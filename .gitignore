@@ -1,0 +1,13 @@
+# macOS
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V8
+.Trashes
+
+# Obsidian
+.obsidian/
+
+# Temp
+*.tmp
+*.bak
