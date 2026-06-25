@@ -11,3 +11,7 @@
 # Temp
 *.tmp
 *.bak
+
+# Tooling state (not part of wiki)
+.bkit/
+.claude/
