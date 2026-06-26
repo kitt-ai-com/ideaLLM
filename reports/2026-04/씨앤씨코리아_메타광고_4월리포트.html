@@ -1,0 +1,928 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<title>씨앤씨코리아 4월 메타광고 분석 리포트 | (주)kitt</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;700;900&display=swap');
+:root {
+  --brand: #0369a1; --brand-light: #0284c7; --brand-dark: #0c4a6e;
+  --accent: #f59e0b; --success: #15803d; --warning: #ca8a04; --danger: #dc2626;
+  --traffic: #7c3aed;
+  --text: #1f2937; --text-light: #4b5563; --text-muted: #6b7280;
+  --bg: #f9fafb; --card: #fff; --border: #e5e7eb;
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body { font-family: 'Noto Sans KR', sans-serif; background: var(--bg); color: var(--text); line-height: 1.6; }
+.container { max-width: 1280px; margin: 0 auto; padding: 0 24px; }
+
+header { background: linear-gradient(135deg, #0c4a6e 0%, #0369a1 60%, #f59e0b 100%); color: #fff; padding: 56px 0 48px; position: relative; overflow: hidden; }
+header::before { content: "CNC KOREA"; position: absolute; top: 50%; left: 50%; transform: translate(-50%,-50%); font-size: 13rem; font-weight: 900; opacity: 0.07; letter-spacing: -0.04em; pointer-events: none; white-space: nowrap; }
+header .eyebrow { font-size: 0.8rem; letter-spacing: 0.3em; opacity: 0.85; margin-bottom: 12px; position: relative; }
+header h1 { font-size: 2.4rem; font-weight: 900; margin-bottom: 8px; position: relative; }
+header .sub { font-size: 1rem; opacity: 0.9; position: relative; }
+header .meta { margin-top: 24px; display: flex; gap: 24px; font-size: 0.9rem; flex-wrap: wrap; position: relative; }
+
+.section { padding: 48px 0; }
+.section + .section { border-top: 1px solid var(--border); }
+
+h2 { font-size: 1.6rem; font-weight: 800; margin-bottom: 8px; }
+h2 .num-tag { font-size: 0.85rem; color: var(--text-muted); font-weight: 500; margin-left: 8px; }
+.section-desc { color: var(--text-muted); margin-bottom: 24px; padding-bottom: 12px; border-bottom: 3px solid var(--brand); display: inline-block; }
+h3 { font-size: 1.2rem; font-weight: 700; margin: 28px 0 12px; color: var(--brand-dark); }
+h4 { font-size: 1rem; font-weight: 700; margin-bottom: 8px; }
+
+.kpi-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; margin-bottom: 32px; }
+.kpi { background: var(--card); border: 1px solid var(--border); border-radius: 12px; padding: 20px; }
+.kpi .label { font-size: 0.85rem; color: var(--text-muted); margin-bottom: 8px; font-weight: 500; }
+.kpi .value { font-size: 1.6rem; font-weight: 800; }
+.kpi .value .unit { font-size: 0.9rem; color: var(--text-muted); margin-left: 2px; }
+.kpi .delta { font-size: 0.8rem; margin-top: 6px; color: var(--text-muted); }
+.kpi.highlight { background: linear-gradient(135deg, var(--brand-dark), var(--brand)); color: #fff; border: none; }
+.kpi.highlight .label, .kpi.highlight .value, .kpi.highlight .delta { color: #fff; }
+.kpi.traffic { background: linear-gradient(135deg, #5b21b6, var(--traffic)); color: #fff; border: none; }
+.kpi.traffic .label, .kpi.traffic .value, .kpi.traffic .delta { color: #fff; }
+
+table { width: 100%; border-collapse: collapse; background: var(--card); border-radius: 8px; overflow: hidden; box-shadow: 0 1px 2px rgba(0,0,0,0.04); margin-bottom: 24px; font-size: 0.85rem; }
+th { background: #f3f4f6; padding: 10px 12px; text-align: left; font-weight: 700; font-size: 0.8rem; border-bottom: 2px solid var(--border); }
+td { padding: 9px 12px; border-bottom: 1px solid var(--border); vertical-align: middle; }
+tr:last-child td { border-bottom: none; }
+tr:hover td { background: #fafafa; }
+.num { text-align: right; font-variant-numeric: tabular-nums; white-space: nowrap; }
+.date { font-variant-numeric: tabular-nums; color: var(--text-light); white-space: nowrap; }
+.ad-name { font-weight: 600; max-width: 320px; }
+.ad-name .ad-copy { font-weight: 400; color: var(--text-muted); font-size: 0.78rem; margin-top: 2px; line-height: 1.3; }
+.roas-cell { font-weight: 700; }
+tr.r-good td.roas-cell { color: var(--success); }
+tr.r-bad td.roas-cell { color: var(--danger); }
+tr.day-off { background: #f9fafb; opacity: 0.7; }
+tr.day-off td.roas-cell { color: var(--text-muted); }
+
+.mini-bar { background: #f3f4f6; height: 14px; border-radius: 3px; overflow: hidden; min-width: 120px; }
+.mb-fill { height: 100%; transition: width 0.4s; }
+
+.callout { border-left: 4px solid var(--brand); background: #f0f9ff; padding: 16px 20px; border-radius: 4px; margin: 16px 0; }
+.callout.danger { border-color: var(--danger); background: #fef2f2; }
+.callout.success { border-color: var(--success); background: #f0fdf4; }
+.callout.warn { border-color: var(--warning); background: #fefce8; }
+.callout.info { border-color: var(--traffic); background: #faf5ff; }
+.callout ul { list-style: none; padding-left: 0; }
+.callout li { padding: 6px 0; padding-left: 20px; position: relative; font-size: 0.92rem; }
+.callout li::before { content: "▶"; position: absolute; left: 0; color: var(--brand); font-size: 0.7rem; top: 9px; }
+.callout.danger li::before { content: "✕"; color: var(--danger); }
+.callout.success li::before { content: "✓"; color: var(--success); }
+.callout.warn li::before { content: "⚠"; color: var(--warning); }
+.callout.info li::before { content: "ℹ"; color: var(--traffic); }
+
+.two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; align-items: start; }
+@media (max-width: 900px) { .kpi-grid { grid-template-columns: repeat(2, 1fr); } .two-col { grid-template-columns: 1fr; } }
+
+.compare-card { background: var(--card); border: 1px solid var(--border); border-radius: 12px; padding: 24px; }
+.compare-card.sales { border-top: 4px solid var(--brand); }
+.compare-card.traffic { border-top: 4px solid var(--traffic); }
+.compare-card .obj-tag { display: inline-block; padding: 4px 12px; border-radius: 4px; font-size: 0.75rem; font-weight: 600; margin-bottom: 8px; }
+.compare-card.sales .obj-tag { background: #dbeafe; color: var(--brand-dark); }
+.compare-card.traffic .obj-tag { background: #ede9fe; color: #5b21b6; }
+.compare-card h3 { margin: 0 0 8px; }
+
+.timeline { display: grid; grid-template-columns: repeat(30, 1fr); gap: 2px; margin: 16px 0; padding: 16px; background: var(--card); border: 1px solid var(--border); border-radius: 8px; }
+.tl-day { aspect-ratio: 1; background: #e5e7eb; border-radius: 2px; position: relative; }
+.tl-day.active { background: var(--brand-light); }
+.tl-day.high { background: var(--brand-dark); }
+.tl-day.off { background: #fee2e2; }
+.tl-day::after { content: attr(data-day); position: absolute; bottom: 100%; left: 50%; transform: translateX(-50%); font-size: 0.62rem; color: var(--text-muted); padding-bottom: 2px; }
+
+.ad-card { background: var(--card); border: 1px solid var(--border); border-radius: 12px; padding: 20px; margin-bottom: 16px; }
+.ad-card-header { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 12px; padding-bottom: 12px; border-bottom: 1px solid var(--border); }
+.ad-card-header h4 { font-size: 1.05rem; }
+.ad-meta { font-size: 0.78rem; color: var(--text-muted); margin-top: 4px; }
+.badge { display: inline-block; padding: 4px 10px; border-radius: 4px; font-size: 0.75rem; font-weight: 600; }
+.badge.active { color: var(--success); background: #dcfce7; }
+.ad-copy-block { background: #f9fafb; padding: 12px 16px; border-radius: 6px; font-size: 0.88rem; margin-bottom: 12px; line-height: 1.5; white-space: pre-wrap; }
+.metrics-row { display: grid; grid-template-columns: repeat(6, 1fr); gap: 8px; }
+.metric { background: #f9fafb; padding: 8px 12px; border-radius: 4px; text-align: center; }
+.metric .m-lbl { font-size: 0.7rem; color: var(--text-muted); }
+.metric .m-val { font-size: 1rem; font-weight: 700; margin-top: 2px; }
+
+footer { padding: 32px 0; text-align: center; color: var(--text-muted); font-size: 0.85rem; border-top: 1px solid var(--border); margin-top: 48px; }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="container">
+    <div class="eyebrow">META ADS REPORT · APRIL 2026</div>
+    <h1>씨앤씨코리아 4월 메타광고 분석</h1>
+    <div class="sub">2026년 4월 1일 ~ 4월 30일 · 캠페인 목적별 분리 분석</div>
+    <div class="meta">
+      <span>📅 30일</span>
+      <span>📊 캠페인 2개 · 광고 5개</span>
+      <span>💵 총 지출 1,410,659원</span>
+      <span>🛒 매출(전환캠페인) 5,129,640원</span>
+    </div>
+  </div>
+</header>
+
+<section class="section">
+  <div class="container">
+    <h2>1. 캠페인 목적별 분리 분석</h2>
+    <p class="section-desc">두 캠페인은 <strong>목적이 달라 평가 기준도 다릅니다</strong>. 같은 ROAS 잣대로 비교 불가.</p>
+
+    <div class="two-col">
+      <div class="compare-card sales">
+        <span class="obj-tag">🛒 OUTCOME_SALES (매출 목적)</span>
+        <h3>pet안전봉투 신제품 캠페인</h3>
+        <p style="color:var(--text-muted);font-size:0.9rem;margin-bottom:16px">픽셀 구매 추적 정확 — ROAS로 평가 가능</p>
+        <table>
+          <tbody>
+            <tr><td>운영기간</td><td class="num">2026-04-01 ~ 2026-04-17 (17일)</td></tr>
+            <tr><td>지출</td><td class="num">813,709원</td></tr>
+            <tr><td>구매</td><td class="num">41건</td></tr>
+            <tr><td>매출</td><td class="num">5,129,640원</td></tr>
+            <tr><td><strong>ROAS</strong></td><td class="num roas-cell" style="font-size:1.3rem;color:var(--success)"><strong>6.30</strong></td></tr>
+            <tr><td>광고 수</td><td class="num">4개</td></tr>
+            <tr><td>광고당 평균 ROAS</td><td class="num">5.36</td></tr>
+          </tbody>
+        </table>
+        <div style="margin-top:12px;padding:10px;background:#f0fdf4;border-radius:4px;font-size:0.88rem">
+          ✅ <strong>매우 우수</strong> — 광고비 1원당 매출 6.30원 회수
+        </div>
+      </div>
+
+      <div class="compare-card traffic">
+        <span class="obj-tag">🔗 LINK_CLICKS (트래픽 목적)</span>
+        <h3>20250515_트래픽_영상 캠페인</h3>
+        <p style="color:var(--text-muted);font-size:0.9rem;margin-bottom:16px">픽셀 구매 추적 부정확 — <strong>ROAS 측정 불가</strong>. CTR/CPC/방문자 수로 평가.</p>
+        <table>
+          <tbody>
+            <tr><td>운영기간</td><td class="num">2026-04-01 ~ 04-30 (30일 풀)</td></tr>
+            <tr><td>지출</td><td class="num">596,950원</td></tr>
+            <tr><td>노출</td><td class="num">54,638</td></tr>
+            <tr><td>클릭</td><td class="num">1,957</td></tr>
+            <tr><td><strong>CTR</strong></td><td class="num roas-cell" style="font-size:1.3rem;color:var(--traffic)"><strong>3.58%</strong></td></tr>
+            <tr><td>CPC</td><td class="num">305원</td></tr>
+            <tr><td>광고 수</td><td class="num">1개</td></tr>
+          </tbody>
+        </table>
+        <div style="margin-top:12px;padding:10px;background:#faf5ff;border-radius:4px;font-size:0.88rem">
+          🟣 <strong>인지/도달 캠페인</strong> — CTR 3.58% (업계 평균 1.5~2% 대비 우수), CPC 305원 (저렴)
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="section">
+  <div class="container">
+    <h2>2. pet안전봉투 캠페인 — 일별 추이 + 중단 분석</h2>
+    <p class="section-desc">4/1~4/17 운영 후 4/18부터 게재 중단. 17일간 ROAS 6.30 우수 성과.</p>
+
+    <div class="kpi-grid">
+      <div class="kpi highlight">
+        <div class="label">17일 통합 ROAS</div>
+        <div class="value">6.30</div>
+        <div class="delta">광고비 1원 → 매출 6.30원</div>
+      </div>
+      <div class="kpi">
+        <div class="label">총 지출 / 총 매출</div>
+        <div class="value">813,709<span class="unit">원</span></div>
+        <div class="delta">매출 5,129,640원</div>
+      </div>
+      <div class="kpi">
+        <div class="label">구매 건수</div>
+        <div class="value">41<span class="unit">건</span></div>
+        <div class="delta">평균 객단가 125,113원</div>
+      </div>
+      <div class="kpi">
+        <div class="label">CTR / CPC</div>
+        <div class="value">1.68<span class="unit">%</span></div>
+        <div class="delta">CPC 868원</div>
+      </div>
+    </div>
+
+    <h3>일별 성과 추이</h3>
+    <p style="color:var(--text-muted);font-size:0.9rem;margin-bottom:16px">파란 막대 = 지출, 초록 막대 = 매출. 4/17 이후 게재 중단(빨간 회색 행).</p>
+    <table>
+      <thead><tr><th>날짜</th><th class="num">지출</th><th>지출 비교</th><th class="num">구매</th><th class="num">매출</th><th>매출 비교</th><th class="num">ROAS</th><th>비고</th></tr></thead>
+      <tbody><tr class="">
+        <td class="date">2026-04-01</td>
+        <td class="num">54,088원</td>
+        <td><div class="mini-bar"><div class="mb-fill" style="width:88.9795515488509%;background:#1e40af"></div></div></td>
+        <td class="num">2</td>
+        <td class="num">119,180원</td>
+        <td><div class="mini-bar"><div class="mb-fill" style="width:12.25992943185442%;background:#10b981"></div></div></td>
+        <td class="num roas-cell">2.20</td>
+        <td></td>
+      </tr><tr class="">
+        <td class="date">2026-04-02</td>
+        <td class="num">45,217원</td>
+        <td><div class="mini-bar"><div class="mb-fill" style="width:74.38597068452137%;background:#1e40af"></div></div></td>
+        <td class="num">4</td>
+        <td class="num">295,290원</td>
+        <td><div class="mini-bar"><div class="mb-fill" style="width:30.376191994733105%;background:#10b981"></div></div></td>
+        <td class="num roas-cell">6.53</td>
+        <td></td>
+      </tr><tr class="">
+        <td class="date">2026-04-03</td>
+        <td class="num">46,997원</td>
+        <td><div class="mini-bar"><div class="mb-fill" style="width:77.31422837119779%;background:#1e40af"></div></div></td>
+        <td class="num">0</td>
+        <td class="num">0원</td>
+        <td><div class="mini-bar"><div class="mb-fill" style="width:0%;background:#10b981"></div></div></td>
+        <td class="num roas-cell">0.00</td>
+        <td></td>
+      </tr><tr class="">
+        <td class="date">2026-04-04</td>
+        <td class="num">45,498원</td>
+        <td><div class="mini-bar"><div class="mb-fill" style="width:74.8482405777551%;background:#1e40af"></div></div></td>
+        <td class="num">0</td>
+        <td class="num">0원</td>
+        <td><div class="mini-bar"><div class="mb-fill" style="width:0%;background:#10b981"></div></div></td>
+        <td class="num roas-cell">0.00</td>
+        <td></td>
+      </tr><tr class="">
+        <td class="date">2026-04-05</td>
+        <td class="num">52,398원</td>
+        <td><div class="mini-bar"><div class="mb-fill" style="width:86.19935183509632%;background:#1e40af"></div></div></td>
+        <td class="num">1</td>
+        <td class="num">76,200원</td>
+        <td><div class="mini-bar"><div class="mb-fill" style="width:7.838619086317392%;background:#10b981"></div></div></td>
+        <td class="num roas-cell">1.45</td>
+        <td></td>
+      </tr><tr class="">
+        <td class="date">2026-04-06</td>
+        <td class="num">57,275원</td>
+        <td><div class="mini-bar"><div class="mb-fill" style="width:94.22244887887213%;background:#1e40af"></div></div></td>
+        <td class="num">5</td>
+        <td class="num">443,740원</td>
+        <td><div class="mini-bar"><div class="mb-fill" style="width:45.647097550688706%;background:#10b981"></div></div></td>
+        <td class="num roas-cell">7.75</td>
+        <td></td>
+      </tr><tr class="">
+        <td class="date">2026-04-07</td>
+        <td class="num">50,173원</td>
+        <td><div class="mini-bar"><div class="mb-fill" style="width:82.53902972675078%;background:#1e40af"></div></div></td>
+        <td class="num">4</td>
+        <td class="num">972,110원</td>
+        <td><div class="mini-bar"><div class="mb-fill" style="width:100.0%;background:#10b981"></div></div></td>
+        <td class="num roas-cell">19.38</td>
+        <td></td>
+      </tr><tr class="">
+        <td class="date">2026-04-08</td>
+        <td class="num">48,223원</td>
+        <td><div class="mini-bar"><div class="mb-fill" style="width:79.33110698011087%;background:#1e40af"></div></div></td>
+        <td class="num">3</td>
+        <td class="num">256,000원</td>
+        <td><div class="mini-bar"><div class="mb-fill" style="width:26.334468321486256%;background:#10b981"></div></div></td>
+        <td class="num roas-cell">5.31</td>
+        <td></td>
+      </tr><tr class="">
+        <td class="date">2026-04-09</td>
+        <td class="num">39,924원</td>
+        <td><div class="mini-bar"><div class="mb-fill" style="width:65.67851678812903%;background:#1e40af"></div></div></td>
+        <td class="num">4</td>
+        <td class="num">293,590원</td>
+        <td><div class="mini-bar"><div class="mb-fill" style="width:30.20131466603574%;background:#10b981"></div></div></td>
+        <td class="num roas-cell">7.35</td>
+        <td></td>
+      </tr><tr class="">
+        <td class="date">2026-04-10</td>
+        <td class="num">39,904원</td>
+        <td><div class="mini-bar"><div class="mb-fill" style="width:65.64561501636862%;background:#1e40af"></div></div></td>
+        <td class="num">2</td>
+        <td class="num">366,190원</td>
+        <td><div class="mini-bar"><div class="mb-fill" style="width:37.66960529158223%;background:#10b981"></div></div></td>
+        <td class="num roas-cell">9.18</td>
+        <td></td>
+      </tr><tr class="">
+        <td class="date">2026-04-11</td>
+        <td class="num">60,787원</td>
+        <td><div class="mini-bar"><div class="mb-fill" style="width:100.0%;background:#1e40af"></div></div></td>
+        <td class="num">0</td>
+        <td class="num">0원</td>
+        <td><div class="mini-bar"><div class="mb-fill" style="width:0%;background:#10b981"></div></div></td>
+        <td class="num roas-cell">0.00</td>
+        <td></td>
+      </tr><tr class="">
+        <td class="date">2026-04-12</td>
+        <td class="num">49,262원</td>
+        <td><div class="mini-bar"><div class="mb-fill" style="width:81.04035402306414%;background:#1e40af"></div></div></td>
+        <td class="num">0</td>
+        <td class="num">0원</td>
+        <td><div class="mini-bar"><div class="mb-fill" style="width:0%;background:#10b981"></div></div></td>
+        <td class="num roas-cell">0.00</td>
+        <td></td>
+      </tr><tr class="">
+        <td class="date">2026-04-13</td>
+        <td class="num">52,536원</td>
+        <td><div class="mini-bar"><div class="mb-fill" style="width:86.42637406024315%;background:#1e40af"></div></div></td>
+        <td class="num">2</td>
+        <td class="num">708,840원</td>
+        <td><div class="mini-bar"><div class="mb-fill" style="width:72.9176739257903%;background:#10b981"></div></div></td>
+        <td class="num roas-cell">13.49</td>
+        <td></td>
+      </tr><tr class="">
+        <td class="date">2026-04-14</td>
+        <td class="num">57,098원</td>
+        <td><div class="mini-bar"><div class="mb-fill" style="width:93.93126819879251%;background:#1e40af"></div></div></td>
+        <td class="num">3</td>
+        <td class="num">640,530원</td>
+        <td><div class="mini-bar"><div class="mb-fill" style="width:65.89069138266245%;background:#10b981"></div></div></td>
+        <td class="num roas-cell">11.22</td>
+        <td></td>
+      </tr><tr class="">
+        <td class="date">2026-04-15</td>
+        <td class="num">50,831원</td>
+        <td><div class="mini-bar"><div class="mb-fill" style="width:83.62149801766824%;background:#1e40af"></div></div></td>
+        <td class="num">3</td>
+        <td class="num">494,120원</td>
+        <td><div class="mini-bar"><div class="mb-fill" style="width:50.8296386211437%;background:#10b981"></div></div></td>
+        <td class="num roas-cell">9.72</td>
+        <td></td>
+      </tr><tr class="">
+        <td class="date">2026-04-16</td>
+        <td class="num">46,663원</td>
+        <td><div class="mini-bar"><div class="mb-fill" style="width:76.76476878279895%;background:#1e40af"></div></div></td>
+        <td class="num">6</td>
+        <td class="num">278,170원</td>
+        <td><div class="mini-bar"><div class="mb-fill" style="width:28.61507442573371%;background:#10b981"></div></div></td>
+        <td class="num roas-cell">5.96</td>
+        <td></td>
+      </tr><tr class="">
+        <td class="date">2026-04-17</td>
+        <td class="num">16,835원</td>
+        <td><div class="mini-bar"><div class="mb-fill" style="width:27.69506637932453%;background:#1e40af"></div></div></td>
+        <td class="num">2</td>
+        <td class="num">185,680원</td>
+        <td><div class="mini-bar"><div class="mb-fill" style="width:19.100719054427998%;background:#10b981"></div></div></td>
+        <td class="num roas-cell">11.03</td>
+        <td></td>
+      </tr><tr class="day-off">
+        <td class="date">2026-04-18</td>
+        <td class="num">0원</td>
+        <td><div class="mini-bar"><div class="mb-fill" style="width:0%;background:#1e40af"></div></div></td>
+        <td class="num">0</td>
+        <td class="num">0원</td>
+        <td><div class="mini-bar"><div class="mb-fill" style="width:0%;background:#10b981"></div></div></td>
+        <td class="num roas-cell">0.00</td>
+        <td>🛑 중단</td>
+      </tr><tr class="day-off">
+        <td class="date">2026-04-19</td>
+        <td class="num">0원</td>
+        <td><div class="mini-bar"><div class="mb-fill" style="width:0%;background:#1e40af"></div></div></td>
+        <td class="num">0</td>
+        <td class="num">0원</td>
+        <td><div class="mini-bar"><div class="mb-fill" style="width:0%;background:#10b981"></div></div></td>
+        <td class="num roas-cell">0.00</td>
+        <td>🛑 중단</td>
+      </tr><tr class="day-off">
+        <td class="date">2026-04-20</td>
+        <td class="num">0원</td>
+        <td><div class="mini-bar"><div class="mb-fill" style="width:0%;background:#1e40af"></div></div></td>
+        <td class="num">0</td>
+        <td class="num">0원</td>
+        <td><div class="mini-bar"><div class="mb-fill" style="width:0%;background:#10b981"></div></div></td>
+        <td class="num roas-cell">0.00</td>
+        <td>🛑 중단</td>
+      </tr></tbody>
+    </table>
+
+    <h3>광고별 성과 (4개)</h3>
+    <table>
+      <thead><tr><th class="num">#</th><th>광고명 + 카피</th><th class="num">지출</th><th class="num">노출</th><th class="num">클릭</th><th class="num">CTR</th><th class="num">CPC</th><th class="num">구매</th><th class="num">매출</th><th class="num">ROAS</th></tr></thead>
+      <tbody><tr class="r-good">
+        <td class="num">1</td>
+        <td class="ad-name">쿠팡업체도_영상<div class="ad-copy">쿠팡 협력업체도 선택한 이유 "왜 이걸 진작 몰랐을까?"  쿠팡 협력업체들이 이미 사용 중인 뽁뽁이 일체형 안전봉투. 택배 발송량이 많을수록 포...</div></td>
+        <td class="num">428,447원</td>
+        <td class="num">27,922</td>
+        <td class="num">581</td>
+        <td class="num">2.08%</td>
+        <td class="num">737원</td>
+        <td class="num">22</td>
+        <td class="num">3,391,190원</td>
+        <td class="num roas-cell">7.92</td>
+      </tr><tr class="r-good">
+        <td class="num">2</td>
+        <td class="ad-name">뽁뽁이사는돈_이미지1<div class="ad-copy">뽁뽁이 따로 사는 돈, 아까워요 매번 뽁뽁이 롤 사서 직접 감고 계신가요? 포장 시간도 오래 걸리고, 재료비도 만만찮죠. 뽁뽁이 일체형 안전봉투...</div></td>
+        <td class="num">172,645원</td>
+        <td class="num">11,463</td>
+        <td class="num">161</td>
+        <td class="num">1.40%</td>
+        <td class="num">1,072원</td>
+        <td class="num">8</td>
+        <td class="num">736,500원</td>
+        <td class="num roas-cell">4.27</td>
+      </tr><tr class="r-good">
+        <td class="num">3</td>
+        <td class="ad-name">무료배송+5%할인_이미지1<div class="ad-copy">[무료배송+5%할인] 택배 클레임 줄이는 가장 쉬운 방법!  PET 안전봉투로 파손 걱정 제로.  지금 바로 확인하세요.</div></td>
+        <td class="num">130,392원</td>
+        <td class="num">9,677</td>
+        <td class="num">119</td>
+        <td class="num">1.23%</td>
+        <td class="num">1,096원</td>
+        <td class="num">8</td>
+        <td class="num">649,070원</td>
+        <td class="num roas-cell">4.98</td>
+      </tr><tr class="r-good">
+        <td class="num">4</td>
+        <td class="ad-name">포장만바꿔도_이미지3_0320<div class="ad-copy">포장만 바꿔도 프로 택배 받자마자 "어? 여긴 전문 쇼핑몰인가?" 첫인상이 재구매를 만듭니다  지금 5% 할인 + 무료배송으로 더 똑똑하게 시작...</div></td>
+        <td class="num">82,225원</td>
+        <td class="num">6,741</td>
+        <td class="num">76</td>
+        <td class="num">1.13%</td>
+        <td class="num">1,082원</td>
+        <td class="num">3</td>
+        <td class="num">352,880원</td>
+        <td class="num roas-cell">4.29</td>
+      </tr></tbody>
+    </table>
+
+    <div class="callout success">
+      <h4>🏆 베스트: 쿠팡업체도_영상 (ROAS 7.92)</h4>
+      <ul>
+        <li>"쿠팡 협력업체도 선택한 이유" — 권위/사회적 증명 후킹 + 구체적 페인포인트(포장 시간 50% 단축, 재료비 절감)</li>
+        <li>지출 428,447원 / 매출 3,391,190원 — pet 캠페인 매출의 <strong>66%</strong> 기여</li>
+        <li>CPC 737원 (다른 이미지 광고 1,000원+ 대비 저렴) — 영상 포맷이 클릭 효율 우수</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<section class="section">
+  <div class="container">
+    <h2>3. 트래픽_영상 캠페인 — 30일 풀가동 분석</h2>
+    <p class="section-desc">목적이 클릭(트래픽)이라 ROAS 측정 부적절. CTR/CPC/방문자 수가 핵심 지표.</p>
+
+    <div class="kpi-grid">
+      <div class="kpi traffic">
+        <div class="label">평균 CTR</div>
+        <div class="value">3.58<span class="unit">%</span></div>
+        <div class="delta">업계 평균 1.5~2% 대비 1.8배 우수</div>
+      </div>
+      <div class="kpi">
+        <div class="label">총 클릭 (사이트 방문)</div>
+        <div class="value">1,957</div>
+        <div class="delta">30일간 누적 방문자</div>
+      </div>
+      <div class="kpi">
+        <div class="label">평균 CPC</div>
+        <div class="value">305<span class="unit">원</span></div>
+        <div class="delta">한국 평균 500~1,000원 대비 저렴</div>
+      </div>
+      <div class="kpi">
+        <div class="label">노출</div>
+        <div class="value">54,638</div>
+        <div class="delta">CPM 10,926원</div>
+      </div>
+    </div>
+
+    <div class="callout info">
+      <h4>ℹ️ 왜 이 캠페인의 ROAS는 의미 없나?</h4>
+      <ul>
+        <li>캠페인 목적이 <code>LINK_CLICKS</code>(클릭 최대화) — Meta는 클릭이 잘 발생할 사용자에게 노출 최적화</li>
+        <li>구매는 그 클릭 후 며칠/몇 주 후, 다른 디바이스/세션에서 일어날 수 있음 — Meta 어트리뷰션 윈도우(7일/1일)에 걸리지 않음</li>
+        <li>매출 목적(<code>OUTCOME_SALES</code>) 캠페인과는 사용자 풀, 입찰 방식, 추적 정확도가 모두 다름</li>
+        <li>트래픽 캠페인은 <strong>인지/도달 → 향후 리타게팅 풀 형성</strong>이 본질 가치</li>
+      </ul>
+    </div>
+
+    <h3>📊 핵심 성과 지표 — 트래픽 캠페인 본연의 가치 측정</h3>
+    <div class="kpi-grid">
+      <div class="kpi traffic">
+        <div class="label">고유 도달 (Reach)</div>
+        <div class="value">13,961<span class="unit">명</span></div>
+        <div class="delta">중복 제외 노출 사용자 수</div>
+      </div>
+      <div class="kpi">
+        <div class="label">노출 빈도 (Frequency)</div>
+        <div class="value">3.91<span class="unit">회</span></div>
+        <div class="delta">한 사람당 평균 노출 횟수 — 인지 형성 적정선(2~5회) 안</div>
+      </div>
+      <div class="kpi">
+        <div class="label">고유 클릭자</div>
+        <div class="value">879<span class="unit">명</span></div>
+        <div class="delta">실제 사이트 방문 unique 사용자</div>
+      </div>
+      <div class="kpi">
+        <div class="label">고유 CTR</div>
+        <div class="value">6.30<span class="unit">%</span></div>
+        <div class="delta">unique 사용자 기준 — 매우 우수</div>
+      </div>
+      <div class="kpi">
+        <div class="label">아웃바운드 클릭</div>
+        <div class="value">2,294</div>
+        <div class="delta">광고에서 외부 사이트로 이동한 클릭 (총 클릭의 117%)</div>
+      </div>
+      <div class="kpi">
+        <div class="label">재방문 비율</div>
+        <div class="value">2.23<span class="unit">회</span></div>
+        <div class="delta">고유 클릭자가 평균 2.2번 클릭 — 관심도 높음</div>
+      </div>
+      <div class="kpi">
+        <div class="label">CPM (1,000노출당)</div>
+        <div class="value">10,926<span class="unit">원</span></div>
+        <div class="delta">한국 평균 7,000~15,000원 범위 내</div>
+      </div>
+      <div class="kpi">
+        <div class="label">고유 방문자 단가</div>
+        <div class="value">679<span class="unit">원</span></div>
+        <div class="delta">596,950원 ÷ 879명 — unique 1명 사이트 유입에 679원</div>
+      </div>
+    </div>
+
+    <h3>📅 주차별 트렌드</h3>
+    <p style="color:var(--text-muted);font-size:0.9rem;margin-bottom:16px">CTR 추이를 보면 캠페인 피로도 신호 감지 가능. 4월 중반 약화 후 후반 회복.</p>
+    <table>
+      <thead><tr><th>주차</th><th>기간</th><th class="num">지출</th><th class="num">노출</th><th class="num">클릭</th><th class="num">CTR</th><th class="num">CPC</th><th>트렌드</th></tr></thead>
+      <tbody>
+        <tr><td><strong>1주차</strong></td><td>4/1~4/7</td><td class="num">139,550원</td><td class="num">11,118</td><td class="num">467</td><td class="num"><strong>4.20%</strong></td><td class="num">299원</td><td>🟢 강세 출발</td></tr>
+        <tr><td><strong>2주차</strong></td><td>4/8~4/14</td><td class="num">134,170원</td><td class="num">14,177</td><td class="num">508</td><td class="num">3.58%</td><td class="num"><strong>264원</strong></td><td>🟢 클릭 최다, CPC 최저</td></tr>
+        <tr><td><strong>3주차</strong></td><td>4/15~4/21</td><td class="num">142,770원</td><td class="num">16,330</td><td class="num">454</td><td class="num"><strong>2.78%</strong></td><td class="num">314원</td><td>🟡 CTR 약세 (피로도)</td></tr>
+        <tr><td><strong>4주차</strong></td><td>4/22~4/28</td><td class="num">139,105원</td><td class="num">9,643</td><td class="num">411</td><td class="num"><strong>4.26%</strong></td><td class="num">338원</td><td>🟢 CTR 회복</td></tr>
+        <tr><td><strong>5주차</strong></td><td>4/29~4/30</td><td class="num">41,355원</td><td class="num">3,370</td><td class="num">117</td><td class="num">3.47%</td><td class="num">353원</td><td>— 부분 데이터</td></tr>
+      </tbody>
+    </table>
+
+    <h3>🏆 베스트 / 워스트 일별 성과</h3>
+    <div class="two-col">
+      <div class="callout success">
+        <h4>✅ 베스트 데이</h4>
+        <ul>
+          <li><strong>4/2 (CTR 5.97%, CPC 212원)</strong> — 한 달 중 최고 CTR + 최저 CPC. 광고 노출 초기 신선도 + 타겟팅 매칭 우수</li>
+          <li><strong>4/12 (클릭 107건, CTR 4.06%)</strong> — 일 클릭 최다. 주말 효과 + 알고리즘 최적화 정착 시점</li>
+          <li><strong>4/23 (CTR 5.06%)</strong> — 4월 후반 회복기 정점. 1주차와 비슷한 효율 회복</li>
+          <li>1주차/4주차 평균 CTR 4.2% — <strong>업계 평균(1.5~2%)의 2.1배</strong></li>
+        </ul>
+      </div>
+      <div class="callout danger">
+        <h4>⚠️ 워스트 데이 / 약점 구간</h4>
+        <ul>
+          <li><strong>4/16 (CTR 1.70%)</strong> — 한 달 중 최저. 노출 3,351건으로 평소(1,700~2,000) 대비 60%↑ 늘었으나 클릭 정체 → 알고리즘이 약한 오디언스로 확산 탐색 신호</li>
+          <li><strong>4/26 (CPC 436원)</strong> — 한 달 중 최고 CPC. CTR 3.98%로 양호하나 입찰 경쟁 격화 추정</li>
+          <li><strong>3주차 전체 CTR 2.78%</strong> — 1·4주차(4.2%) 대비 -34%. 동일 소재 노출 누적으로 인한 광고 피로도 신호</li>
+          <li>4/19~4/21 클릭율 2.35~4.28%로 변동성 큼 — 주말·평일 전환 패턴 점검 가치</li>
+        </ul>
+      </div>
+    </div>
+
+    <h3>💎 트래픽 캠페인 가치 환산</h3>
+    <div class="callout info">
+      <h4>📌 596,950원 광고비로 얻은 자산</h4>
+      <ul>
+        <li><strong>브랜드 노출</strong> 54,638회 — CPM 10,926원 = 1,000명 노출 단가</li>
+        <li><strong>고유 도달</strong> 13,961명 — 1인당 인지 비용 <strong>43원</strong> (광고비 ÷ reach)</li>
+        <li><strong>사이트 방문자</strong> 879명 (unique) — 향후 리타게팅 광고로 재공략 가능한 모수</li>
+        <li><strong>관심 표명자</strong> 1,957회 클릭 / 879명 (재방문 2.2회) — 단순 클릭이 아닌 반복 방문 = 검토·비교 행위</li>
+        <li>리타게팅 캠페인 평균 CPC 100~150원 가정 시 <strong>이 풀로 6~8만원/일 효율 광고 운영 가능</strong></li>
+      </ul>
+    </div>
+
+    <div class="callout warn">
+      <h4>📈 4월 운영 점수표 (트래픽 캠페인 기준)</h4>
+      <ul>
+        <li>CTR <strong>3.58%</strong> — 업계 평균 대비 <strong>+90%</strong> 우수 ✅</li>
+        <li>CPC <strong>305원</strong> — 한국 평균 500~1,000원 대비 <strong>40~70% 저렴</strong> ✅</li>
+        <li>Frequency 3.91 — 적정선(2~5회) 안 ✅. 5회 초과 시 피로도 경고</li>
+        <li>고유 CTR 6.30% — unique 사용자 기준으로 봐도 매우 우수 ✅</li>
+        <li>아웃바운드 클릭 2,294 — 사이트 직접 유입 효율 높음 ✅</li>
+        <li><strong>총평: A등급 트래픽 캠페인</strong>. 단, 3주차 CTR 약화는 광고 피로도 신호</li>
+      </ul>
+    </div>
+
+    <div class="ad-card">
+      <div class="ad-card-header">
+        <div>
+          <h4>20251117_트래픽_영상</h4>
+          <div class="ad-meta">캠페인: 20250515_트래픽_영상 · 목적: LINK_CLICKS · 상태: ACTIVE</div>
+        </div>
+        <span class="badge active">운영중</span>
+      </div>
+      <div class="ad-copy-block">
+        <div><strong>제목:</strong> 완충포장재 전문기업 씨앤씨코리아</div>
+        <div style="margin-top:6px"><strong>본문:</strong> 앞선 기술력으로 최적의 포장 솔루션을 제안해드립니다!</div>
+      </div>
+      <div class="metrics-row">
+        <div class="metric"><div class="m-lbl">지출</div><div class="m-val">596,950원</div></div>
+        <div class="metric"><div class="m-lbl">노출</div><div class="m-val">54,638</div></div>
+        <div class="metric"><div class="m-lbl">클릭</div><div class="m-val">1,957</div></div>
+        <div class="metric"><div class="m-lbl">CTR</div><div class="m-val">3.58%</div></div>
+        <div class="metric"><div class="m-lbl">CPC</div><div class="m-val">305원</div></div>
+        <div class="metric"><div class="m-lbl">CPM</div><div class="m-val">10,926원</div></div>
+      </div>
+    </div>
+    
+
+    <h3>일별 추이 (30일)</h3>
+    <p style="color:var(--text-muted);font-size:0.9rem;margin-bottom:16px">매일 일관된 지출·클릭. 보라 = 지출, 주황 = 클릭.</p>
+    <table>
+      <thead><tr><th>날짜</th><th class="num">지출</th><th>지출비교</th><th class="num">노출</th><th class="num">클릭</th><th>클릭비교</th><th class="num">CTR</th><th class="num">CPC</th></tr></thead>
+      <tbody><tr>
+        <td class="date">2026-04-01</td>
+        <td class="num">18,563원</td>
+        <td><div class="mini-bar"><div class="mb-fill" style="width:73.89140991959239%;background:#7c3aed"></div></div></td>
+        <td class="num">1,438</td>
+        <td class="num">68</td>
+        <td><div class="mini-bar"><div class="mb-fill" style="width:63.55140186915887%;background:#f59e0b"></div></div></td>
+        <td class="num">4.73%</td>
+        <td class="num">273원</td>
+      </tr><tr>
+        <td class="date">2026-04-02</td>
+        <td class="num">18,027원</td>
+        <td><div class="mini-bar"><div class="mb-fill" style="width:71.75782182947218%;background:#7c3aed"></div></div></td>
+        <td class="num">1,424</td>
+        <td class="num">85</td>
+        <td><div class="mini-bar"><div class="mb-fill" style="width:79.43925233644859%;background:#f59e0b"></div></div></td>
+        <td class="num">5.97%</td>
+        <td class="num">212원</td>
+      </tr><tr>
+        <td class="date">2026-04-03</td>
+        <td class="num">16,758원</td>
+        <td><div class="mini-bar"><div class="mb-fill" style="width:66.70647241461667%;background:#7c3aed"></div></div></td>
+        <td class="num">1,367</td>
+        <td class="num">51</td>
+        <td><div class="mini-bar"><div class="mb-fill" style="width:47.66355140186916%;background:#f59e0b"></div></div></td>
+        <td class="num">3.73%</td>
+        <td class="num">329원</td>
+      </tr><tr>
+        <td class="date">2026-04-04</td>
+        <td class="num">17,962원</td>
+        <td><div class="mini-bar"><div class="mb-fill" style="width:71.49908446779715%;background:#7c3aed"></div></div></td>
+        <td class="num">1,704</td>
+        <td class="num">62</td>
+        <td><div class="mini-bar"><div class="mb-fill" style="width:57.943925233644855%;background:#f59e0b"></div></div></td>
+        <td class="num">3.64%</td>
+        <td class="num">290원</td>
+      </tr><tr>
+        <td class="date">2026-04-05</td>
+        <td class="num">25,122원</td>
+        <td><div class="mini-bar"><div class="mb-fill" style="width:100.0%;background:#7c3aed"></div></div></td>
+        <td class="num">1,839</td>
+        <td class="num">69</td>
+        <td><div class="mini-bar"><div class="mb-fill" style="width:64.48598130841121%;background:#f59e0b"></div></div></td>
+        <td class="num">3.75%</td>
+        <td class="num">364원</td>
+      </tr><tr>
+        <td class="date">2026-04-06</td>
+        <td class="num">22,243원</td>
+        <td><div class="mini-bar"><div class="mb-fill" style="width:88.53992516519385%;background:#7c3aed"></div></div></td>
+        <td class="num">1,498</td>
+        <td class="num">57</td>
+        <td><div class="mini-bar"><div class="mb-fill" style="width:53.271028037383175%;background:#f59e0b"></div></div></td>
+        <td class="num">3.81%</td>
+        <td class="num">390원</td>
+      </tr><tr>
+        <td class="date">2026-04-07</td>
+        <td class="num">20,875원</td>
+        <td><div class="mini-bar"><div class="mb-fill" style="width:83.09449884563331%;background:#7c3aed"></div></div></td>
+        <td class="num">1,848</td>
+        <td class="num">75</td>
+        <td><div class="mini-bar"><div class="mb-fill" style="width:70.09345794392523%;background:#f59e0b"></div></div></td>
+        <td class="num">4.06%</td>
+        <td class="num">278원</td>
+      </tr><tr>
+        <td class="date">2026-04-08</td>
+        <td class="num">18,718원</td>
+        <td><div class="mini-bar"><div class="mb-fill" style="width:74.50839901281745%;background:#7c3aed"></div></div></td>
+        <td class="num">1,593</td>
+        <td class="num">70</td>
+        <td><div class="mini-bar"><div class="mb-fill" style="width:65.42056074766354%;background:#f59e0b"></div></div></td>
+        <td class="num">4.39%</td>
+        <td class="num">267원</td>
+      </tr><tr>
+        <td class="date">2026-04-09</td>
+        <td class="num">17,222원</td>
+        <td><div class="mini-bar"><div class="mb-fill" style="width:68.55345911949685%;background:#7c3aed"></div></div></td>
+        <td class="num">1,638</td>
+        <td class="num">63</td>
+        <td><div class="mini-bar"><div class="mb-fill" style="width:58.87850467289719%;background:#f59e0b"></div></div></td>
+        <td class="num">3.85%</td>
+        <td class="num">273원</td>
+      </tr><tr>
+        <td class="date">2026-04-10</td>
+        <td class="num">18,229원</td>
+        <td><div class="mini-bar"><div class="mb-fill" style="width:72.56189793806226%;background:#7c3aed"></div></div></td>
+        <td class="num">1,610</td>
+        <td class="num">74</td>
+        <td><div class="mini-bar"><div class="mb-fill" style="width:69.1588785046729%;background:#f59e0b"></div></div></td>
+        <td class="num">4.60%</td>
+        <td class="num">246원</td>
+      </tr><tr>
+        <td class="date">2026-04-11</td>
+        <td class="num">17,501원</td>
+        <td><div class="mini-bar"><div class="mb-fill" style="width:69.66403948730196%;background:#7c3aed"></div></div></td>
+        <td class="num">2,811</td>
+        <td class="num">69</td>
+        <td><div class="mini-bar"><div class="mb-fill" style="width:64.48598130841121%;background:#f59e0b"></div></div></td>
+        <td class="num">2.45%</td>
+        <td class="num">254원</td>
+      </tr><tr>
+        <td class="date">2026-04-12</td>
+        <td class="num">24,370원</td>
+        <td><div class="mini-bar"><div class="mb-fill" style="width:97.0066077541597%;background:#7c3aed"></div></div></td>
+        <td class="num">2,638</td>
+        <td class="num">107</td>
+        <td><div class="mini-bar"><div class="mb-fill" style="width:100.0%;background:#f59e0b"></div></div></td>
+        <td class="num">4.06%</td>
+        <td class="num">228원</td>
+      </tr><tr>
+        <td class="date">2026-04-13</td>
+        <td class="num">18,776원</td>
+        <td><div class="mini-bar"><div class="mb-fill" style="width:74.73927235092748%;background:#7c3aed"></div></div></td>
+        <td class="num">1,884</td>
+        <td class="num">61</td>
+        <td><div class="mini-bar"><div class="mb-fill" style="width:57.009345794392516%;background:#f59e0b"></div></div></td>
+        <td class="num">3.24%</td>
+        <td class="num">308원</td>
+      </tr><tr>
+        <td class="date">2026-04-14</td>
+        <td class="num">19,354원</td>
+        <td><div class="mini-bar"><div class="mb-fill" style="width:77.0400445824377%;background:#7c3aed"></div></div></td>
+        <td class="num">2,003</td>
+        <td class="num">64</td>
+        <td><div class="mini-bar"><div class="mb-fill" style="width:59.813084112149525%;background:#f59e0b"></div></div></td>
+        <td class="num">3.20%</td>
+        <td class="num">302원</td>
+      </tr><tr>
+        <td class="date">2026-04-15</td>
+        <td class="num">21,906원</td>
+        <td><div class="mini-bar"><div class="mb-fill" style="width:87.19847145927872%;background:#7c3aed"></div></div></td>
+        <td class="num">2,537</td>
+        <td class="num">72</td>
+        <td><div class="mini-bar"><div class="mb-fill" style="width:67.28971962616822%;background:#f59e0b"></div></div></td>
+        <td class="num">2.84%</td>
+        <td class="num">304원</td>
+      </tr><tr>
+        <td class="date">2026-04-16</td>
+        <td class="num">18,475원</td>
+        <td><div class="mini-bar"><div class="mb-fill" style="width:73.54111933763235%;background:#7c3aed"></div></div></td>
+        <td class="num">3,351</td>
+        <td class="num">57</td>
+        <td><div class="mini-bar"><div class="mb-fill" style="width:53.271028037383175%;background:#f59e0b"></div></div></td>
+        <td class="num">1.70%</td>
+        <td class="num">324원</td>
+      </tr><tr>
+        <td class="date">2026-04-17</td>
+        <td class="num">18,597원</td>
+        <td><div class="mini-bar"><div class="mb-fill" style="width:74.0267494626224%;background:#7c3aed"></div></div></td>
+        <td class="num">2,998</td>
+        <td class="num">74</td>
+        <td><div class="mini-bar"><div class="mb-fill" style="width:69.1588785046729%;background:#f59e0b"></div></div></td>
+        <td class="num">2.47%</td>
+        <td class="num">251원</td>
+      </tr><tr>
+        <td class="date">2026-04-18</td>
+        <td class="num">18,467원</td>
+        <td><div class="mini-bar"><div class="mb-fill" style="width:73.50927473927234%;background:#7c3aed"></div></div></td>
+        <td class="num">1,721</td>
+        <td class="num">57</td>
+        <td><div class="mini-bar"><div class="mb-fill" style="width:53.271028037383175%;background:#f59e0b"></div></div></td>
+        <td class="num">3.31%</td>
+        <td class="num">324원</td>
+      </tr><tr>
+        <td class="date">2026-04-19</td>
+        <td class="num">23,298원</td>
+        <td><div class="mini-bar"><div class="mb-fill" style="width:92.73943157391928%;background:#7c3aed"></div></div></td>
+        <td class="num">2,550</td>
+        <td class="num">60</td>
+        <td><div class="mini-bar"><div class="mb-fill" style="width:56.074766355140184%;background:#f59e0b"></div></div></td>
+        <td class="num">2.35%</td>
+        <td class="num">388원</td>
+      </tr><tr>
+        <td class="date">2026-04-20</td>
+        <td class="num">22,719원</td>
+        <td><div class="mini-bar"><div class="mb-fill" style="width:90.43467876761405%;background:#7c3aed"></div></div></td>
+        <td class="num">1,864</td>
+        <td class="num">78</td>
+        <td><div class="mini-bar"><div class="mb-fill" style="width:72.89719626168224%;background:#f59e0b"></div></div></td>
+        <td class="num">4.18%</td>
+        <td class="num">291원</td>
+      </tr><tr>
+        <td class="date">2026-04-21</td>
+        <td class="num">19,308원</td>
+        <td><div class="mini-bar"><div class="mb-fill" style="width:76.85693814186769%;background:#7c3aed"></div></div></td>
+        <td class="num">1,309</td>
+        <td class="num">56</td>
+        <td><div class="mini-bar"><div class="mb-fill" style="width:52.336448598130836%;background:#f59e0b"></div></div></td>
+        <td class="num">4.28%</td>
+        <td class="num">345원</td>
+      </tr><tr>
+        <td class="date">2026-04-22</td>
+        <td class="num">18,600원</td>
+        <td><div class="mini-bar"><div class="mb-fill" style="width:74.0386911870074%;background:#7c3aed"></div></div></td>
+        <td class="num">1,336</td>
+        <td class="num">56</td>
+        <td><div class="mini-bar"><div class="mb-fill" style="width:52.336448598130836%;background:#f59e0b"></div></div></td>
+        <td class="num">4.19%</td>
+        <td class="num">332원</td>
+      </tr><tr>
+        <td class="date">2026-04-23</td>
+        <td class="num">18,697원</td>
+        <td><div class="mini-bar"><div class="mb-fill" style="width:74.42480694212244%;background:#7c3aed"></div></div></td>
+        <td class="num">1,266</td>
+        <td class="num">64</td>
+        <td><div class="mini-bar"><div class="mb-fill" style="width:59.813084112149525%;background:#f59e0b"></div></div></td>
+        <td class="num">5.06%</td>
+        <td class="num">292원</td>
+      </tr><tr>
+        <td class="date">2026-04-24</td>
+        <td class="num">19,576원</td>
+        <td><div class="mini-bar"><div class="mb-fill" style="width:77.9237321869278%;background:#7c3aed"></div></div></td>
+        <td class="num">1,667</td>
+        <td class="num">71</td>
+        <td><div class="mini-bar"><div class="mb-fill" style="width:66.35514018691589%;background:#f59e0b"></div></div></td>
+        <td class="num">4.26%</td>
+        <td class="num">276원</td>
+      </tr><tr>
+        <td class="date">2026-04-25</td>
+        <td class="num">17,677원</td>
+        <td><div class="mini-bar"><div class="mb-fill" style="width:70.36462065122203%;background:#7c3aed"></div></div></td>
+        <td class="num">1,158</td>
+        <td class="num">54</td>
+        <td><div class="mini-bar"><div class="mb-fill" style="width:50.467289719626166%;background:#f59e0b"></div></div></td>
+        <td class="num">4.66%</td>
+        <td class="num">327원</td>
+      </tr><tr>
+        <td class="date">2026-04-26</td>
+        <td class="num">24,417원</td>
+        <td><div class="mini-bar"><div class="mb-fill" style="width:97.19369476952473%;background:#7c3aed"></div></div></td>
+        <td class="num">1,408</td>
+        <td class="num">56</td>
+        <td><div class="mini-bar"><div class="mb-fill" style="width:52.336448598130836%;background:#f59e0b"></div></div></td>
+        <td class="num">3.98%</td>
+        <td class="num">436원</td>
+      </tr><tr>
+        <td class="date">2026-04-27</td>
+        <td class="num">20,153원</td>
+        <td><div class="mini-bar"><div class="mb-fill" style="width:80.22052384364302%;background:#7c3aed"></div></div></td>
+        <td class="num">1,455</td>
+        <td class="num">57</td>
+        <td><div class="mini-bar"><div class="mb-fill" style="width:53.271028037383175%;background:#f59e0b"></div></div></td>
+        <td class="num">3.92%</td>
+        <td class="num">354원</td>
+      </tr><tr>
+        <td class="date">2026-04-28</td>
+        <td class="num">19,985원</td>
+        <td><div class="mini-bar"><div class="mb-fill" style="width:79.55178727808295%;background:#7c3aed"></div></div></td>
+        <td class="num">1,353</td>
+        <td class="num">53</td>
+        <td><div class="mini-bar"><div class="mb-fill" style="width:49.532710280373834%;background:#f59e0b"></div></div></td>
+        <td class="num">3.92%</td>
+        <td class="num">377원</td>
+      </tr><tr>
+        <td class="date">2026-04-29</td>
+        <td class="num">19,862원</td>
+        <td><div class="mini-bar"><div class="mb-fill" style="width:79.06217657829791%;background:#7c3aed"></div></div></td>
+        <td class="num">1,405</td>
+        <td class="num">56</td>
+        <td><div class="mini-bar"><div class="mb-fill" style="width:52.336448598130836%;background:#f59e0b"></div></div></td>
+        <td class="num">3.99%</td>
+        <td class="num">355원</td>
+      </tr><tr>
+        <td class="date">2026-04-30</td>
+        <td class="num">21,493원</td>
+        <td><div class="mini-bar"><div class="mb-fill" style="width:85.55449406894355%;background:#7c3aed"></div></div></td>
+        <td class="num">1,965</td>
+        <td class="num">61</td>
+        <td><div class="mini-bar"><div class="mb-fill" style="width:57.009345794392516%;background:#f59e0b"></div></div></td>
+        <td class="num">3.10%</td>
+        <td class="num">352원</td>
+      </tr></tbody>
+    </table>
+
+    <div class="callout warn">
+      <h4>🤔 트래픽 캠페인 가치 평가 방법</h4>
+      <ul>
+        <li><strong>리타게팅 풀 가치</strong>: 1,957명 사이트 방문자가 리타게팅 광고 모수가 됨 — 별도 리타게팅 캠페인 LTV 평가</li>
+        <li><strong>CTR 트렌드</strong>: 4/16(1.70%) ↘️ 4/23(5.06%) — 변동 있지만 전반 양호. 4/16 일시 약세는 광고 피로도 가능성</li>
+        <li><strong>총평</strong>: 단가 대비 효율 좋은 인지 캠페인. 단, "구매" 직접 기여는 아니므로 매출 캠페인과 별도 KPI로 운영</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<section class="section">
+  <div class="container">
+    <h2>4. 종합 인사이트</h2>
+
+    <div class="callout success">
+      <h4>👍 잘한 점</h4>
+      <ul>
+        <li>매출 캠페인(pet안전봉투) ROAS 6.30 — 신제품 런칭 광고로 매우 우수</li>
+        <li>"쿠팡업체도_영상" 권위/사회적 증명 후킹 — 카피 패턴 검증됨</li>
+        <li>트래픽 캠페인 CTR 3.58% — 업계 평균 대비 우수, 인지도 확보</li>
+        <li>전체 광고비 1,410,659원 중 813,709원으로 매출 5,129,640원 발생</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="container">
+    <p><strong>씨앤씨코리아 4월 메타광고 분석 리포트</strong></p>
+    <p>데이터 출처: Meta Marketing API v21.0 (광고계정 act_988250955232473) · 생성일: 2026-05-04</p>
+    <p>© (주)kitt — 마케팅 자동화 분석 리포트</p>
+  </div>
+</footer>
+
+</body>
+</html>

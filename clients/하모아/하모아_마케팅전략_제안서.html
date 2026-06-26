@@ -1,0 +1,1101 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>하모아(Hamoa) 한돈 D2C 마케팅 전략 제안서 - (주)kitt</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;700;900&display=swap');
+
+  :root {
+    --brand: #b91c1c;
+    --brand-light: #dc2626;
+    --brand-lighter: #fee2e2;
+    --brand-dark: #7f1d1d;
+    --accent: #f59e0b;
+    --accent-dark: #b45309;
+    --success: #15803d;
+    --success-light: #dcfce7;
+    --warning: #ca8a04;
+    --warning-light: #fef9c3;
+    --danger: #dc2626;
+    --danger-light: #fee2e2;
+    --text: #1f2937;
+    --text-light: #4b5563;
+    --text-muted: #6b7280;
+    --bg: #ffffff;
+    --bg-alt: #f9fafb;
+    --bg-card: #ffffff;
+    --border: #e5e7eb;
+    --border-strong: #d1d5db;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  @media print {
+    @page { size: A4; margin: 18mm 14mm 22mm 14mm; }
+    body { font-size: 10pt; }
+    .page-break { page-break-before: always; }
+    .no-print { display: none !important; }
+    header { position: static; }
+    a { color: var(--text) !important; text-decoration: none !important; }
+    .toc { page-break-after: always; }
+    table { font-size: 9pt; }
+    h2 { page-break-before: always; }
+    h2:first-of-type { page-break-before: avoid; }
+  }
+
+  body {
+    font-family: 'Noto Sans KR', -apple-system, BlinkMacSystemFont, sans-serif;
+    font-size: 15px;
+    line-height: 1.75;
+    color: var(--text);
+    background: var(--bg);
+    -webkit-font-smoothing: antialiased;
+  }
+
+  header {
+    background: linear-gradient(135deg, var(--brand-dark) 0%, var(--brand) 60%, var(--accent-dark) 100%);
+    color: #fff;
+    padding: 64px 0 56px;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+  }
+  header::before {
+    content: "HAMOA";
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    font-size: 18rem;
+    font-weight: 900;
+    opacity: 0.06;
+    letter-spacing: -0.1em;
+    pointer-events: none;
+  }
+  header .eyebrow {
+    font-size: 0.85rem;
+    letter-spacing: 0.3em;
+    font-weight: 500;
+    opacity: 0.85;
+    margin-bottom: 12px;
+    position: relative;
+  }
+  header h1 {
+    font-size: 2.2rem;
+    font-weight: 900;
+    margin-bottom: 14px;
+    letter-spacing: -0.03em;
+    position: relative;
+  }
+  header .subtitle {
+    font-size: 1.05rem;
+    opacity: 0.92;
+    margin-bottom: 28px;
+    font-weight: 300;
+    position: relative;
+  }
+  header .meta {
+    font-size: 0.92rem;
+    opacity: 0.88;
+    line-height: 1.9;
+    position: relative;
+  }
+  header .meta strong { color: #fecaca; font-weight: 500; }
+
+  .container {
+    max-width: 960px;
+    margin: 0 auto;
+    padding: 0 28px;
+  }
+
+  .toc {
+    background: var(--bg-alt);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 28px 36px;
+    margin: 48px auto 0;
+  }
+  .toc h3 {
+    font-size: 1.05rem;
+    font-weight: 700;
+    margin-bottom: 16px;
+    color: var(--brand-dark);
+    letter-spacing: -0.01em;
+  }
+  .toc ol {
+    list-style: none;
+    counter-reset: toc;
+    columns: 2;
+    column-gap: 40px;
+  }
+  .toc ol li {
+    counter-increment: toc;
+    padding: 6px 0;
+    font-size: 0.95rem;
+    color: var(--text-light);
+    break-inside: avoid;
+  }
+  .toc ol li::before {
+    content: counter(toc, decimal-leading-zero);
+    color: var(--brand);
+    font-weight: 700;
+    margin-right: 10px;
+  }
+
+  section { padding: 56px 0 16px; }
+
+  h2 {
+    font-size: 1.6rem;
+    font-weight: 800;
+    margin-bottom: 12px;
+    color: var(--brand-dark);
+    letter-spacing: -0.02em;
+    padding-bottom: 14px;
+    border-bottom: 3px solid var(--brand);
+    display: inline-block;
+  }
+  .section-lead {
+    font-size: 0.95rem;
+    color: var(--text-muted);
+    margin: 8px 0 28px;
+    line-height: 1.7;
+  }
+  h3 {
+    font-size: 1.2rem;
+    font-weight: 700;
+    margin: 28px 0 14px;
+    color: var(--text);
+    letter-spacing: -0.01em;
+  }
+  h4 {
+    font-size: 1.02rem;
+    font-weight: 700;
+    margin: 18px 0 8px;
+    color: var(--brand-dark);
+  }
+  p { margin-bottom: 14px; color: var(--text-light); }
+  ul, ol { margin: 10px 0 16px 22px; }
+  li { margin-bottom: 6px; color: var(--text-light); }
+
+  .badge {
+    display: inline-block;
+    background: var(--brand-lighter);
+    color: var(--brand-dark);
+    padding: 3px 10px;
+    border-radius: 999px;
+    font-size: 0.78rem;
+    font-weight: 600;
+    margin-right: 6px;
+  }
+  .badge.accent { background: #fef3c7; color: var(--accent-dark); }
+  .badge.success { background: var(--success-light); color: var(--success); }
+  .badge.danger { background: var(--danger-light); color: var(--danger); }
+  .badge.muted { background: #f3f4f6; color: var(--text-muted); }
+
+  .kpi-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 14px;
+    margin: 20px 0 28px;
+  }
+  .kpi {
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 18px 16px;
+    text-align: center;
+  }
+  .kpi.highlight { border-color: var(--brand); background: var(--brand-lighter); }
+  .kpi.danger { border-color: var(--danger); background: var(--danger-light); }
+  .kpi .label {
+    font-size: 0.78rem;
+    color: var(--text-muted);
+    margin-bottom: 6px;
+    letter-spacing: 0.02em;
+  }
+  .kpi .value {
+    font-size: 1.55rem;
+    font-weight: 800;
+    color: var(--brand-dark);
+    letter-spacing: -0.02em;
+  }
+  .kpi .sub {
+    font-size: 0.75rem;
+    color: var(--text-muted);
+    margin-top: 3px;
+  }
+
+  .callout {
+    background: var(--bg-alt);
+    border-left: 4px solid var(--brand);
+    padding: 18px 22px;
+    border-radius: 6px;
+    margin: 20px 0;
+  }
+  .callout.danger { border-color: var(--danger); background: var(--danger-light); }
+  .callout.warning { border-color: var(--warning); background: var(--warning-light); }
+  .callout.success { border-color: var(--success); background: var(--success-light); }
+  .callout p:last-child { margin-bottom: 0; }
+  .callout strong { color: var(--text); }
+
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 14px 0 24px;
+    font-size: 0.92rem;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    overflow: hidden;
+  }
+  th {
+    background: var(--brand-dark);
+    color: #fff;
+    font-weight: 600;
+    padding: 11px 12px;
+    text-align: left;
+    font-size: 0.88rem;
+  }
+  td {
+    padding: 11px 12px;
+    border-top: 1px solid var(--border);
+    color: var(--text-light);
+  }
+  tr:nth-child(even) td { background: var(--bg-alt); }
+  .num { text-align: right; font-variant-numeric: tabular-nums; }
+  .tag-pill {
+    display: inline-block;
+    padding: 2px 8px;
+    border-radius: 4px;
+    font-size: 0.75rem;
+    font-weight: 600;
+  }
+  .pill-good { background: var(--success-light); color: var(--success); }
+  .pill-warn { background: var(--warning-light); color: var(--warning); }
+  .pill-bad { background: var(--danger-light); color: var(--danger); }
+
+  .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin: 18px 0; }
+  .grid-3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; margin: 18px 0; }
+
+  .card {
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 22px;
+  }
+  .card h4 { margin-top: 0; color: var(--brand-dark); }
+  .card .tag { font-size: 0.78rem; color: var(--accent-dark); font-weight: 600; letter-spacing: 0.05em; }
+
+  .timeline { position: relative; padding-left: 30px; margin: 24px 0; }
+  .timeline::before {
+    content: "";
+    position: absolute;
+    left: 8px; top: 10px; bottom: 10px;
+    width: 2px; background: var(--brand);
+  }
+  .phase { position: relative; margin-bottom: 22px; padding-bottom: 16px; }
+  .phase::before {
+    content: "";
+    position: absolute;
+    left: -27px; top: 6px;
+    width: 14px; height: 14px;
+    border-radius: 50%;
+    background: var(--brand);
+    border: 3px solid var(--bg);
+    box-shadow: 0 0 0 2px var(--brand);
+  }
+  .phase .phase-meta {
+    font-size: 0.82rem;
+    color: var(--accent-dark);
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    margin-bottom: 3px;
+  }
+  .phase h4 { margin: 0 0 8px; }
+
+  .persona {
+    background: linear-gradient(135deg, #fff 0%, var(--bg-alt) 100%);
+    border: 1px solid var(--border);
+    border-left: 4px solid var(--accent);
+    border-radius: 8px;
+    padding: 20px 22px;
+  }
+  .persona h4 { color: var(--accent-dark); margin-top: 0; }
+  .persona .demo { font-size: 0.82rem; color: var(--text-muted); margin-bottom: 8px; }
+
+  .funnel-table th:first-child { width: 18%; }
+  .funnel-table tr td:first-child { font-weight: 600; color: var(--text); }
+
+  .budget-table th:first-child { width: 35%; }
+  .budget-table tfoot td { background: var(--brand-dark); color: #fff; font-weight: 700; }
+
+  .check-list { list-style: none; margin-left: 0; }
+  .check-list li { padding-left: 26px; position: relative; margin-bottom: 10px; }
+  .check-list li::before {
+    content: "✓";
+    position: absolute; left: 0; top: 0;
+    color: var(--success);
+    font-weight: 900;
+  }
+  .x-list { list-style: none; margin-left: 0; }
+  .x-list li { padding-left: 26px; position: relative; margin-bottom: 10px; }
+  .x-list li::before {
+    content: "✗";
+    position: absolute; left: 0; top: 0;
+    color: var(--danger);
+    font-weight: 900;
+  }
+
+  footer {
+    background: var(--brand-dark);
+    color: #fff;
+    padding: 40px 0;
+    text-align: center;
+    margin-top: 60px;
+  }
+  footer .logo { font-size: 1.3rem; font-weight: 900; letter-spacing: 0.02em; margin-bottom: 8px; }
+  footer p { color: #fecaca; margin: 3px 0; font-size: 0.9rem; }
+
+  @media (max-width: 720px) {
+    .kpi-grid { grid-template-columns: repeat(2, 1fr); }
+    .grid-2, .grid-3 { grid-template-columns: 1fr; }
+    .toc ol { columns: 1; }
+    header h1 { font-size: 1.6rem; }
+    header::before { font-size: 10rem; }
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="container">
+    <div class="eyebrow">MARKETING STRATEGY PROPOSAL</div>
+    <h1>하모아(Hamoa) 한돈 D2C 성과 개선 마케팅 전략</h1>
+    <div class="subtitle">메타 광고 성과 진단과 12주 그로스 로드맵</div>
+    <div class="meta">
+      <strong>Client</strong> 하모아 (대표 강병욱) &nbsp;·&nbsp;
+      <strong>Prepared by</strong> (주)kitt &nbsp;·&nbsp;
+      <strong>Date</strong> 2026.04.24<br>
+      <strong>분석 기간</strong> 2026.03.01 ~ 2026.03.23 (23일)
+    </div>
+  </div>
+</header>
+
+<div class="container">
+  <div class="toc">
+    <h3>목차</h3>
+    <ol>
+      <li>Executive Summary — 현 상황 한눈에 보기</li>
+      <li>하모아 쇼핑몰 현황 분석</li>
+      <li>메타(Meta) 광고 성과 정밀 진단</li>
+      <li>성과 부진의 5대 원인 구조화</li>
+      <li>한돈·육류 D2C 시장과 경쟁 지형</li>
+      <li>타겟 페르소나 재정의</li>
+      <li>마케팅 전략 4대 축</li>
+      <li>12주 실행 로드맵</li>
+      <li>채널 믹스와 월 예산안</li>
+      <li>기대 성과(KPI)와 리스크 대응</li>
+    </ol>
+  </div>
+</div>
+
+<!-- 1. Executive Summary -->
+<section>
+  <div class="container">
+    <h2>01. Executive Summary</h2>
+    <p class="section-lead">현재 하모아의 메타 광고는 23일간 <strong>광고비 150만 원을 집행해 매출 99만 원</strong>을 회수하는 구조로, 광고가 돌수록 손실이 누적됩니다. 이는 소재·타겟·전환 동선 세 축이 동시에 최적화되지 않은 <strong>구조적 문제</strong>이며, 캠페인 단위 최적화가 아니라 제품–오퍼–크리에이티브–랜딩–리마케팅을 하나의 퍼널로 재설계해야 합니다.</p>
+
+    <div class="kpi-grid">
+      <div class="kpi danger">
+        <div class="label">전체 ROAS</div>
+        <div class="value">0.66</div>
+        <div class="sub">광고비 1원당 매출 0.66원</div>
+      </div>
+      <div class="kpi">
+        <div class="label">총 광고 지출</div>
+        <div class="value">₩1,502,826</div>
+        <div class="sub">일 평균 ₩65,340</div>
+      </div>
+      <div class="kpi">
+        <div class="label">총 구매 건수</div>
+        <div class="value">28건</div>
+        <div class="sub">일 평균 1.2건</div>
+      </div>
+      <div class="kpi">
+        <div class="label">평균 CPA</div>
+        <div class="value">₩53,672</div>
+        <div class="sub">객단가 ₩35,396 대비 152%</div>
+      </div>
+    </div>
+
+    <div class="callout danger">
+      <p><strong>핵심 진단 ─</strong> 현 상태에서 객단가보다 고객 획득 비용이 1.5배 높아, 광고를 끌수록 적자 폭이 커지는 구조입니다. 단, 베스트 캠페인 <span class="badge">한돈세트_260304</span>가 ROAS 0.85로 가장 근접했다는 것은 <strong>오퍼–소재 궁합이 맞으면 BEP 돌파가 가능하다</strong>는 신호입니다.</p>
+    </div>
+
+    <h3>즉시 실행 권고(Quick Wins)</h3>
+    <ol>
+      <li><strong>저성과 캠페인 3종 즉시 중단</strong> — 곰탕_260320(ROAS 0.10), 한우사골곰탕_260307(구매 0건), 한돈_판매(노출 0) 예산을 회수해 상위 캠페인에 집중</li>
+      <li><strong>객단가 인상 번들 재설계</strong> — 현 객단가 3.5만 원을 7~8만 원대로 끌어올려 CPA 5만 원대에도 수익이 남도록 번들/사은품 구조 변경</li>
+      <li><strong>픽셀·카탈로그·도메인 검증 재설정</strong> — 전환 이벤트가 캠페인별로 혼재(Initiate Checkout vs Purchase)되어 머신러닝이 잘못된 신호를 학습 중</li>
+    </ol>
+  </div>
+</section>
+
+<!-- 2. 하모아 쇼핑몰 현황 분석 -->
+<section>
+  <div class="container">
+    <h2>02. 하모아 쇼핑몰 현황 분석</h2>
+    <p class="section-lead">제품 경쟁력·가격 포지셔닝·쇼핑몰 UX 세 측면에서 현 상태를 진단했습니다.</p>
+
+    <div class="grid-3">
+      <div class="card">
+        <div class="tag">BRAND</div>
+        <h4>하모아</h4>
+        <p>충북 청주 기반 한돈·간편식 D2C 쇼핑몰. "친구와 함께 쇼핑도 즐기고 포인트도 받자" 슬로건으로 <strong>커뮤니티·리워드</strong>를 중심축으로 삼음.</p>
+      </div>
+      <div class="card">
+        <div class="tag">PRODUCT</div>
+        <h4>3개 제품 라인</h4>
+        <p>① 한돈 정육(삼겹·항정·갈비) ② 소고기 ③ 간편식(곰탕·부대찌개·국밥). <strong>간편식 3종 9,900원</strong>이 트래픽 드라이버.</p>
+      </div>
+      <div class="card">
+        <div class="tag">PRICE</div>
+        <h4>고할인·저객단가</h4>
+        <p>9,500~18,500원 대 집중. 할인율 26~59%로 체감 가격은 낮지만, <strong>객단가가 낮아 광고 효율 확보가 어려움</strong>.</p>
+      </div>
+    </div>
+
+    <h3>2-1. 제품 포지셔닝 매트릭스</h3>
+    <table>
+      <thead>
+        <tr>
+          <th>상품</th>
+          <th>정가</th>
+          <th>판매가</th>
+          <th class="num">할인율</th>
+          <th>역할</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>한돈 냉장 돼지고기 4종</td>
+          <td class="num">15,500</td>
+          <td class="num">9,500</td>
+          <td class="num">39%</td>
+          <td><span class="tag-pill pill-warn">입구 상품</span></td>
+        </tr>
+        <tr>
+          <td>하모아 베스트 3종(간편식)</td>
+          <td class="num">─</td>
+          <td class="num">9,900</td>
+          <td class="num">─</td>
+          <td><span class="tag-pill pill-warn">입구 상품</span></td>
+        </tr>
+        <tr>
+          <td>한돈 냉장 항정살</td>
+          <td class="num">35,000</td>
+          <td class="num">14,400</td>
+          <td class="num">59%</td>
+          <td><span class="tag-pill pill-good">핵심 SKU</span></td>
+        </tr>
+        <tr>
+          <td>국내산 돼지갈비찜 1kg</td>
+          <td class="num">25,000</td>
+          <td class="num">18,500</td>
+          <td class="num">26%</td>
+          <td><span class="tag-pill pill-good">핵심 SKU</span></td>
+        </tr>
+      </tbody>
+    </table>
+
+    <div class="callout warning">
+      <p><strong>구조적 이슈 ─</strong> 입구 상품(1만 원대)과 핵심 SKU(1.5~2만 원대) 사이에 <strong>3~5만 원대 "주력 번들"이 비어 있습니다.</strong> 한돈세트_260304 캠페인이 상대적으로 잘 돌았던 이유도 번들 구성이 있었기 때문입니다. 번들 라인업 보강이 가장 빠른 성과 개선 포인트입니다.</p>
+    </div>
+
+    <h3>2-2. 쇼핑몰 UX 관찰 사항</h3>
+    <ul>
+      <li>메인 히어로 영역이 <strong>기능 설명 중심</strong>(리워드 프로그램)으로 구성되어 있어, 신규 방문객에게 "왜 여기서 한돈을 사야 하는가"에 대한 답이 즉시 드러나지 않음</li>
+      <li>상품 상세에 <strong>산지·등급·도축일·부위별 조리법</strong> 등 육류 구매 전환에 결정적인 신뢰 요소가 부족</li>
+      <li>리뷰/평점/누적 판매량 등 <strong>사회적 증거(social proof)</strong> 노출이 약함 — 메타 광고에서 랜딩으로 유입되는 트래픽의 이탈률이 높을 수밖에 없는 환경</li>
+      <li>이메일(dodam2115@naver.com)과 네이버 스마트스토어 "dodamhanu" 도메인을 종합하면 <strong>자사몰-네이버 스토어 이원화 운영</strong> 중으로 추정 — 채널 간 역할 분담 재설계 필요</li>
+    </ul>
+  </div>
+</section>
+
+<!-- 3. 메타 광고 성과 정밀 진단 -->
+<section>
+  <div class="container">
+    <h2>03. 메타(Meta) 광고 성과 정밀 진단</h2>
+    <p class="section-lead">2026.03.01~03.23 집행된 6개 캠페인을 ROAS·CPA·학습 신호 3관점에서 분석했습니다.</p>
+
+    <h3>3-1. 캠페인별 성과 스코어카드</h3>
+    <table>
+      <thead>
+        <tr>
+          <th>캠페인</th>
+          <th>상태</th>
+          <th class="num">지출(₩)</th>
+          <th class="num">노출</th>
+          <th class="num">도달</th>
+          <th class="num">구매</th>
+          <th class="num">매출(₩)</th>
+          <th class="num">ROAS</th>
+          <th>판정</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>한돈세트_260304</td>
+          <td><span class="badge success">Active</span></td>
+          <td class="num">932,009</td>
+          <td class="num">22,567</td>
+          <td class="num">12,256</td>
+          <td class="num">21</td>
+          <td class="num">796,400</td>
+          <td class="num"><strong>0.85</strong></td>
+          <td><span class="tag-pill pill-warn">유지·최적화</span></td>
+        </tr>
+        <tr>
+          <td>삼겹살_260313</td>
+          <td><span class="badge muted">Inactive</span></td>
+          <td class="num">221,063</td>
+          <td class="num">7,984</td>
+          <td class="num">5,911</td>
+          <td class="num">6</td>
+          <td class="num">180,800</td>
+          <td class="num">0.82</td>
+          <td><span class="tag-pill pill-warn">재개·AB</span></td>
+        </tr>
+        <tr>
+          <td>한돈셋트_260225</td>
+          <td><span class="badge muted">Inactive</span></td>
+          <td class="num">154,751</td>
+          <td class="num">5,398</td>
+          <td class="num">3,561</td>
+          <td class="num">0</td>
+          <td class="num">0</td>
+          <td class="num">─</td>
+          <td><span class="tag-pill pill-bad">중단</span></td>
+        </tr>
+        <tr>
+          <td>곰탕_260320</td>
+          <td><span class="badge success">Active</span></td>
+          <td class="num">135,406</td>
+          <td class="num">4,399</td>
+          <td class="num">3,171</td>
+          <td class="num">1</td>
+          <td class="num">13,900</td>
+          <td class="num">0.10</td>
+          <td><span class="tag-pill pill-bad">즉시 중단</span></td>
+        </tr>
+        <tr>
+          <td>한우사골곰탕_260307</td>
+          <td><span class="badge muted">Inactive</span></td>
+          <td class="num">59,597</td>
+          <td class="num">2,231</td>
+          <td class="num">1,657</td>
+          <td class="num">0</td>
+          <td class="num">0</td>
+          <td class="num">─</td>
+          <td><span class="tag-pill pill-bad">중단</span></td>
+        </tr>
+        <tr>
+          <td>한돈_판매</td>
+          <td><span class="badge muted">Inactive</span></td>
+          <td class="num">0</td>
+          <td class="num">0</td>
+          <td class="num">0</td>
+          <td class="num">0</td>
+          <td class="num">0</td>
+          <td class="num">─</td>
+          <td><span class="tag-pill pill-bad">미게재</span></td>
+        </tr>
+      </tbody>
+    </table>
+
+    <h3>3-2. 주요 지표 요약</h3>
+    <div class="kpi-grid">
+      <div class="kpi">
+        <div class="label">누적 노출</div>
+        <div class="value">42,579</div>
+        <div class="sub">도달 26,556 대비 1.6 회</div>
+      </div>
+      <div class="kpi">
+        <div class="label">객단가(AOV)</div>
+        <div class="value">₩35,396</div>
+        <div class="sub">총매출 991,100 ÷ 28건</div>
+      </div>
+      <div class="kpi">
+        <div class="label">최고 CPA</div>
+        <div class="value danger">₩135,406</div>
+        <div class="sub">곰탕_260320</div>
+      </div>
+      <div class="kpi highlight">
+        <div class="label">최저 CPA</div>
+        <div class="value">₩36,844</div>
+        <div class="sub">삼겹살_260313</div>
+      </div>
+    </div>
+
+    <div class="callout">
+      <p><strong>학습 신호의 혼선 ─</strong> 한돈셋트_260225 캠페인이 Initiate Checkout(결제시작)을 최적화 이벤트로 삼고 있는 반면, 나머지는 Purchase로 설정되어 있습니다. <strong>같은 계정 안에서 이벤트가 섞이면 머신러닝이 서로 다른 유저 프로파일을 학습하여 효율이 평준화됩니다.</strong> 계정 단위 전환 이벤트 표준화가 필요합니다.</p>
+    </div>
+  </div>
+</section>
+
+<!-- 4. 부진 원인 5대 -->
+<section>
+  <div class="container">
+    <h2>04. 성과 부진의 5대 원인</h2>
+    <p class="section-lead">단순히 "광고가 안 돈다"가 아니라, 어느 단계에서 어떻게 새고 있는지 분해해야 해결이 가능합니다.</p>
+
+    <div class="grid-2">
+      <div class="card">
+        <div class="tag">CAUSE 01</div>
+        <h4>오퍼 구조 — 객단가 &lt; CPA</h4>
+        <p>평균 객단가 ₩35,396, 평균 CPA ₩53,672. <strong>첫 구매만 놓고 보면 광고는 무조건 적자</strong> 구조. 재구매가 광고비를 갚아야 하는데, 리텐션 프로그램이 광고 성과 추적과 연동되지 않음.</p>
+      </div>
+      <div class="card">
+        <div class="tag">CAUSE 02</div>
+        <h4>소재 ─ 식감·가성비 증폭 실패</h4>
+        <p>육류 광고의 CVR을 좌우하는 <strong>ASMR·클로즈업·지글지글·플레이팅</strong> 후킹 소재가 부족. 정지 이미지·일반 컷 중심 소재는 피드 경쟁에서 밀림.</p>
+      </div>
+      <div class="card">
+        <div class="tag">CAUSE 03</div>
+        <h4>타겟 ─ 광범위 타겟 의존</h4>
+        <p>상세 타겟 세분화 없이 어드밴티지+ 또는 넓은 관심사 타겟에 의존한 것으로 추정됨. 육류 구매객은 <strong>가사관여도/가구형태/식습관</strong>으로 잘게 쪼개야 ROAS가 나옴.</p>
+      </div>
+      <div class="card">
+        <div class="tag">CAUSE 04</div>
+        <h4>랜딩 ─ 광고→상세 간 메시지 단절</h4>
+        <p>광고 후킹은 "하모아 베스트 3종 9,900원"이지만 랜딩은 카테고리/홈으로 유입되는 경우 이탈률 급증. <strong>광고–상세 1:1 매칭</strong> 상세페이지 전용 버전 부재.</p>
+      </div>
+      <div class="card">
+        <div class="tag">CAUSE 05</div>
+        <h4>픽셀·이벤트 설계 혼선</h4>
+        <p>캠페인별 전환 이벤트 불일치(IC vs Purchase), 모수 기반 리마케팅·LAL 오디언스 설정 여부 미확인. <strong>데이터 기반 최적화의 토대</strong>가 흔들림.</p>
+      </div>
+      <div class="card">
+        <div class="tag">CAUSE 06</div>
+        <h4>채널 분산 ─ 자사몰 vs 스마트스토어</h4>
+        <p>네이버 스마트스토어(dodamhanu)와 자사몰(hamoa.co.kr)이 병행 운영되나, <strong>각 채널의 역할·가격·상품 구성이 구분되지 않음.</strong> 유입이 분산되어 양쪽 모두 성장 임계점을 못 넘음.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- 5. 시장 -->
+<section>
+  <div class="container">
+    <h2>05. 한돈·육류 D2C 시장과 경쟁 지형</h2>
+    <p class="section-lead">시장은 성장 중이고, 하모아가 차별화할 수 있는 빈틈이 분명히 존재합니다.</p>
+
+    <h3>5-1. 시장 맥락</h3>
+    <ul>
+      <li>2025년 국내 온라인 식품 시장 <strong>43.4조 원</strong>(2019년 대비 62% 성장)</li>
+      <li>육류 D2C 대표 주자: <strong>정육각</strong>(연 매출 400억+), <strong>설로인</strong>(200억+), <strong>육백점</strong>, <strong>반하누</strong>, <strong>한우맘</strong></li>
+      <li>2026년 이커머스 시장 전체는 300조 원 규모로 전망되며 <strong>D2C 자사몰 강화</strong>가 중견 브랜드 공통 전략</li>
+    </ul>
+
+    <h3>5-2. 경쟁사 포지셔닝</h3>
+    <table>
+      <thead>
+        <tr>
+          <th>브랜드</th>
+          <th>카테고리</th>
+          <th>핵심 메시지</th>
+          <th>가격 포지션</th>
+          <th>하모아 대비 시사점</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><strong>정육각</strong></td>
+          <td>초신선 돈육</td>
+          <td>"도축 4일 이내 초신선"</td>
+          <td>프리미엄</td>
+          <td>신선도 스토리텔링이 핵심 경쟁력</td>
+        </tr>
+        <tr>
+          <td><strong>설로인</strong></td>
+          <td>한우·드라이에이징</td>
+          <td>"셰프 큐레이션·건조숙성"</td>
+          <td>프리미엄</td>
+          <td>콘텐츠·브랜딩 투자가 ROAS로 환산</td>
+        </tr>
+        <tr>
+          <td><strong>반하누</strong></td>
+          <td>한우·한돈 종합몰</td>
+          <td>"앱 기반 반복구매·회원가"</td>
+          <td>중가</td>
+          <td>앱·회원제 리텐션 구조가 강함</td>
+        </tr>
+        <tr>
+          <td><strong>육백점</strong></td>
+          <td>전국 산지 직배송</td>
+          <td>"산지 직송·중간 유통 제거"</td>
+          <td>중가</td>
+          <td>산지 스토리가 차별화</td>
+        </tr>
+        <tr>
+          <td style="background: var(--brand-lighter);"><strong>하모아(현 포지션)</strong></td>
+          <td style="background: var(--brand-lighter);">한돈+간편식</td>
+          <td style="background: var(--brand-lighter);">"친구 초대 리워드"</td>
+          <td style="background: var(--brand-lighter);">가성비</td>
+          <td style="background: var(--brand-lighter);"><strong>간편식 연계는 경쟁사에 없는 빈틈</strong></td>
+        </tr>
+      </tbody>
+    </table>
+
+    <div class="callout success">
+      <p><strong>하모아의 WIN ZONE ─</strong> 경쟁사는 "신선·숙성·산지"로 프리미엄 포지션에 몰려 있고, 가성비 영역은 상대적으로 비어 있습니다. 여기에 <strong>"삼겹살을 사면 부대찌개도 같이" 간편식 번들</strong>이라는 하모아만의 접점을 결합하면, "1~2인 가구가 한 끼를 완성할 수 있는 한돈 박스" 포지션을 선점할 수 있습니다.</p>
+    </div>
+  </div>
+</section>
+
+<!-- 6. 페르소나 -->
+<section>
+  <div class="container">
+    <h2>06. 타겟 페르소나 재정의</h2>
+    <p class="section-lead">넓은 타겟 대신 초기 획득 ROAS가 나올 핵심 3페르소나에 집중합니다.</p>
+
+    <div class="grid-3">
+      <div class="persona">
+        <h4>① 실속파 4050 주부</h4>
+        <div class="demo">40~59세 여성 · 유자녀 가구 · 수도권/광역시</div>
+        <p>가족 식탁을 책임지는 실구매자. 할인·대용량·번들에 반응. <strong>삼겹살 1kg+갈비찜 번들</strong>에 최적.</p>
+        <p><strong>핵심 훅</strong>: "주말 가족 식탁, 1만 원대 완성"</p>
+      </div>
+      <div class="persona">
+        <h4>② 바쁜 3040 직장인 1~2인 가구</h4>
+        <div class="demo">30~49세 · 1~2인 가구 · 수도권 밀집</div>
+        <p>밀키트·간편식 헤비 유저. <strong>곰탕·부대찌개·국밥 3종 9,900원</strong>이 정확히 이 페르소나용. 자취·맞벌이 키워드에서 CVR이 높음.</p>
+        <p><strong>핵심 훅</strong>: "데우기만 하면 한 끼, 냉동실 비상식"</p>
+      </div>
+      <div class="persona">
+        <h4>③ 미식·홈파티 2030</h4>
+        <div class="demo">25~39세 · 홈쿡/파티 콘텐츠 관심</div>
+        <p>항정살·오겹살·수제 갈비찜에 반응. <strong>인스타 릴스형 조리 영상</strong>과 궁합. 객단가를 끌어올리는 주력 타겟.</p>
+        <p><strong>핵심 훅</strong>: "캠핑·홈파티, 숨은 부위로 차별화"</p>
+      </div>
+    </div>
+
+    <h3>제외 또는 억제 타겟</h3>
+    <ul class="x-list">
+      <li>20대 초반 학생층 — 객단가 낮고 재구매율 낮음, 현 단계 광고비에서는 제외</li>
+      <li>이미 구매한 고객 동일 오퍼 재노출 — 리마케팅은 <strong>크로스셀(한돈→간편식)</strong>로만 운영</li>
+    </ul>
+  </div>
+</section>
+
+<!-- 7. 4대 전략 -->
+<section>
+  <div class="container">
+    <h2>07. 마케팅 전략 4대 축</h2>
+    <p class="section-lead">"광고를 더 태운다"가 아니라 "광고가 돌 수 있는 구조로 바꾼다"가 핵심입니다.</p>
+
+    <div class="grid-2">
+      <div class="card" style="border-top: 4px solid var(--brand);">
+        <div class="tag">AXIS 01 — OFFER</div>
+        <h4>번들·미끼-주력-업셀 3단 상품 구조 재설계</h4>
+        <ul>
+          <li><strong>미끼(Tripwire)</strong>: 간편식 3종 9,900원 — 신규 획득 채널</li>
+          <li><strong>주력(Hero Bundle)</strong>: 한돈 삼겹+갈비찜+간편식 49,000~69,000원대 신규 번들 개발</li>
+          <li><strong>업셀/재구매</strong>: 정기배송(월 1회), 리워드 포인트·친구 초대 연계</li>
+        </ul>
+        <p><strong>목표</strong>: 평균 객단가 ₩35,396 → ₩55,000+ 상향, CPA 5만 원대에도 흑자 가능한 구조 확보</p>
+      </div>
+
+      <div class="card" style="border-top: 4px solid var(--accent);">
+        <div class="tag">AXIS 02 — CREATIVE</div>
+        <h4>식감 중심 숏폼 소재 공장화</h4>
+        <ul>
+          <li>지글지글 ASMR·클로즈업·플레이팅 <strong>15초 릴스 3종/주</strong></li>
+          <li>"비포·애프터"(포장 개봉→조리→플레이팅) 서사형 1편/주</li>
+          <li>실구매 고객 리뷰·UGC 큐레이션 3종/주</li>
+          <li>기존 촬영 자산(한돈삼겹살 영상, 정·세 이미지 8컷)을 <strong>릴스·카탈로그·이메일·상세</strong>로 멀티 리퍼포즈</li>
+        </ul>
+        <p><strong>목표</strong>: CTR 1.0%→1.8%, 후킹 구간 Hook Rate 25%→40%</p>
+      </div>
+
+      <div class="card" style="border-top: 4px solid var(--success);">
+        <div class="tag">AXIS 03 — FUNNEL</div>
+        <h4>광고→랜딩→상세→결제 일관성 확보</h4>
+        <ul>
+          <li>광고 문구·오퍼와 <strong>1:1 매칭되는 랜딩 상세페이지</strong> 구축(SKU당 1페이지)</li>
+          <li>신뢰 섹션 강화: 산지·등급·도축일·실사용 리뷰·누적 판매량</li>
+          <li>픽셀 재설정·전환 API(CAPI) 연동, 전 캠페인 <strong>Purchase 이벤트로 통일</strong></li>
+          <li>장바구니 이탈·결제 이탈·구매 완료 <strong>세그먼트별 리마케팅</strong> 3트랙 세팅</li>
+        </ul>
+        <p><strong>목표</strong>: 랜딩→장바구니 3%→6%, 장바구니→결제 40%→55%</p>
+      </div>
+
+      <div class="card" style="border-top: 4px solid var(--warning);">
+        <div class="tag">AXIS 04 — CHANNEL MIX</div>
+        <h4>자사몰·스마트스토어·SNS의 역할 분담</h4>
+        <ul>
+          <li><strong>자사몰(hamoa.co.kr)</strong>: 리워드·정기배송 기반 <strong>재구매·LTV 허브</strong></li>
+          <li><strong>네이버 스마트스토어(dodamhanu)</strong>: 신규 고객 신뢰·후기 누적 <strong>획득 채널</strong>, 네이버 쇼핑 광고 병행</li>
+          <li><strong>메타(IG/FB)</strong>: 릴스 중심 수요 발굴, 자사몰 랜딩으로 유도</li>
+          <li><strong>카카오 모먼트·CRM</strong>: 기구매 고객 재구매 유도(객단가 업셀)</li>
+        </ul>
+        <p><strong>목표</strong>: 채널별 KPI 분리, 자사몰 회원 DB 3개월 내 3배 성장</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- 8. 로드맵 -->
+<section>
+  <div class="container">
+    <h2>08. 12주 실행 로드맵</h2>
+    <p class="section-lead">Week 1~4 진단·세팅 → Week 5~8 스케일 테스트 → Week 9~12 최적화·확장 3단계로 구성합니다.</p>
+
+    <div class="timeline">
+      <div class="phase">
+        <div class="phase-meta">PHASE 1 · WEEK 1–4</div>
+        <h4>기반 정리와 퀵윈 확보</h4>
+        <ul>
+          <li>메타 계정 진단 감사(픽셀·CAPI·이벤트·도메인 인증)</li>
+          <li>저성과 캠페인 3종 중단, 상위 2종에 예산 집중(한돈세트/삼겹살)</li>
+          <li>번들 SKU 3종 기획·등록(Hero Bundle 49K/69K/99K)</li>
+          <li>랜딩 상세 3종 리라이팅, 신뢰 섹션 보강</li>
+          <li>기존 촬영본 재편집 → 릴스 6편·카탈로그 12컷 납품</li>
+        </ul>
+      </div>
+      <div class="phase">
+        <div class="phase-meta">PHASE 2 · WEEK 5–8</div>
+        <h4>소재·타겟 A/B 스케일</h4>
+        <ul>
+          <li>3페르소나 × 3후킹 × 3랜딩 = <strong>27조합 A/B 매트릭스 운영</strong></li>
+          <li>릴스 광고 중심(6편/주), 카탈로그 DPA 병행</li>
+          <li>네이버 쇼핑 검색·파워링크 병행, 스마트스토어 후기 캠페인</li>
+          <li>리마케팅 3트랙(장바구니·방문·구매고객 크로스셀) 가동</li>
+          <li>주간 성과 리뷰 리포트 운영, CAC·LTV 트래킹 대시보드 구축</li>
+        </ul>
+      </div>
+      <div class="phase">
+        <div class="phase-meta">PHASE 3 · WEEK 9–12</div>
+        <h4>스케일업과 리텐션 체계화</h4>
+        <ul>
+          <li>ROAS 1.5 이상 조합에 예산 집중 투자(스케일 2~3배)</li>
+          <li>정기배송 런칭, 카카오·이메일 CRM 시퀀스 3단계 구축</li>
+          <li>협업 인플루언서 3~5명 UGC 제작(식단·홈파티·캠핑 키워드)</li>
+          <li>연말 대비 시즈널 캠페인(김장·명절·선물세트) 기획</li>
+          <li>3개월 성과 보고서 및 6개월 확장 플랜 제안</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- 9. 채널 믹스와 예산 -->
+<section>
+  <div class="container">
+    <h2>09. 채널 믹스와 월 예산안</h2>
+    <p class="section-lead">현재 광고비(월 환산 약 200만 원) 대비, <strong>월 500만 원 기준 표준안</strong>과 공격형 확장안을 함께 제시합니다.</p>
+
+    <h3>9-1. 월 500만 원 표준안</h3>
+    <table class="budget-table">
+      <thead>
+        <tr>
+          <th>채널</th>
+          <th>세부 활동</th>
+          <th class="num">월 예산(₩)</th>
+          <th class="num">비중</th>
+          <th>KPI</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>메타(IG/FB)</td>
+          <td>신규 획득 · 릴스 · 카탈로그 DPA</td>
+          <td class="num">2,800,000</td>
+          <td class="num">56%</td>
+          <td>ROAS 1.5+</td>
+        </tr>
+        <tr>
+          <td>네이버 쇼핑 광고</td>
+          <td>스토어 검색·파워링크</td>
+          <td class="num">900,000</td>
+          <td class="num">18%</td>
+          <td>CPA ≤ ₩40K</td>
+        </tr>
+        <tr>
+          <td>카카오 모먼트·CRM</td>
+          <td>리타겟·톡채널·업셀</td>
+          <td class="num">500,000</td>
+          <td class="num">10%</td>
+          <td>재구매율 15%+</td>
+        </tr>
+        <tr>
+          <td>콘텐츠 제작</td>
+          <td>릴스·UGC·인플루언서</td>
+          <td class="num">600,000</td>
+          <td class="num">12%</td>
+          <td>소재 12종/월</td>
+        </tr>
+        <tr>
+          <td>도구·분석</td>
+          <td>CAPI·히트맵·리포트</td>
+          <td class="num">200,000</td>
+          <td class="num">4%</td>
+          <td>주간 대시보드</td>
+        </tr>
+      </tbody>
+      <tfoot>
+        <tr>
+          <td>합계</td>
+          <td>─</td>
+          <td class="num">5,000,000</td>
+          <td class="num">100%</td>
+          <td>ROAS 1.5 / CAC ≤ ₩45K</td>
+        </tr>
+      </tfoot>
+    </table>
+
+    <h3>9-2. 3단계 투자 시나리오</h3>
+    <table>
+      <thead>
+        <tr>
+          <th>플랜</th>
+          <th class="num">월 광고비</th>
+          <th>핵심 활동</th>
+          <th>기대 월매출</th>
+          <th>목표 ROAS</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><strong>라이트</strong> (구조 개선형)</td>
+          <td class="num">3,000,000</td>
+          <td>메타+네이버, 소재 6편/월</td>
+          <td class="num">3,500만~4,500만</td>
+          <td class="num">1.2~1.5</td>
+        </tr>
+        <tr style="background: var(--brand-lighter);">
+          <td><strong>스탠다드</strong> (추천)</td>
+          <td class="num">5,000,000</td>
+          <td>메타+네이버+카카오+CRM, 소재 12편/월</td>
+          <td class="num">7,000만~9,000만</td>
+          <td class="num">1.5~1.8</td>
+        </tr>
+        <tr>
+          <td><strong>그로스</strong> (공격형)</td>
+          <td class="num">10,000,000</td>
+          <td>+인플루언서·유튜브·시즈널 캠페인</td>
+          <td class="num">1.5억~2억</td>
+          <td class="num">1.8~2.2</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</section>
+
+<!-- 10. 기대 성과 및 리스크 -->
+<section>
+  <div class="container">
+    <h2>10. 기대 성과(KPI)와 리스크 대응</h2>
+    <p class="section-lead">스탠다드 플랜(월 500만 원) 기준 3개월 목표입니다.</p>
+
+    <h3>10-1. 3개월 KPI 목표</h3>
+    <table>
+      <thead>
+        <tr>
+          <th>지표</th>
+          <th class="num">현재(23일 실측)</th>
+          <th class="num">4주 차</th>
+          <th class="num">8주 차</th>
+          <th class="num">12주 차</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>ROAS</td>
+          <td class="num">0.66</td>
+          <td class="num">1.0</td>
+          <td class="num">1.5</td>
+          <td class="num"><strong>1.8+</strong></td>
+        </tr>
+        <tr>
+          <td>평균 객단가(AOV)</td>
+          <td class="num">₩35,396</td>
+          <td class="num">₩45,000</td>
+          <td class="num">₩52,000</td>
+          <td class="num"><strong>₩55,000+</strong></td>
+        </tr>
+        <tr>
+          <td>CPA</td>
+          <td class="num">₩53,672</td>
+          <td class="num">₩45,000</td>
+          <td class="num">₩38,000</td>
+          <td class="num"><strong>≤ ₩35,000</strong></td>
+        </tr>
+        <tr>
+          <td>월 구매 건수</td>
+          <td class="num">37건(환산)</td>
+          <td class="num">90건</td>
+          <td class="num">160건</td>
+          <td class="num"><strong>250건+</strong></td>
+        </tr>
+        <tr>
+          <td>신규 회원 DB</td>
+          <td class="num">─</td>
+          <td class="num">+200</td>
+          <td class="num">+500</td>
+          <td class="num"><strong>+1,000</strong></td>
+        </tr>
+        <tr>
+          <td>재구매율(90일)</td>
+          <td class="num">미측정</td>
+          <td class="num">추적 시작</td>
+          <td class="num">12%</td>
+          <td class="num"><strong>18%+</strong></td>
+        </tr>
+      </tbody>
+    </table>
+
+    <h3>10-2. 리스크와 대응</h3>
+    <div class="grid-2">
+      <div class="card">
+        <h4>⚠ 원육 원가 변동</h4>
+        <p>한돈 시세 변동에 따라 마진율이 흔들릴 수 있음. → <strong>월 단위 가격·번들 재계산 프로세스</strong>, 간편식 라인으로 마진 방어.</p>
+      </div>
+      <div class="card">
+        <h4>⚠ 시즈널 수요 편차</h4>
+        <p>명절·김장·여름 캠핑 시즌 변동성. → 시즈널 캘린더 기반 사전 기획, 비시즌 리뷰·콘텐츠 자산 축적.</p>
+      </div>
+      <div class="card">
+        <h4>⚠ iOS 추적 제한(ATT)</h4>
+        <p>픽셀 단독으로는 전환 추적 누락 발생. → <strong>전환 API(CAPI)·UTM·쇼핑몰 Self-Reported Attribution 병행</strong>.</p>
+      </div>
+      <div class="card">
+        <h4>⚠ 소재 피로도</h4>
+        <p>같은 소재 2~3주 이상 돌면 CTR 급락. → 주 3~6편 신규 소재 공급 라인 고정화.</p>
+      </div>
+    </div>
+
+    <div class="callout success">
+      <p><strong>요약 ─</strong> 지금의 ROAS 0.66은 "광고를 태우지 말라"가 아니라 <strong>"광고 이전 구조를 고치면 충분히 돌릴 수 있다"</strong>는 진단입니다. 번들 재설계·소재 공장화·퍼널 일관성 3가지를 4주 안에 세팅하면, 12주 안에 ROAS 1.8과 월 250건 이상의 안정적인 주문 흐름 확보가 현실적 목표입니다.</p>
+    </div>
+
+    <h3>다음 단계</h3>
+    <ul class="check-list">
+      <li>1차 워크숍(2시간) — 번들 구조·소재 방향·랜딩 골조 합의</li>
+      <li>계정 진단 감사 리포트 납품(5영업일)</li>
+      <li>4주 스프린트 계약 체결 및 집행 시작</li>
+    </ul>
+  </div>
+</section>
+
+<footer>
+  <div class="container">
+    <div class="logo">(주) kitt</div>
+    <p>AI × Growth Marketing Partner</p>
+    <p>Contact · kitt.ai.ceo@gmail.com</p>
+  </div>
+</footer>
+
+</body>
+</html>

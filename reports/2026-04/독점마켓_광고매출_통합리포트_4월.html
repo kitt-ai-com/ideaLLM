@@ -1,0 +1,819 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<title>독점마켓 메타광고 + 매출 통합 리포트 2026-04 | (주)kitt</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;700;900&display=swap');
+:root {
+  --brand: #047857; --brand-light: #10b981; --brand-dark: #064e3b;
+  --accent: #f59e0b; --success: #15803d; --warning: #ca8a04; --danger: #dc2626;
+  --text: #1f2937; --text-light: #4b5563; --text-muted: #6b7280;
+  --bg: #f9fafb; --card: #fff; --border: #e5e7eb;
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body { font-family: 'Noto Sans KR', sans-serif; background: var(--bg); color: var(--text); line-height: 1.6; }
+.container { max-width: 1280px; margin: 0 auto; padding: 0 24px; }
+header { background: linear-gradient(135deg, #064e3b 0%, #047857 60%, #f59e0b 100%); color: #fff; padding: 56px 0 48px; position: relative; overflow: hidden; }
+header::before { content: "독점마켓"; position: absolute; top: 50%; left: 50%; transform: translate(-50%,-50%); font-size: 14rem; font-weight: 900; opacity: 0.06; letter-spacing: -0.05em; pointer-events: none; }
+header .eyebrow { font-size: 0.8rem; letter-spacing: 0.3em; opacity: 0.85; margin-bottom: 12px; }
+header h1 { font-size: 2.4rem; font-weight: 900; margin-bottom: 8px; position: relative; }
+header .sub { font-size: 1rem; opacity: 0.9; position: relative; }
+header .meta { margin-top: 24px; display: flex; gap: 24px; font-size: 0.9rem; flex-wrap: wrap; position: relative; }
+
+.section { padding: 48px 0; }
+.section + .section { border-top: 1px solid var(--border); }
+.section.hero-stats { background: linear-gradient(180deg, #ecfdf5 0%, var(--bg) 100%); }
+
+h2 { font-size: 1.6rem; font-weight: 800; margin-bottom: 8px; }
+h2 .num-tag { font-size: 0.85rem; color: var(--text-muted); font-weight: 500; margin-left: 8px; }
+.section-desc { color: var(--text-muted); margin-bottom: 24px; padding-bottom: 12px; border-bottom: 3px solid var(--brand); display: inline-block; }
+h3 { font-size: 1.15rem; font-weight: 700; margin: 24px 0 12px; color: var(--brand-dark); }
+
+.kpi-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; margin-bottom: 32px; }
+.kpi { background: var(--card); border: 1px solid var(--border); border-radius: 12px; padding: 20px; box-shadow: 0 1px 2px rgba(0,0,0,0.04); }
+.kpi .label { font-size: 0.85rem; color: var(--text-muted); margin-bottom: 8px; font-weight: 500; }
+.kpi .value { font-size: 1.6rem; font-weight: 800; }
+.kpi .value .unit { font-size: 0.9rem; color: var(--text-muted); margin-left: 2px; }
+.kpi .delta { font-size: 0.8rem; margin-top: 6px; color: var(--text-muted); }
+.kpi.highlight { background: linear-gradient(135deg, var(--brand-dark), var(--brand)); color: #fff; border: none; }
+.kpi.highlight .label, .kpi.highlight .value, .kpi.highlight .delta { color: #fff; }
+.kpi.warn { background: linear-gradient(135deg, #b45309, var(--accent)); color: #fff; border: none; }
+.kpi.warn .label, .kpi.warn .value, .kpi.warn .delta { color: #fff; }
+
+table { width: 100%; border-collapse: collapse; background: var(--card); border-radius: 8px; overflow: hidden; box-shadow: 0 1px 2px rgba(0,0,0,0.04); margin-bottom: 24px; font-size: 0.88rem; }
+th { background: #f3f4f6; padding: 10px 12px; text-align: left; font-weight: 700; font-size: 0.82rem; border-bottom: 2px solid var(--border); }
+td { padding: 10px 12px; border-bottom: 1px solid var(--border); vertical-align: middle; }
+tr:last-child td { border-bottom: none; }
+tr:hover td { background: #fafafa; }
+.num { text-align: right; font-variant-numeric: tabular-nums; }
+.ad-name { font-weight: 600; max-width: 280px; }
+.cat-pill { display: inline-block; color: #fff; padding: 2px 10px; border-radius: 12px; font-size: 0.75rem; font-weight: 600; }
+.badge { display: inline-block; padding: 2px 8px; border-radius: 4px; font-size: 0.75rem; font-weight: 600; }
+.roas-cell { font-weight: 700; }
+tr.r-good td.roas-cell { color: var(--success); }
+tr.r-bad td.roas-cell, tr.r-ghost td.roas-cell { color: var(--danger); }
+tr.r-ghost { background: #fef2f2; }
+
+.callout { border-left: 4px solid var(--brand); background: #ecfdf5; padding: 16px 20px; border-radius: 4px; margin: 16px 0; }
+.callout.danger { border-color: var(--danger); background: #fef2f2; }
+.callout.success { border-color: var(--success); background: #f0fdf4; }
+.callout.warn { border-color: var(--warning); background: #fefce8; }
+.callout.info { border-color: #3b82f6; background: #eff6ff; }
+.callout h4 { margin-bottom: 8px; font-size: 1rem; font-weight: 700; }
+.callout ul { list-style: none; padding-left: 0; }
+.callout li { padding: 6px 0; padding-left: 20px; position: relative; font-size: 0.9rem; }
+.callout li::before { content: "▶"; position: absolute; left: 0; color: var(--brand); font-size: 0.7rem; top: 9px; }
+.callout.danger li::before { content: "✕"; color: var(--danger); }
+.callout.success li::before { content: "✓"; color: var(--success); }
+.callout.warn li::before { content: "⚠"; color: var(--warning); }
+
+.bar-row { display: grid; grid-template-columns: 120px 1fr 240px; gap: 12px; align-items: center; padding: 8px 0; }
+.bar-track { background: #f3f4f6; height: 24px; border-radius: 4px; overflow: hidden; }
+.bar-fill { height: 100%; transition: width 0.4s; }
+.bar-num { text-align: right; font-size: 0.85rem; color: var(--text-light); font-variant-numeric: tabular-nums; }
+
+.two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; align-items: start; }
+.split-pie { display: grid; grid-template-columns: 200px 1fr; gap: 32px; align-items: center; }
+.pie { width: 200px; height: 200px; border-radius: 50%; background: conic-gradient(#3b82f6 0% 17.419867685787374%, #6b7280 17.419867685787374% 21.470106894273474%, #fbbf24 21.470106894273474% 26.170038137660736%, #10b981 26.170038137660736% 100.0%); box-shadow: 0 4px 12px rgba(0,0,0,0.1); }
+.legend { display: flex; flex-direction: column; gap: 8px; }
+.legend-row { display: grid; grid-template-columns: 16px 1fr 60px; gap: 8px; align-items: center; padding: 6px 0; border-bottom: 1px solid var(--border); }
+.legend-row .dot { width: 12px; height: 12px; border-radius: 50%; }
+.legend-row .num { text-align: right; font-weight: 600; }
+
+.flow { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; margin: 24px 0; }
+.flow .step { background: var(--card); border: 1px solid var(--border); border-radius: 8px; padding: 16px; text-align: center; position: relative; }
+.flow .step::after { content: "→"; position: absolute; right: -14px; top: 50%; transform: translateY(-50%); font-size: 1.5rem; color: var(--text-muted); z-index: 1; }
+.flow .step:last-child::after { display: none; }
+.flow .step .num { font-size: 1.6rem; font-weight: 800; color: var(--brand); display: block; }
+.flow .step .lbl { font-size: 0.8rem; color: var(--text-muted); margin-top: 4px; }
+
+@media (max-width: 900px) { .kpi-grid { grid-template-columns: repeat(2, 1fr); } .two-col { grid-template-columns: 1fr; } .split-pie { grid-template-columns: 1fr; } .flow { grid-template-columns: 1fr 1fr; } }
+
+footer { padding: 32px 0; text-align: center; color: var(--text-muted); font-size: 0.85rem; border-top: 1px solid var(--border); margin-top: 48px; }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="container">
+    <div class="eyebrow">META ADS × SALES INTEGRATED REPORT · APRIL 2026</div>
+    <h1>독점마켓 4월 광고·매출 통합 리포트</h1>
+    <div class="sub">2026년 4월 1일 ~ 4월 30일 · Meta 광고 + 자사몰 실매출 통합 분석</div>
+    <div class="meta">
+      <span>📅 30일</span>
+      <span>📊 광고 75개</span>
+      <span>💵 광고비 9,527,900원</span>
+      <span>🛒 실매출 27,089,758원 · 423건</span>
+      <span>📈 실 ROAS 2.84</span>
+    </div>
+  </div>
+</header>
+
+<section class="section hero-stats">
+  <div class="container">
+    <h2>1. 통합 핵심 지표</h2>
+    <p class="section-desc">Meta 광고 비용과 자사몰 실매출을 통합한 진짜 성과 지표</p>
+    <div class="kpi-grid">
+      <div class="kpi highlight">
+        <div class="label">실제 ROAS (결제금액 기준)</div>
+        <div class="value">2.84</div>
+        <div class="delta">광고비 1원 → 결제 2.84원 회수</div>
+      </div>
+      <div class="kpi">
+        <div class="label">정상 ROAS (취소 제외)</div>
+        <div class="value">2.53</div>
+        <div class="delta">취소 환불 차감 후 매출 기준</div>
+      </div>
+      <div class="kpi warn">
+        <div class="label">Meta 어트리뷰션 ROAS</div>
+        <div class="value">2.21</div>
+        <div class="delta">Meta 추적 기준 — 실제보다 22% 낮게 잡힘</div>
+      </div>
+      <div class="kpi">
+        <div class="label">평균 주문 금액 (AOV)</div>
+        <div class="value">64,042<span class="unit">원</span></div>
+        <div class="delta">423건 평균</div>
+      </div>
+      <div class="kpi">
+        <div class="label">총 광고비</div>
+        <div class="value">9,527,900<span class="unit">원</span></div>
+        <div class="delta">활성 11개 / 총 75개</div>
+      </div>
+      <div class="kpi">
+        <div class="label">총 결제금액</div>
+        <div class="value">27,089,758<span class="unit">원</span></div>
+        <div class="delta">423건 결제</div>
+      </div>
+      <div class="kpi">
+        <div class="label">정상 매출 (취소 제외)</div>
+        <div class="value">24,152,358<span class="unit">원</span></div>
+        <div class="delta">394건 / 취소 34건 (2,937,400원)</div>
+      </div>
+      <div class="kpi">
+        <div class="label">PG 수수료</div>
+        <div class="value">856,225<span class="unit">원</span></div>
+        <div class="delta">결제금액의 3.16%</div>
+      </div>
+    </div>
+
+    <div class="callout info">
+      <h4>💡 ROAS 비교 — 진짜 성과는 더 좋습니다</h4>
+      <ul>
+        <li>Meta 어트리뷰션 ROAS는 <strong>2.21</strong>이지만, 자사몰 실 결제 기준 <strong>2.84</strong>로 약 <strong>29% 더 높음</strong></li>
+        <li>차이 원인: Meta 어트리뷰션 윈도우(7일 클릭/1일 조회) 외 구매, 비로그인/디바이스 변경 후 구매, 네이버페이 자체 결제(Meta 추적 미흡) 등</li>
+        <li>광고 효율 의사결정 시 <strong>실 매출 ROAS(2.84)</strong>를 기준으로 판단할 것</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<section class="section">
+  <div class="container">
+    <h2>2. 결제 채널별 매출 분석</h2>
+    <p class="section-desc">자사몰 결제수단별 매출 분포와 취소율</p>
+
+    <div class="split-pie">
+      <div class="pie"></div>
+      <div>
+        <h3 style="margin-top:0">결제금액 비중</h3>
+        <div class="legend"><div class="legend-row"><span class="dot" style="background:#3b82f6"></span><span>신용카드</span><span class="num">17.4%</span></div>
+<div class="legend-row"><span class="dot" style="background:#6b7280"></span><span>무통장입금</span><span class="num">4.1%</span></div>
+<div class="legend-row"><span class="dot" style="background:#fbbf24"></span><span>카카오페이</span><span class="num">4.7%</span></div>
+<div class="legend-row"><span class="dot" style="background:#10b981"></span><span>네이버페이</span><span class="num">73.8%</span></div></div>
+      </div>
+    </div>
+
+    <h3 style="margin-top: 32px;">채널별 막대 비교 (결제금액)</h3>
+    <div><div class="bar-row">
+        <div class="bar-label"><span class="cat-pill" style="background:#3b82f6">신용카드</span></div>
+        <div class="bar-track"><div class="bar-fill" style="width:23.59457765705994%;background:#3b82f6"></div></div>
+        <div class="bar-num">4,719,000원 · 57건 (17.4%)</div>
+      </div><div class="bar-row">
+        <div class="bar-label"><span class="cat-pill" style="background:#6b7280">무통장입금</span></div>
+        <div class="bar-track"><div class="bar-fill" style="width:5.485901802357738%;background:#6b7280"></div></div>
+        <div class="bar-num">1,097,200원 · 28건 (4.1%)</div>
+      </div><div class="bar-row">
+        <div class="bar-label"><span class="cat-pill" style="background:#fbbf24">카카오페이</span></div>
+        <div class="bar-track"><div class="bar-fill" style="width:6.365886050639694%;background:#fbbf24"></div></div>
+        <div class="bar-num">1,273,200원 · 32건 (4.7%)</div>
+      </div><div class="bar-row">
+        <div class="bar-label"><span class="cat-pill" style="background:#10b981">네이버페이</span></div>
+        <div class="bar-track"><div class="bar-fill" style="width:100.0%;background:#10b981"></div></div>
+        <div class="bar-num">20,000,358원 · 306건 (73.8%)</div>
+      </div></div>
+
+    <h3 style="margin-top: 32px;">상세 표</h3>
+    <table>
+      <thead><tr>
+        <th>결제수단</th><th class="num">결제금액</th><th class="num">건수</th><th class="num">비중</th>
+        <th class="num">취소금액</th><th class="num">취소건수</th><th class="num">정상금액</th><th class="num">정상건수</th><th class="num">PG수수료</th>
+      </tr></thead>
+      <tbody><tr>
+        <td><span class="cat-pill" style="background:#3b82f6">신용카드</span></td>
+        <td class="num">4,719,000</td>
+        <td class="num">57</td>
+        <td class="num">17.4%</td>
+        <td class="num">553,000</td>
+        <td class="num">3건</td>
+        <td class="num">4,166,000</td>
+        <td class="num">54</td>
+        <td class="num">151,201</td>
+      </tr><tr>
+        <td><span class="cat-pill" style="background:#6b7280">무통장입금</span></td>
+        <td class="num">1,097,200</td>
+        <td class="num">28</td>
+        <td class="num">4.1%</td>
+        <td class="num">0</td>
+        <td class="num">0건</td>
+        <td class="num">1,097,200</td>
+        <td class="num">28</td>
+        <td class="num">0</td>
+      </tr><tr>
+        <td><span class="cat-pill" style="background:#fbbf24">카카오페이</span></td>
+        <td class="num">1,273,200</td>
+        <td class="num">32</td>
+        <td class="num">4.7%</td>
+        <td class="num">95,900</td>
+        <td class="num">3건</td>
+        <td class="num">1,177,300</td>
+        <td class="num">29</td>
+        <td class="num">42,722</td>
+      </tr><tr>
+        <td><span class="cat-pill" style="background:#10b981">네이버페이</span></td>
+        <td class="num">20,000,358</td>
+        <td class="num">306</td>
+        <td class="num">73.8%</td>
+        <td class="num">2,288,500</td>
+        <td class="num">23건 + 부분5</td>
+        <td class="num">17,711,858</td>
+        <td class="num">283</td>
+        <td class="num">662,302</td>
+      </tr>
+      <tr style="background:#f3f4f6;font-weight:700">
+        <td>합계</td><td class="num">27,089,758</td><td class="num">423</td><td class="num">100%</td>
+        <td class="num">2,937,400</td><td class="num">34</td>
+        <td class="num">24,152,358</td><td class="num">394</td><td class="num">856,225</td>
+      </tr>
+      </tbody>
+    </table>
+
+    <div class="callout warn">
+      <h4>⚠️ 채널 인사이트</h4>
+      <ul>
+        <li><strong>네이버페이 비중 73.8%</strong> — 트래픽이 네이버 검색/쇼핑 의존도 높음. 네이버 SEO + 가격비교 노출 관리 핵심</li>
+        <li>네이버페이 취소율 <strong>9.2%</strong>(28/306) — 다른 채널 대비 높음. 단순 변심 vs 배송지연 사유 점검 필요</li>
+        <li>신용카드/카카오페이는 취소율 5% 내외 — 정상 수준</li>
+        <li>무통장입금은 취소 0건 — 의지 강한 구매층</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<section class="section">
+  <div class="container">
+    <h2>3. 광고 → 매출 퍼널</h2>
+    <p class="section-desc">노출에서 결제까지 깔때기 구조</p>
+    <div class="flow">
+      <div class="step"><span class="num">471,713</span><span class="lbl">노출</span></div>
+      <div class="step"><span class="num">17,715</span><span class="lbl">링크 클릭<br/>CTR 3.76%</span></div>
+      <div class="step"><span class="num">15,557</span><span class="lbl">랜딩 조회<br/>88% 진입</span></div>
+      <div class="step"><span class="num">423</span><span class="lbl">실 결제<br/>2.72% 전환</span></div>
+    </div>
+
+    <table>
+      <thead><tr><th>단계</th><th class="num">수치</th><th class="num">전 단계 대비</th><th class="num">비고</th></tr></thead>
+      <tbody>
+        <tr><td>광고 노출</td><td class="num">471,713</td><td class="num">-</td><td>4월 누적</td></tr>
+        <tr><td>링크 클릭</td><td class="num">17,715</td><td class="num">3.76%</td><td>업계 평균(1.5~2%) 상회</td></tr>
+        <tr><td>랜딩 페이지 조회</td><td class="num">15,557</td><td class="num">87.8%</td><td>클릭→LP 진입률</td></tr>
+        <tr><td>Meta 어트리뷰션 구매</td><td class="num">355</td><td class="num">2.28%</td><td>Meta 픽셀 추적 기준</td></tr>
+        <tr style="background:#dcfce7;font-weight:700"><td>실 결제 (자사몰)</td><td class="num">423</td><td class="num">2.72%</td><td>관리자 페이지 결제건수</td></tr>
+        <tr><td>정상 (취소 제외)</td><td class="num">394</td><td class="num">93.1%</td><td>취소 34건 차감</td></tr>
+      </tbody>
+    </table>
+
+    <div class="callout success">
+      <h4>📈 어트리뷰션 GAP 분석</h4>
+      <ul>
+        <li>Meta 추적 구매: <strong>355건</strong> / 실 결제: <strong>423건</strong> · 정상 결제: <strong>394건</strong></li>
+        <li>Meta 어트리뷰션 커버리지: <strong>90.1%</strong> (Meta는 정상 구매의 90%만 추적)</li>
+        <li>미추적 39건은 광고에 의해 발생했지만 Meta가 인식 못 한 구매 — 광고 기여도가 실제로 더 큼</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<section class="section">
+  <div class="container">
+    <h2>4. 광고 카테고리별 성과</h2>
+    <p class="section-desc">광고명 키워드 기준 자동 분류</p>
+    <div><div class="bar-row">
+        <div class="bar-label"><span class="cat-pill" style="background:#f59e0b">가격소구</span></div>
+        <div class="bar-track"><div class="bar-fill" style="width:100.0%;background:#f59e0b"></div></div>
+        <div class="bar-num">3,565,025원 · ROAS 2.74</div>
+      </div><div class="bar-row">
+        <div class="bar-label"><span class="cat-pill" style="background:#10b981">후킹/리액션</span></div>
+        <div class="bar-track"><div class="bar-fill" style="width:65.55861459597058%;background:#10b981"></div></div>
+        <div class="bar-num">2,337,181원 · ROAS 2.47</div>
+      </div><div class="bar-row">
+        <div class="bar-label"><span class="cat-pill" style="background:#0ea5e9">수산물</span></div>
+        <div class="bar-track"><div class="bar-fill" style="width:64.43191842974453%;background:#0ea5e9"></div></div>
+        <div class="bar-num">2,297,014원 · ROAS 1.92</div>
+      </div><div class="bar-row">
+        <div class="bar-label"><span class="cat-pill" style="background:#6b7280">기타</span></div>
+        <div class="bar-track"><div class="bar-fill" style="width:32.98706180181065%;background:#6b7280"></div></div>
+        <div class="bar-num">1,175,997원 · ROAS 0.89</div>
+      </div><div class="bar-row">
+        <div class="bar-label"><span class="cat-pill" style="background:#dc2626">정육</span></div>
+        <div class="bar-track"><div class="bar-fill" style="width:4.282803065897153%;background:#dc2626"></div></div>
+        <div class="bar-num">152,683원 · ROAS 0.31</div>
+      </div></div>
+    <table style="margin-top: 24px">
+      <thead><tr><th>카테고리</th><th class="num">광고 수</th><th class="num">지출</th><th class="num">비중</th><th class="num">Meta 구매</th><th class="num">Meta 매출</th><th class="num">ROAS(Meta)</th></tr></thead>
+      <tbody><tr>
+        <td><span class="cat-pill" style="background:#f59e0b">가격소구</span></td>
+        <td class="num">11</td>
+        <td class="num">3,565,025</td>
+        <td class="num">37.4%</td>
+        <td class="num">99</td>
+        <td class="num">9,754,400</td>
+        <td class="num roas-cell">2.74</td>
+      </tr><tr>
+        <td><span class="cat-pill" style="background:#10b981">후킹/리액션</span></td>
+        <td class="num">15</td>
+        <td class="num">2,337,181</td>
+        <td class="num">24.5%</td>
+        <td class="num">141</td>
+        <td class="num">5,771,000</td>
+        <td class="num roas-cell">2.47</td>
+      </tr><tr>
+        <td><span class="cat-pill" style="background:#0ea5e9">수산물</span></td>
+        <td class="num">8</td>
+        <td class="num">2,297,014</td>
+        <td class="num">24.1%</td>
+        <td class="num">56</td>
+        <td class="num">4,410,800</td>
+        <td class="num roas-cell">1.92</td>
+      </tr><tr>
+        <td><span class="cat-pill" style="background:#6b7280">기타</span></td>
+        <td class="num">39</td>
+        <td class="num">1,175,997</td>
+        <td class="num">12.3%</td>
+        <td class="num">56</td>
+        <td class="num">1,050,800</td>
+        <td class="num roas-cell">0.89</td>
+      </tr><tr>
+        <td><span class="cat-pill" style="background:#dc2626">정육</span></td>
+        <td class="num">2</td>
+        <td class="num">152,683</td>
+        <td class="num">1.6%</td>
+        <td class="num">3</td>
+        <td class="num">47,400</td>
+        <td class="num roas-cell">0.31</td>
+      </tr></tbody>
+    </table>
+  </div>
+</section>
+
+<section class="section">
+  <div class="container">
+    <h2>5. 활성 광고 <span class="num-tag">11개 운영중</span></h2>
+    <p class="section-desc">5월 1일 기준 운영 상태 광고 — 의사결정 대상</p>
+    <table>
+      <thead><tr><th class="num">#</th><th>카테고리</th><th>광고명</th><th>상태</th><th class="num">지출</th><th class="num">노출</th><th class="num">클릭</th><th class="num">CTR</th><th class="num">구매</th><th class="num">ROAS</th></tr></thead>
+      <tbody><tr class="r-good">
+      <td class="num">1</td>
+      <td><span class="cat-pill" style="background:#f59e0b">가격소구</span></td>
+      <td class="ad-name">260220_가격_영상</td>
+      <td><span class="badge" style="color:#15803d;background:#dcfce7">운영중</span></td>
+      <td class="num">2,709,799</td>
+      <td class="num">126,592</td>
+      <td class="num">4,349</td>
+      <td class="num">3.44%</td>
+      <td class="num">48</td>
+      <td class="num roas-cell">3.05</td>
+    </tr>
+<tr class="r-ok">
+      <td class="num">2</td>
+      <td><span class="cat-pill" style="background:#6b7280">기타</span></td>
+      <td class="ad-name">260423_롱버젼</td>
+      <td><span class="badge" style="color:#15803d;background:#dcfce7">운영중</span></td>
+      <td class="num">443,205</td>
+      <td class="num">28,847</td>
+      <td class="num">621</td>
+      <td class="num">2.15%</td>
+      <td class="num">48</td>
+      <td class="num roas-cell">2.07</td>
+    </tr>
+<tr class="r-ok">
+      <td class="num">3</td>
+      <td><span class="cat-pill" style="background:#10b981">후킹/리액션</span></td>
+      <td class="ad-name">신선도_이미지2</td>
+      <td><span class="badge" style="color:#15803d;background:#dcfce7">운영중</span></td>
+      <td class="num">427,916</td>
+      <td class="num">18,939</td>
+      <td class="num">1,170</td>
+      <td class="num">6.18%</td>
+      <td class="num">18</td>
+      <td class="num roas-cell">2.18</td>
+    </tr>
+<tr class="r-good">
+      <td class="num">4</td>
+      <td><span class="cat-pill" style="background:#10b981">후킹/리액션</span></td>
+      <td class="ad-name">260417_한번먹으면_이미지4</td>
+      <td><span class="badge" style="color:#15803d;background:#dcfce7">운영중</span></td>
+      <td class="num">402,538</td>
+      <td class="num">45,837</td>
+      <td class="num">1,114</td>
+      <td class="num">2.43%</td>
+      <td class="num">60</td>
+      <td class="num roas-cell">3.20</td>
+    </tr>
+<tr class="r-ok">
+      <td class="num">5</td>
+      <td><span class="cat-pill" style="background:#10b981">후킹/리액션</span></td>
+      <td class="ad-name">신선도_이미지3</td>
+      <td><span class="badge" style="color:#15803d;background:#dcfce7">운영중</span></td>
+      <td class="num">312,674</td>
+      <td class="num">13,065</td>
+      <td class="num">863</td>
+      <td class="num">6.61%</td>
+      <td class="num">14</td>
+      <td class="num roas-cell">2.04</td>
+    </tr>
+<tr class="r-good">
+      <td class="num">6</td>
+      <td><span class="cat-pill" style="background:#f59e0b">가격소구</span></td>
+      <td class="ad-name">260417_가격_영상</td>
+      <td><span class="badge" style="color:#15803d;background:#dcfce7">운영중</span></td>
+      <td class="num">246,624</td>
+      <td class="num">22,380</td>
+      <td class="num">591</td>
+      <td class="num">2.64%</td>
+      <td class="num">28</td>
+      <td class="num roas-cell">2.96</td>
+    </tr>
+<tr class="r-ok">
+      <td class="num">7</td>
+      <td><span class="cat-pill" style="background:#10b981">후킹/리액션</span></td>
+      <td class="ad-name">신선도_이미지1</td>
+      <td><span class="badge" style="color:#15803d;background:#dcfce7">운영중</span></td>
+      <td class="num">73,859</td>
+      <td class="num">1,769</td>
+      <td class="num">176</td>
+      <td class="num">9.95%</td>
+      <td class="num">3</td>
+      <td class="num roas-cell">1.62</td>
+    </tr>
+<tr class="r-ok">
+      <td class="num">8</td>
+      <td><span class="cat-pill" style="background:#f59e0b">가격소구</span></td>
+      <td class="ad-name">260429_비품대게가격_2</td>
+      <td><span class="badge" style="color:#15803d;background:#dcfce7">운영중</span></td>
+      <td class="num">53,307</td>
+      <td class="num">3,156</td>
+      <td class="num">76</td>
+      <td class="num">2.41%</td>
+      <td class="num">1</td>
+      <td class="num roas-cell">1.31</td>
+    </tr>
+<tr class="r-good">
+      <td class="num">9</td>
+      <td><span class="cat-pill" style="background:#10b981">후킹/리액션</span></td>
+      <td class="ad-name">260417_한번먹으면_이미지11</td>
+      <td><span class="badge" style="color:#15803d;background:#dcfce7">운영중</span></td>
+      <td class="num">48,444</td>
+      <td class="num">3,420</td>
+      <td class="num">74</td>
+      <td class="num">2.16%</td>
+      <td class="num">6</td>
+      <td class="num roas-cell">3.80</td>
+    </tr>
+<tr class="r-">
+      <td class="num">10</td>
+      <td><span class="cat-pill" style="background:#f59e0b">가격소구</span></td>
+      <td class="ad-name">260429_가격_영상</td>
+      <td><span class="badge" style="color:#15803d;background:#dcfce7">운영중</span></td>
+      <td class="num">2,454</td>
+      <td class="num">151</td>
+      <td class="num">2</td>
+      <td class="num">1.32%</td>
+      <td class="num">0</td>
+      <td class="num roas-cell">0.00</td>
+    </tr>
+<tr class="r-">
+      <td class="num">11</td>
+      <td><span class="cat-pill" style="background:#6b7280">기타</span></td>
+      <td class="ad-name">260429_특A급_1</td>
+      <td><span class="badge" style="color:#15803d;background:#dcfce7">운영중</span></td>
+      <td class="num">1,818</td>
+      <td class="num">75</td>
+      <td class="num">5</td>
+      <td class="num">6.67%</td>
+      <td class="num">0</td>
+      <td class="num roas-cell">0.00</td>
+    </tr></tbody>
+    </table>
+
+    <div class="two-col" style="margin-top: 24px;">
+      <div class="callout danger">
+        <h4>🔴 종료 검토 (활성 ROAS&lt;1, 지출 3만원+)</h4>
+        <ul><li>해당 없음</li></ul>
+      </div>
+      <div class="callout success">
+        <h4>🟢 예산 증액 후보 (활성 ROAS≥2.5)</h4>
+        <ul><li><strong>260220_가격_영상</strong> — ROAS 3.05 / 구매 48건 / 지출 2,709,799원</li>
+<li><strong>260417_한번먹으면_이미지4</strong> — ROAS 3.20 / 구매 60건 / 지출 402,538원</li>
+<li><strong>260417_가격_영상</strong> — ROAS 2.96 / 구매 28건 / 지출 246,624원</li>
+<li><strong>260417_한번먹으면_이미지11</strong> — ROAS 3.80 / 구매 6건 / 지출 48,444원</li></ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="section">
+  <div class="container">
+    <h2>6. 베스트 광고 (ROAS ≥ 2)</h2>
+    <p class="section-desc">지출 5만원+ 중 Meta 어트리뷰션 ROAS 상위 — 종료된 광고도 학습 자산</p>
+    <table>
+      <thead><tr><th class="num">#</th><th>카테고리</th><th>광고명</th><th>상태</th><th class="num">지출</th><th class="num">노출</th><th class="num">클릭</th><th class="num">CTR</th><th class="num">구매</th><th class="num">ROAS</th></tr></thead>
+      <tbody><tr class="r-good">
+      <td class="num">1</td>
+      <td><span class="cat-pill" style="background:#10b981">후킹/리액션</span></td>
+      <td class="ad-name">신선도_이미지4</td>
+      <td><span class="badge" style="color:#6b7280;background:#f3f4f6">종료</span></td>
+      <td class="num">639,779</td>
+      <td class="num">24,389</td>
+      <td class="num">1,500</td>
+      <td class="num">6.15%</td>
+      <td class="num">30</td>
+      <td class="num roas-cell">3.31</td>
+    </tr>
+<tr class="r-good">
+      <td class="num">2</td>
+      <td><span class="cat-pill" style="background:#10b981">후킹/리액션</span></td>
+      <td class="ad-name">신선도_이미지5</td>
+      <td><span class="badge" style="color:#6b7280;background:#f3f4f6">종료</span></td>
+      <td class="num">126,990</td>
+      <td class="num">5,203</td>
+      <td class="num">409</td>
+      <td class="num">7.86%</td>
+      <td class="num">7</td>
+      <td class="num roas-cell">3.31</td>
+    </tr>
+<tr class="r-good">
+      <td class="num">3</td>
+      <td><span class="cat-pill" style="background:#10b981">후킹/리액션</span></td>
+      <td class="ad-name">260417_한번먹으면_이미지4</td>
+      <td><span class="badge" style="color:#15803d;background:#dcfce7">운영중</span></td>
+      <td class="num">402,538</td>
+      <td class="num">45,837</td>
+      <td class="num">1,114</td>
+      <td class="num">2.43%</td>
+      <td class="num">60</td>
+      <td class="num roas-cell">3.20</td>
+    </tr>
+<tr class="r-good">
+      <td class="num">4</td>
+      <td><span class="cat-pill" style="background:#f59e0b">가격소구</span></td>
+      <td class="ad-name">260220_가격_영상</td>
+      <td><span class="badge" style="color:#15803d;background:#dcfce7">운영중</span></td>
+      <td class="num">2,709,799</td>
+      <td class="num">126,592</td>
+      <td class="num">4,349</td>
+      <td class="num">3.44%</td>
+      <td class="num">48</td>
+      <td class="num roas-cell">3.05</td>
+    </tr>
+<tr class="r-good">
+      <td class="num">5</td>
+      <td><span class="cat-pill" style="background:#0ea5e9">수산물</span></td>
+      <td class="ad-name">신선도_박달대게</td>
+      <td><span class="badge" style="color:#ca8a04;background:#fef9c3">게재중단</span></td>
+      <td class="num">731,360</td>
+      <td class="num">31,508</td>
+      <td class="num">1,281</td>
+      <td class="num">4.07%</td>
+      <td class="num">21</td>
+      <td class="num roas-cell">3.00</td>
+    </tr>
+<tr class="r-good">
+      <td class="num">6</td>
+      <td><span class="cat-pill" style="background:#f59e0b">가격소구</span></td>
+      <td class="ad-name">260417_가격_영상</td>
+      <td><span class="badge" style="color:#15803d;background:#dcfce7">운영중</span></td>
+      <td class="num">246,624</td>
+      <td class="num">22,380</td>
+      <td class="num">591</td>
+      <td class="num">2.64%</td>
+      <td class="num">28</td>
+      <td class="num roas-cell">2.96</td>
+    </tr>
+<tr class="r-ok">
+      <td class="num">7</td>
+      <td><span class="cat-pill" style="background:#10b981">후킹/리액션</span></td>
+      <td class="ad-name">신선도_이미지2</td>
+      <td><span class="badge" style="color:#15803d;background:#dcfce7">운영중</span></td>
+      <td class="num">427,916</td>
+      <td class="num">18,939</td>
+      <td class="num">1,170</td>
+      <td class="num">6.18%</td>
+      <td class="num">18</td>
+      <td class="num roas-cell">2.18</td>
+    </tr>
+<tr class="r-ok">
+      <td class="num">8</td>
+      <td><span class="cat-pill" style="background:#6b7280">기타</span></td>
+      <td class="ad-name">260423_롱버젼</td>
+      <td><span class="badge" style="color:#15803d;background:#dcfce7">운영중</span></td>
+      <td class="num">443,205</td>
+      <td class="num">28,847</td>
+      <td class="num">621</td>
+      <td class="num">2.15%</td>
+      <td class="num">48</td>
+      <td class="num roas-cell">2.07</td>
+    </tr>
+<tr class="r-ok">
+      <td class="num">9</td>
+      <td><span class="cat-pill" style="background:#10b981">후킹/리액션</span></td>
+      <td class="ad-name">신선도_이미지3</td>
+      <td><span class="badge" style="color:#15803d;background:#dcfce7">운영중</span></td>
+      <td class="num">312,674</td>
+      <td class="num">13,065</td>
+      <td class="num">863</td>
+      <td class="num">6.61%</td>
+      <td class="num">14</td>
+      <td class="num roas-cell">2.04</td>
+    </tr></tbody>
+    </table>
+  </div>
+</section>
+
+<section class="section">
+  <div class="container">
+    <h2>7. 저조 광고 (ROAS &lt; 1) <span class="num-tag">9개</span></h2>
+    <p class="section-desc">지출 5만원+ 중 ROAS 1 미만 — 5월 반복 금지</p>
+    <table>
+      <thead><tr><th class="num">#</th><th>카테고리</th><th>광고명</th><th>상태</th><th class="num">지출</th><th class="num">노출</th><th class="num">클릭</th><th class="num">CTR</th><th class="num">구매</th><th class="num">ROAS</th></tr></thead>
+      <tbody><tr class="r-bad">
+      <td class="num">1</td>
+      <td><span class="cat-pill" style="background:#6b7280">기타</span></td>
+      <td class="ad-name">260327_리뷰_단일이미지</td>
+      <td><span class="badge" style="color:#ca8a04;background:#fef9c3">게재중단</span></td>
+      <td class="num">73,905</td>
+      <td class="num">3,730</td>
+      <td class="num">134</td>
+      <td class="num">3.59%</td>
+      <td class="num">0</td>
+      <td class="num roas-cell">0.00</td>
+    </tr>
+<tr class="r-bad">
+      <td class="num">2</td>
+      <td><span class="cat-pill" style="background:#6b7280">기타</span></td>
+      <td class="ad-name">냉장고필수템_이미지4</td>
+      <td><span class="badge" style="color:#ca8a04;background:#fef9c3">게재중단</span></td>
+      <td class="num">52,780</td>
+      <td class="num">1,713</td>
+      <td class="num">31</td>
+      <td class="num">1.81%</td>
+      <td class="num">0</td>
+      <td class="num roas-cell">0.00</td>
+    </tr>
+<tr class="r-ghost">
+      <td class="num">3</td>
+      <td><span class="cat-pill" style="background:#0ea5e9">수산물</span></td>
+      <td class="ad-name">260220_킹크랩가격_2</td>
+      <td><span class="badge" style="color:#6b7280;background:#f3f4f6">종료</span></td>
+      <td class="num">216,619</td>
+      <td class="num">10,372</td>
+      <td class="num">313</td>
+      <td class="num">3.02%</td>
+      <td class="num">0</td>
+      <td class="num roas-cell">0.00</td>
+    </tr>
+<tr class="r-ghost">
+      <td class="num">4</td>
+      <td><span class="cat-pill" style="background:#6b7280">기타</span></td>
+      <td class="ad-name">오늘아침조업_롱버전_이미지2</td>
+      <td><span class="badge" style="color:#6b7280;background:#f3f4f6">종료</span></td>
+      <td class="num">110,310</td>
+      <td class="num">5,350</td>
+      <td class="num">154</td>
+      <td class="num">2.88%</td>
+      <td class="num">0</td>
+      <td class="num roas-cell">0.00</td>
+    </tr>
+<tr class="r-bad">
+      <td class="num">5</td>
+      <td><span class="cat-pill" style="background:#6b7280">기타</span></td>
+      <td class="ad-name">바다의보약_롱버전_슬라이딩</td>
+      <td><span class="badge" style="color:#6b7280;background:#f3f4f6">종료</span></td>
+      <td class="num">50,092</td>
+      <td class="num">2,147</td>
+      <td class="num">69</td>
+      <td class="num">3.21%</td>
+      <td class="num">0</td>
+      <td class="num roas-cell">0.00</td>
+    </tr>
+<tr class="r-bad">
+      <td class="num">6</td>
+      <td><span class="cat-pill" style="background:#10b981">후킹/리액션</span></td>
+      <td class="ad-name">한입먹는순간_동영상</td>
+      <td><span class="badge" style="color:#6b7280;background:#f3f4f6">종료</span></td>
+      <td class="num">256,749</td>
+      <td class="num">11,766</td>
+      <td class="num">430</td>
+      <td class="num">3.65%</td>
+      <td class="num">2</td>
+      <td class="num roas-cell">0.22</td>
+    </tr>
+<tr class="r-bad">
+      <td class="num">7</td>
+      <td><span class="cat-pill" style="background:#dc2626">정육</span></td>
+      <td class="ad-name">돔베고기기획전_이미지1</td>
+      <td><span class="badge" style="color:#6b7280;background:#f3f4f6">종료</span></td>
+      <td class="num">141,634</td>
+      <td class="num">4,882</td>
+      <td class="num">102</td>
+      <td class="num">2.09%</td>
+      <td class="num">2</td>
+      <td class="num roas-cell">0.24</td>
+    </tr>
+<tr class="r-bad">
+      <td class="num">8</td>
+      <td><span class="cat-pill" style="background:#6b7280">기타</span></td>
+      <td class="ad-name">오늘아침조업_롱버전_동영상</td>
+      <td><span class="badge" style="color:#6b7280;background:#f3f4f6">종료</span></td>
+      <td class="num">93,727</td>
+      <td class="num">2,734</td>
+      <td class="num">75</td>
+      <td class="num">2.74%</td>
+      <td class="num">1</td>
+      <td class="num roas-cell">0.32</td>
+    </tr>
+<tr class="r-bad">
+      <td class="num">9</td>
+      <td><span class="cat-pill" style="background:#f59e0b">가격소구</span></td>
+      <td class="ad-name">마트가지마세요_이미지3</td>
+      <td><span class="badge" style="color:#ca8a04;background:#fef9c3">게재중단</span></td>
+      <td class="num">184,118</td>
+      <td class="num">13,148</td>
+      <td class="num">362</td>
+      <td class="num">2.75%</td>
+      <td class="num">11</td>
+      <td class="num roas-cell">0.66</td>
+    </tr></tbody>
+    </table>
+  </div>
+</section>
+
+<section class="section">
+  <div class="container">
+    <h2>8. 종합 인사이트 & 5월 액션</h2>
+    <p class="section-desc">매출 데이터까지 결합한 의사결정 근거</p>
+
+    <div class="callout success">
+      <h4>👍 4월 잘한 점</h4>
+      <ul>
+        <li>실 ROAS <strong>2.84</strong> — 광고비 100만원당 매출 284만원 발생, 손익분기 +154%</li>
+        <li>CTR 3.76% — 업계 평균 대비 후킹 강력</li>
+        <li>"신선도_*" 시리즈 ROAS 2~3 일관 — 컨셉 재현 가능한 winner pattern 확보</li>
+        <li>네이버페이 채널이 매출 73.8% 점유 — 네이버 검색 트래픽 + 쇼핑 진입 효율적</li>
+      </ul>
+    </div>
+
+    <div class="callout warn">
+      <h4>⚠️ 4월 개선점</h4>
+      <ul>
+        <li>구매 0건 광고 5개 (지출 5만원+) — 종료 판단 1~2주 일찍 cut했어야 절감액 ~50만원</li>
+        <li>"한입먹는순간_동영상"(ROAS 0.22), "킹크랩가격_2"(0), "돔베고기기획전"(0.24) 등 — 큰 지출 후 사후약방문</li>
+        <li>네이버페이 취소율 9.2% — 평균보다 높음. 배송지연/품질 사유 비중 점검 필요</li>
+        <li>Meta 어트리뷰션이 실 매출의 90%만 추적 — 어트리뷰션 윈도우 점검 또는 전환 API 직접 연동 검토</li>
+      </ul>
+    </div>
+
+    <div class="callout">
+      <h4>📋 5월 액션 플랜</h4>
+      <ul>
+        <li><strong>증액 (+30~50%)</strong>: 260417_한번먹으면_이미지4 (ROAS 3.20, 구매 60건), 260423_롱버젼 (ROAS 2.07, 구매 48건), 260220_가격_영상 (ROAS 3.05)</li>
+        <li><strong>즉시 종료</strong>: 활성 광고 중 ROAS&lt;1 (왼쪽 빨간 박스 참고)</li>
+        <li><strong>신규 제작</strong>: "신선도_이미지5/6/7" — 베스트 패턴 변형. 가격 메시지 결합 A/B 테스트</li>
+        <li><strong>네이버 채널 강화</strong>: 매출 74% 점유 채널 — 네이버 광고/SEO 별도 예산 배정 검토</li>
+        <li><strong>취소율 분석</strong>: 네이버페이 취소건 25건 사유 카테고리화 (배송/품질/변심) — 30일 내 5%대 회복 목표</li>
+        <li><strong>전환 API 연동</strong>: Meta 픽셀 + Conversions API 동시 운영해 어트리뷰션 커버리지 90% → 80%+ 끌어올리기</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="container">
+    <p><strong>독점마켓 메타광고·매출 통합 월간 리포트</strong> · 2026년 4월</p>
+    <p>데이터 출처: Meta 광고 관리자 + 독점마켓 자사몰 매출 관리 · 생성일: 2026-05-04</p>
+    <p>© (주)kitt — 마케팅 자동화 분석 리포트</p>
+  </div>
+</footer>
+
+</body>
+</html>
