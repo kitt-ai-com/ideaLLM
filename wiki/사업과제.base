@@ -1,0 +1,87 @@
+filters:
+  and:
+    - 유형 == "사업과제"
+formulas:
+  D_Day: '(마감일 - now()).days'
+properties:
+  note.마감일:
+    displayName: 마감일
+  note.상태:
+    displayName: 상태
+  note.역할:
+    displayName: 역할
+  note.지원금:
+    displayName: 지원금
+  note.신청처:
+    displayName: 신청처
+  formula.D_Day:
+    displayName: D-Day
+views:
+  - type: table
+    name: ⏰ 마감 임박순
+    order:
+      - file.name
+      - 마감일
+      - formula.D_Day
+      - 상태
+      - 역할
+      - 지원금
+      - 신청처
+    sort:
+      - property: 마감일
+        direction: ASC
+  - type: table
+    name: 🔥 진행중만
+    filters:
+      or:
+        - 상태 == "진행중"
+        - 상태 == "서류완료"
+    order:
+      - file.name
+      - 마감일
+      - formula.D_Day
+      - 상태
+      - 신청처
+    sort:
+      - property: 마감일
+        direction: ASC
+  - type: table
+    name: 🟢 하반기 모니터링
+    filters:
+      and:
+        - 상태 == "모니터링"
+    order:
+      - file.name
+      - 예상시기
+      - 역할
+      - 지원금
+      - 신청처
+    sort:
+      - property: 마감일
+        direction: ASC
+  - type: table
+    name: 🔵 2027 선제준비
+    filters:
+      and:
+        - 상태 == "선제준비"
+    order:
+      - file.name
+      - 예상시기
+      - 역할
+      - 지원금
+    sort:
+      - property: 마감일
+        direction: ASC
+  - type: table
+    name: ⬛ 마감완료
+    filters:
+      and:
+        - 상태 == "마감"
+    order:
+      - file.name
+      - 마감일
+      - 역할
+      - 지원금
+    sort:
+      - property: 마감일
+        direction: DESC

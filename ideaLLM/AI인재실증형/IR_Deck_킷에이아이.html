@@ -1,0 +1,672 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;700;900&display=swap');
+
+  @page {
+    size: 1280px 720px;
+    margin: 0;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  html, body { width: 1280px; background: #fff; }
+  body { font-family: 'Apple SD Gothic Neo', 'Malgun Gothic', sans-serif; }
+
+  .slide {
+    width: 1280px;
+    height: 720px;
+    page-break-after: always;
+    page-break-inside: avoid;
+    overflow: hidden;
+    position: relative;
+    display: flex;
+    flex-direction: column;
+  }
+
+  /* 공통 헤더 */
+  .slide-header {
+    padding: 22px 56px 0;
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    flex-shrink: 0;
+  }
+  .slide-number { font-size: 13px; color: #aaa; font-weight: 300; }
+  .logo { font-size: 15px; font-weight: 700; color: #1a1a2e; letter-spacing: -0.5px; }
+
+  /* 슬라이드 1 — 표지 */
+  .s1 { background: linear-gradient(135deg, #0f0c29, #302b63, #24243e); color: #fff; justify-content: center; align-items: flex-start; padding: 0 100px; }
+  .s1 .tag { background: rgba(255,255,255,0.15); border: 1px solid rgba(255,255,255,0.3); border-radius: 20px; padding: 6px 18px; font-size: 13px; font-weight: 400; letter-spacing: 1px; display: inline-block; margin-bottom: 32px; }
+  .s1 h1 { font-size: 60px; font-weight: 900; line-height: 1.15; margin-bottom: 20px; }
+  .s1 h1 span { color: #7c83ff; }
+  .s1 .sub { font-size: 20px; font-weight: 300; color: rgba(255,255,255,0.75); margin-bottom: 52px; }
+  .s1 .meta { font-size: 14px; color: rgba(255,255,255,0.5); line-height: 2; }
+  .s1 .meta strong { color: rgba(255,255,255,0.85); }
+
+  /* 슬라이드 2 — 문제 */
+  .s2 { background: #fff; }
+  .s2 .content { padding: 16px 56px 20px; flex: 1; }
+  .s2 h2 { font-size: 12px; color: #7c83ff; font-weight: 700; letter-spacing: 2px; text-transform: uppercase; margin-bottom: 6px; }
+  .s2 h3 { font-size: 28px; font-weight: 900; color: #1a1a2e; margin-bottom: 18px; line-height: 1.2; }
+  .cards { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; }
+  .card { background: #f8f8fc; border-radius: 12px; padding: 18px 18px; border-top: 4px solid; }
+  .card.c1 { border-color: #ff6b6b; }
+  .card.c2 { border-color: #ffa94d; }
+  .card.c3 { border-color: #7c83ff; }
+  .card .num { font-size: 32px; font-weight: 900; opacity: 0.12; line-height: 1; }
+  .card h4 { font-size: 16px; font-weight: 700; color: #1a1a2e; margin: 6px 0 8px; }
+  .card p { font-size: 13px; color: #555; line-height: 1.6; }
+  .stat-bar { margin-top: 18px; background: #1a1a2e; border-radius: 12px; padding: 16px 28px; display: flex; justify-content: space-around; }
+  .stat { text-align: center; color: #fff; }
+  .stat .val { font-size: 26px; font-weight: 900; color: #7c83ff; }
+  .stat .label { font-size: 11px; color: rgba(255,255,255,0.6); margin-top: 3px; }
+
+  /* 슬라이드 3 — 솔루션 */
+  .s3 { background: #1a1a2e; color: #fff; }
+  .s3 .content { padding: 16px 56px 20px; flex: 1; }
+  .s3 h2 { font-size: 12px; color: #7c83ff; font-weight: 700; letter-spacing: 2px; margin-bottom: 6px; }
+  .s3 h3 { font-size: 28px; font-weight: 900; margin-bottom: 16px; }
+  .flow { display: flex; align-items: center; gap: 10px; margin-bottom: 20px; }
+  .flow-box { background: rgba(124,131,255,0.15); border: 1px solid rgba(124,131,255,0.4); border-radius: 10px; padding: 12px 16px; text-align: center; flex: 1; }
+  .flow-box .icon { font-size: 20px; margin-bottom: 4px; }
+  .flow-box p { font-size: 12px; color: rgba(255,255,255,0.8); }
+  .arrow { font-size: 18px; color: #7c83ff; flex-shrink: 0; }
+  .agents { display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; }
+  .agent-card { background: rgba(255,255,255,0.05); border-radius: 10px; padding: 16px; border: 1px solid rgba(255,255,255,0.1); }
+  .agent-card .badge { background: #7c83ff; color: #fff; border-radius: 5px; padding: 2px 8px; font-size: 10px; font-weight: 700; display: inline-block; margin-bottom: 8px; }
+  .agent-card h4 { font-size: 14px; font-weight: 700; margin-bottom: 5px; }
+  .agent-card p { font-size: 12px; color: rgba(255,255,255,0.6); line-height: 1.5; }
+  .agent-card .result { font-size: 12px; color: #7c83ff; font-weight: 700; margin-top: 6px; }
+
+  /* 슬라이드 4 — 실증 성과 */
+  .s4 { background: #fff; }
+  .s4 .content { padding: 16px 56px 20px; flex: 1; }
+  .s4 h2 { font-size: 12px; color: #7c83ff; font-weight: 700; letter-spacing: 2px; margin-bottom: 6px; }
+  .s4 h3 { font-size: 28px; font-weight: 900; color: #1a1a2e; margin-bottom: 18px; }
+  .metrics { display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; margin-bottom: 20px; }
+  .metric { background: #f8f8fc; border-radius: 12px; padding: 18px 16px; text-align: center; }
+  .metric .val { font-size: 34px; font-weight: 900; color: #7c83ff; line-height: 1; }
+  .metric .unit { font-size: 14px; font-weight: 700; color: #7c83ff; }
+  .metric .label { font-size: 12px; color: #666; margin-top: 6px; line-height: 1.4; }
+  .timeline { display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; }
+  .tl-item { border-left: 3px solid #7c83ff; padding-left: 14px; }
+  .tl-item .date { font-size: 11px; color: #7c83ff; font-weight: 700; }
+  .tl-item h4 { font-size: 13px; font-weight: 700; color: #1a1a2e; margin: 3px 0; }
+  .tl-item p { font-size: 12px; color: #666; line-height: 1.5; }
+
+  /* 슬라이드 5 — 시장 */
+  .s5 { background: #f8f8fc; }
+  .s5 .content { padding: 16px 56px 20px; flex: 1; }
+  .s5 h2 { font-size: 12px; color: #7c83ff; font-weight: 700; letter-spacing: 2px; margin-bottom: 6px; }
+  .s5 h3 { font-size: 28px; font-weight: 900; color: #1a1a2e; margin-bottom: 18px; }
+  .market-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+  .tam-box { background: #fff; border-radius: 12px; padding: 20px; }
+  .tam-box h4 { font-size: 11px; color: #aaa; font-weight: 700; letter-spacing: 1px; margin-bottom: 14px; }
+  .tam-row { display: flex; align-items: center; gap: 12px; margin-bottom: 10px; }
+  .tam-bar { height: 32px; border-radius: 7px; display: flex; align-items: center; padding-left: 14px; color: #fff; font-weight: 700; font-size: 13px; }
+  .tam-bar.tam { background: #302b63; width: 100%; }
+  .tam-bar.sam { background: #7c83ff; width: 60%; }
+  .tam-bar.som { background: #a8acff; width: 25%; font-size: 11px; }
+  .tam-label { font-size: 12px; color: #555; min-width: 60px; }
+  .target-box { background: #fff; border-radius: 12px; padding: 20px; }
+  .target-box h4 { font-size: 11px; color: #aaa; font-weight: 700; letter-spacing: 1px; margin-bottom: 14px; }
+  .target-item { display: flex; justify-content: space-between; align-items: center; padding: 10px 0; border-bottom: 1px solid #f0f0f0; }
+  .target-item:last-child { border-bottom: none; }
+  .target-item .name { font-size: 13px; font-weight: 700; color: #1a1a2e; }
+  .target-item .desc { font-size: 11px; color: #888; }
+  .target-item .size { font-size: 13px; font-weight: 700; color: #7c83ff; }
+
+  /* 슬라이드 6 — 경쟁우위 */
+  .s6 { background: #1a1a2e; color: #fff; }
+  .s6 .content { padding: 16px 56px 20px; flex: 1; }
+  .s6 h2 { font-size: 12px; color: #7c83ff; font-weight: 700; letter-spacing: 2px; margin-bottom: 6px; }
+  .s6 h3 { font-size: 28px; font-weight: 900; margin-bottom: 20px; }
+  .comp-table { width: 100%; border-collapse: collapse; font-size: 13px; }
+  .comp-table th { background: rgba(124,131,255,0.2); color: #7c83ff; font-weight: 700; padding: 10px 14px; text-align: center; }
+  .comp-table th:first-child { text-align: left; }
+  .comp-table td { padding: 11px 14px; border-bottom: 1px solid rgba(255,255,255,0.08); color: rgba(255,255,255,0.8); text-align: center; }
+  .comp-table td:first-child { text-align: left; font-weight: 700; color: #fff; }
+  .comp-table tr.kitt td { color: #7c83ff; font-weight: 700; }
+  .comp-table tr.kitt td:first-child { color: #7c83ff; }
+  .o { color: #51cf66 !important; font-weight: 700; }
+  .x { color: #ff6b6b !important; }
+  .d { color: rgba(255,255,255,0.4) !important; }
+
+  /* 슬라이드 7 — 비즈니스 모델 */
+  .s7 { background: #fff; }
+  .s7 .content { padding: 16px 56px 20px; flex: 1; }
+  .s7 h2 { font-size: 12px; color: #7c83ff; font-weight: 700; letter-spacing: 2px; margin-bottom: 6px; }
+  .s7 h3 { font-size: 28px; font-weight: 900; color: #1a1a2e; margin-bottom: 16px; }
+  .bm-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; margin-bottom: 16px; }
+  .bm-card { border-radius: 12px; padding: 18px; text-align: center; }
+  .bm-card.phase1 { background: #f0f0ff; }
+  .bm-card.phase2 { background: #e8f5e9; }
+  .bm-card.phase3 { background: #fff3e0; }
+  .bm-card .phase-label { font-size: 10px; font-weight: 700; letter-spacing: 1px; color: #888; margin-bottom: 6px; }
+  .bm-card h4 { font-size: 15px; font-weight: 900; color: #1a1a2e; margin-bottom: 6px; }
+  .bm-card .price { font-size: 22px; font-weight: 900; color: #7c83ff; }
+  .bm-card .price-label { font-size: 11px; color: #888; }
+  .bm-card p { font-size: 11px; color: #666; margin-top: 6px; line-height: 1.5; }
+  .roadmap { display: flex; gap: 8px; }
+  .rm-item { flex: 1; padding: 14px; border-radius: 10px; background: #f8f8fc; }
+  .rm-item .quarter { font-size: 11px; font-weight: 700; color: #7c83ff; letter-spacing: 1px; }
+  .rm-item h4 { font-size: 13px; font-weight: 700; color: #1a1a2e; margin: 3px 0; }
+  .rm-item p { font-size: 11px; color: #888; line-height: 1.5; }
+
+  /* 슬라이드 8 — 팀 */
+  .s8 { background: #f8f8fc; }
+  .s8 .content { padding: 16px 56px 20px; flex: 1; }
+  .s8 h2 { font-size: 12px; color: #7c83ff; font-weight: 700; letter-spacing: 2px; margin-bottom: 6px; }
+  .s8 h3 { font-size: 28px; font-weight: 900; color: #1a1a2e; margin-bottom: 16px; }
+  .team-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 16px; }
+  .team-card { background: #fff; border-radius: 12px; padding: 20px; }
+  .team-card .role { background: #7c83ff; color: #fff; border-radius: 5px; padding: 2px 10px; font-size: 11px; font-weight: 700; display: inline-block; margin-bottom: 8px; }
+  .team-card h4 { font-size: 18px; font-weight: 900; color: #1a1a2e; margin-bottom: 3px; }
+  .team-card .edu { font-size: 12px; color: #888; margin-bottom: 10px; }
+  .team-card ul { list-style: none; }
+  .team-card ul li { font-size: 12px; color: #444; padding: 3px 0; padding-left: 14px; position: relative; line-height: 1.5; }
+  .team-card ul li::before { content: '·'; position: absolute; left: 0; color: #7c83ff; font-weight: 700; }
+  .hire-box { background: #1a1a2e; border-radius: 10px; padding: 14px 22px; display: flex; align-items: center; gap: 16px; }
+  .hire-box .icon { font-size: 26px; }
+  .hire-box p { color: #fff; font-size: 13px; line-height: 1.6; }
+  .hire-box strong { color: #7c83ff; }
+
+  /* 슬라이드 9 — AI 활용 */
+  .s9 { background: #1a1a2e; color: #fff; }
+  .s9 .content { padding: 16px 56px 20px; flex: 1; }
+  .s9 h2 { font-size: 12px; color: #7c83ff; font-weight: 700; letter-spacing: 2px; margin-bottom: 6px; }
+  .s9 h3 { font-size: 28px; font-weight: 900; margin-bottom: 18px; }
+  .ai-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; margin-bottom: 18px; }
+  .ai-card { background: rgba(255,255,255,0.05); border: 1px solid rgba(124,131,255,0.3); border-radius: 10px; padding: 18px; }
+  .ai-card .model { font-size: 10px; font-weight: 700; color: #7c83ff; letter-spacing: 1px; margin-bottom: 6px; }
+  .ai-card h4 { font-size: 14px; font-weight: 700; margin-bottom: 6px; }
+  .ai-card p { font-size: 12px; color: rgba(255,255,255,0.6); line-height: 1.6; }
+  .quote { background: rgba(124,131,255,0.15); border-left: 4px solid #7c83ff; border-radius: 0 10px 10px 0; padding: 14px 20px; font-size: 14px; font-style: italic; color: rgba(255,255,255,0.85); line-height: 1.7; }
+
+  /* 슬라이드 10 — 투자요청 */
+  .s10 { background: linear-gradient(135deg, #0f0c29, #302b63); color: #fff; }
+  .s10 .content { padding: 16px 56px 20px; flex: 1; }
+  .s10 h2 { font-size: 12px; color: #7c83ff; font-weight: 700; letter-spacing: 2px; margin-bottom: 6px; }
+  .s10 h3 { font-size: 28px; font-weight: 900; margin-bottom: 20px; }
+  .ask-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+  .ask-box { background: rgba(255,255,255,0.07); border-radius: 12px; padding: 20px; border: 1px solid rgba(124,131,255,0.3); }
+  .ask-box h4 { font-size: 12px; color: #7c83ff; font-weight: 700; letter-spacing: 1px; margin-bottom: 12px; }
+  .ask-box .amount { font-size: 40px; font-weight: 900; color: #fff; line-height: 1; }
+  .ask-box .amount-label { font-size: 13px; color: rgba(255,255,255,0.6); margin-top: 4px; margin-bottom: 16px; }
+  .use-item { display: flex; justify-content: space-between; padding: 8px 0; border-bottom: 1px solid rgba(255,255,255,0.1); font-size: 13px; }
+  .use-item:last-child { border-bottom: none; }
+  .use-item .name { color: rgba(255,255,255,0.7); }
+  .use-item .val { color: #7c83ff; font-weight: 700; }
+  .kpi-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; }
+  .kpi-item { background: rgba(124,131,255,0.1); border-radius: 9px; padding: 12px 14px; }
+  .kpi-item .kpi-val { font-size: 20px; font-weight: 900; color: #7c83ff; }
+  .kpi-item .kpi-label { font-size: 11px; color: rgba(255,255,255,0.6); margin-top: 2px; }
+  .contact { margin-top: 20px; text-align: center; font-size: 13px; color: rgba(255,255,255,0.6); }
+  .contact strong { color: #fff; }
+
+  @media print {
+    .slide { page-break-after: always; }
+  }
+</style>
+</head>
+<body>
+
+<!-- SLIDE 1: 표지 -->
+<div class="slide s1">
+  <div class="slide-header" style="position:absolute;top:36px;right:64px;">
+    <div class="logo" style="color:rgba(255,255,255,0.5);">kitt AI</div>
+  </div>
+  <div style="padding: 0 100px; display:flex; flex-direction:column; justify-content:center; height:100%;">
+    <div class="tag">AI Agent Platform · B2B SaaS</div>
+    <h1>중소기업의 <span>AI 전환</span>을<br>에이전트로 완성한다</h1>
+    <p class="sub">LLM 기반 업종 특화 AI 에이전트로 반복 업무를 자동화하는 kitt AX Agent</p>
+    <div class="meta">
+      <strong>주식회사 킷에이아이</strong> · 대표 유승범<br>
+      서울특별시 서초구 · 설립 2026.04 · AI 에이전트 B2B SaaS<br>
+      kitt.ai.kr · kitt.ai.ceo@gmail.com
+    </div>
+  </div>
+</div>
+
+<!-- SLIDE 2: 문제 -->
+<div class="slide s2">
+  <div class="slide-header">
+    <div class="logo">kitt AI</div>
+    <div class="slide-number">02 / 10</div>
+  </div>
+  <div class="content">
+    <h2>PROBLEM</h2>
+    <h3>중소기업은 AI를 쓰고 싶어도 쓸 수 없다</h3>
+    <div class="cards">
+      <div class="card c1">
+        <div class="num" style="color:#ff6b6b;">01</div>
+        <h4>시간 낭비</h4>
+        <p>담당자 1명이 주문·문서·정산 반복 업무에 하루 2~4시간 소모. 경영 집중 불가.</p>
+      </div>
+      <div class="card c2">
+        <div class="num" style="color:#ffa94d;">02</div>
+        <h4>전문인력 부재</h4>
+        <p>AI 도입하려면 전문 인력이 필요하지만 채용 여력과 검증 능력 모두 부족.</p>
+      </div>
+      <div class="card c3">
+        <div class="num" style="color:#7c83ff;">03</div>
+        <h4>범용 솔루션 한계</h4>
+        <p>시중 챗봇·RPA는 업종 특화가 안 돼 현장 적용율이 낮고 유지비만 발생.</p>
+      </div>
+    </div>
+    <div class="stat-bar">
+      <div class="stat">
+        <div class="val">770만</div>
+        <div class="label">국내 중소기업 수</div>
+      </div>
+      <div class="stat">
+        <div class="val">&lt;5%</div>
+        <div class="label">AI 도입률</div>
+      </div>
+      <div class="stat">
+        <div class="val">4,200억</div>
+        <div class="label">AI 자동화 시장 (2025)</div>
+      </div>
+      <div class="stat">
+        <div class="val">2~4h</div>
+        <div class="label">반복업무 일일 소모 시간</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- SLIDE 3: 솔루션 -->
+<div class="slide s3">
+  <div class="slide-header">
+    <div class="logo" style="color:rgba(255,255,255,0.7);">kitt AI</div>
+    <div class="slide-number" style="color:rgba(255,255,255,0.4);">03 / 10</div>
+  </div>
+  <div class="content">
+    <h2>SOLUTION</h2>
+    <h3>kitt AX Agent — 업종 특화 AI 에이전트 플랫폼</h3>
+    <div class="flow">
+      <div class="flow-box">
+        <div class="icon">📥</div>
+        <p>데이터 입력<br><small style="color:rgba(255,255,255,0.5)">주문·문서·키워드</small></p>
+      </div>
+      <div class="arrow">→</div>
+      <div class="flow-box">
+        <div class="icon">🤖</div>
+        <p>LLM 처리<br><small style="color:rgba(255,255,255,0.5)">Claude / Gemini</small></p>
+      </div>
+      <div class="arrow">→</div>
+      <div class="flow-box">
+        <div class="icon">⚡</div>
+        <p>AI 에이전트<br><small style="color:rgba(255,255,255,0.5)">업종별 자동화</small></p>
+      </div>
+      <div class="arrow">→</div>
+      <div class="flow-box">
+        <div class="icon">📊</div>
+        <p>정형 산출물<br><small style="color:rgba(255,255,255,0.5)">보고서·발주·CS</small></p>
+      </div>
+    </div>
+    <div class="agents">
+      <div class="agent-card">
+        <div class="badge">LIVE</div>
+        <h4>ai-agent</h4>
+        <p>메타 광고 리포트 자동화. RSS→LLM→리포트 자동 생성·발송.</p>
+        <div class="result">월 60시간 절감 · 6개사 운영 중</div>
+      </div>
+      <div class="agent-card">
+        <div class="badge">LIVE</div>
+        <h4>newsletter-agent</h4>
+        <p>7단계 자동 파이프라인. 주제설정→크롤링→LLM요약→HTML→발송.</p>
+        <div class="result">주 2회 자동 발행 · 무인 운영</div>
+      </div>
+      <div class="agent-card">
+        <div class="badge">LIVE</div>
+        <h4>Sellkitt B2B 유통</h4>
+        <p>주문 처리 자동화. AI 엑셀 매핑·발주 자동화 납품 완료.</p>
+        <div class="result">주문처리 90% 단축 · 계약 완료</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- SLIDE 4: 실증 성과 -->
+<div class="slide s4">
+  <div class="slide-header">
+    <div class="logo">kitt AI</div>
+    <div class="slide-number">04 / 10</div>
+  </div>
+  <div class="content">
+    <h2>TRACTION</h2>
+    <h3>이미 납품·운영 중 — 가설이 아닌 실증</h3>
+    <div class="metrics">
+      <div class="metric">
+        <div class="val">6<span class="unit">개사</span></div>
+        <div class="label">광고 에이전트<br>실운영 고객사</div>
+      </div>
+      <div class="metric">
+        <div class="val">60<span class="unit">h</span></div>
+        <div class="label">고객사당<br>월 절감 시간</div>
+      </div>
+      <div class="metric">
+        <div class="val">3<span class="unit">건</span></div>
+        <div class="label">B2B 납품<br>전주기 완료</div>
+      </div>
+      <div class="metric">
+        <div class="val">2<span class="unit">년+</span></div>
+        <div class="label">LLM 실운영<br>경험</div>
+      </div>
+    </div>
+    <div class="timeline">
+      <div class="tl-item">
+        <div class="date">2024</div>
+        <h4>ai-agent 구축</h4>
+        <p>메타광고 자동화 파이프라인. 6개사 계약·운영 시작.</p>
+      </div>
+      <div class="tl-item">
+        <div class="date">2025</div>
+        <h4>Sellkitt 납품</h4>
+        <p>B2B 유통 자동화. 주문처리 90% 단축 실증. 계약 완료.</p>
+      </div>
+      <div class="tl-item">
+        <div class="date">2026.04</div>
+        <h4>킷에이아이 법인 설립</h4>
+        <p>AI 에이전트 전문 법인화. 정부 AI 인재 사업 신청.</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- SLIDE 5: 시장 -->
+<div class="slide s5">
+  <div class="slide-header">
+    <div class="logo">kitt AI</div>
+    <div class="slide-number">05 / 10</div>
+  </div>
+  <div class="content">
+    <h2>MARKET</h2>
+    <h3>TAM 4.2조 · 초기 타깃 중소 광고주·유통업체</h3>
+    <div class="market-grid">
+      <div class="tam-box">
+        <h4>MARKET SIZE (2025 기준)</h4>
+        <div class="tam-row">
+          <div class="tam-label">TAM</div>
+          <div class="tam-bar tam">4조 2,000억 · 국내 AI 자동화 전체</div>
+        </div>
+        <div class="tam-row">
+          <div class="tam-label">SAM</div>
+          <div class="tam-bar sam">8,000억 · 중소기업 AI 도입</div>
+        </div>
+        <div class="tam-row">
+          <div class="tam-label">SOM</div>
+          <div class="tam-bar som" style="font-size:12px;">200억 · 3년 목표</div>
+        </div>
+      </div>
+      <div class="target-box">
+        <h4>초기 타깃 세그먼트</h4>
+        <div class="target-item">
+          <div>
+            <div class="name">광고주 (SMB)</div>
+            <div class="desc">월 마케팅비 500만원+ · Meta 광고 운영</div>
+          </div>
+          <div class="size">~30만개</div>
+        </div>
+        <div class="target-item">
+          <div>
+            <div class="name">B2B 유통·도매업체</div>
+            <div class="desc">주문·발주 반복 업무 과중</div>
+          </div>
+          <div class="size">~15만개</div>
+        </div>
+        <div class="target-item">
+          <div>
+            <div class="name">병원·학원 (서비스업)</div>
+            <div class="desc">CS·문서 자동화 수요</div>
+          </div>
+          <div class="size">~20만개</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- SLIDE 6: 경쟁우위 -->
+<div class="slide s6">
+  <div class="slide-header">
+    <div class="logo" style="color:rgba(255,255,255,0.7);">kitt AI</div>
+    <div class="slide-number" style="color:rgba(255,255,255,0.4);">06 / 10</div>
+  </div>
+  <div class="content">
+    <h2>COMPETITIVE ADVANTAGE</h2>
+    <h3>경쟁사 대비 핵심 차별점</h3>
+    <table class="comp-table">
+      <thead>
+        <tr>
+          <th>구분</th>
+          <th>kitt AX Agent</th>
+          <th>발주모아 (위드소프트)</th>
+          <th>사방넷 (다우기술)</th>
+          <th>범용 챗봇</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr class="kitt">
+          <td>LLM 기반 자율 에이전트</td>
+          <td class="o">✓ Claude·Gemini</td>
+          <td class="x">✗ 규칙기반 ML</td>
+          <td class="x">✗ FAQ 챗봇</td>
+          <td class="d">△ 범용</td>
+        </tr>
+        <tr>
+          <td>업종 특화 커스터마이징</td>
+          <td class="o">✓ 물류·광고·학원</td>
+          <td class="d">△ 유통 한정</td>
+          <td class="d">△ 커머스 한정</td>
+          <td class="x">✗</td>
+        </tr>
+        <tr>
+          <td>실운영 납품 실적</td>
+          <td class="o">✓ 3건 완료</td>
+          <td class="o">✓ 463개사</td>
+          <td class="o">✓ 7,000개사</td>
+          <td class="x">✗</td>
+        </tr>
+        <tr>
+          <td>초기 도입 비용</td>
+          <td class="o">✓ 낮음 (SaaS)</td>
+          <td class="d">△ 중간</td>
+          <td class="x">✗ 높음</td>
+          <td class="o">✓ 낮음</td>
+        </tr>
+        <tr>
+          <td>자율 처리 (사람 개입 최소)</td>
+          <td class="o">✓ 풀 자동화</td>
+          <td class="x">✗</td>
+          <td class="x">✗</td>
+          <td class="x">✗</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<!-- SLIDE 7: 비즈니스 모델 -->
+<div class="slide s7">
+  <div class="slide-header">
+    <div class="logo">kitt AI</div>
+    <div class="slide-number">07 / 10</div>
+  </div>
+  <div class="content">
+    <h2>BUSINESS MODEL</h2>
+    <h3>컨설팅 → SaaS 구독 → AI바우처 연계 3단계 수익화</h3>
+    <div class="bm-grid">
+      <div class="bm-card phase1">
+        <div class="phase-label">PHASE 1 · NOW</div>
+        <h4>AX 컨설팅·구축</h4>
+        <div class="price">1,000만원+</div>
+        <div class="price-label">건당 프로젝트</div>
+        <p>업종별 AI 에이전트 설계·구축·납품. 즉각 매출 발생.</p>
+      </div>
+      <div class="bm-card phase2">
+        <div class="phase-label">PHASE 2 · '26 Q4</div>
+        <h4>SaaS 구독</h4>
+        <div class="price">30~100만원</div>
+        <div class="price-label">월 구독 / 사</div>
+        <p>멀티테넌트 플랫폼. 운영 대시보드 포함. MRR 축적.</p>
+      </div>
+      <div class="bm-card phase3">
+        <div class="phase-label">PHASE 3 · '27</div>
+        <h4>AI바우처 연계</h4>
+        <div class="price">2억원</div>
+        <div class="price-label">건당 정부 과제</div>
+        <p>NIPA 공급기업 POOL 등록 → 대형 B2B 계약 연결.</p>
+      </div>
+    </div>
+    <div class="roadmap">
+      <div class="rm-item">
+        <div class="quarter">'26 Q3</div>
+        <h4>AI 인재 채용</h4>
+        <p>정규직 2명 온보딩. 에이전트 고도화 착수.</p>
+      </div>
+      <div class="rm-item">
+        <div class="quarter">'26 Q4</div>
+        <h4>SaaS 베타 출시</h4>
+        <p>업종별 에이전트 2종. 수요기업 실증 1건.</p>
+      </div>
+      <div class="rm-item">
+        <div class="quarter">'27 Q1</div>
+        <h4>AI바우처 공급 등록</h4>
+        <p>NIPA POOL 등록. 파트너십 확대.</p>
+      </div>
+      <div class="rm-item">
+        <div class="quarter">'27 Q2+</div>
+        <h4>MRR 1억 목표</h4>
+        <p>구독 고객 100사+. 시리즈A 준비.</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- SLIDE 8: 팀 -->
+<div class="slide s8">
+  <div class="slide-header">
+    <div class="logo">kitt AI</div>
+    <div class="slide-number">08 / 10</div>
+  </div>
+  <div class="content">
+    <h2>TEAM</h2>
+    <h3>납품 완료한 2인 팀 — 경험·기술 동시 보유</h3>
+    <div class="team-grid">
+      <div class="team-card">
+        <div class="role">CEO · 대표이사</div>
+        <h4>유승범</h4>
+        <div class="edu">세종대 대학원 컴퓨터공학 석사</div>
+        <ul>
+          <li>카이앤컴퍼니 대표 10년+ · Meta 광고 100개사+ 운영</li>
+          <li>Sellkitt B2B 유통 플랫폼 직접 설계·납품·운영</li>
+          <li>ai-agent 구축 · 광고 클라이언트 6개사 월 60h 절감</li>
+          <li>AI 전략 컨설팅·소프트웨어 구축·리터러시 교육 총괄</li>
+        </ul>
+      </div>
+      <div class="team-card">
+        <div class="role">CTO · 기술이사</div>
+        <h4>김상훈</h4>
+        <div class="edu">경민대 컴퓨터소프트웨어과 겸임교수 · 현장실습 지도 강사</div>
+        <ul>
+          <li>Claude·Gemini LLM 실운영 2년+</li>
+          <li>newsletter-agent 7단계 파이프라인 설계</li>
+          <li>셀킷 AI 아키텍처 설계</li>
+          <li>기존 고객사(유통·병원·학원) 실증 완료</li>
+        </ul>
+      </div>
+    </div>
+    <div class="hire-box">
+      <div class="icon">👥</div>
+      <p><strong>AI 인재 2명 정규직 채용 예정 ('26.10월)</strong> — AI 양성과정 수료생 채용으로 LLM 커스터마이징·AX 솔루션 개발 역량 강화. 채용 후 60일 내 4대보험·근로계약 증빙 완료.</p>
+    </div>
+  </div>
+</div>
+
+<!-- SLIDE 9: AI 활용 -->
+<div class="slide s9">
+  <div class="slide-header">
+    <div class="logo" style="color:rgba(255,255,255,0.7);">kitt AI</div>
+    <div class="slide-number" style="color:rgba(255,255,255,0.4);">09 / 10</div>
+  </div>
+  <div class="content">
+    <h2>AI AS A TEAMMATE</h2>
+    <h3>AI를 도구가 아닌 팀원으로 운영한다</h3>
+    <div class="ai-grid">
+      <div class="ai-card">
+        <div class="model">CLAUDE (ANTHROPIC)</div>
+        <h4>콘텐츠·문서 생성</h4>
+        <p>뉴스레터 자동생성, 사업계획서 초안, 보고서 작성. 주 2회 무인 발행 중.</p>
+      </div>
+      <div class="ai-card">
+        <div class="model">GEMINI (GOOGLE)</div>
+        <h4>데이터 분석·처리</h4>
+        <p>광고 성과 데이터 자동 분석, 인사이트 추출, 대시보드 수치 생성.</p>
+      </div>
+      <div class="ai-card">
+        <div class="model">MULTI-AGENT</div>
+        <h4>파이프라인 자동화</h4>
+        <p>7단계 워크플로우를 AI가 순차 실행. 사람 개입 없이 전 과정 처리.</p>
+      </div>
+    </div>
+    <div class="quote">
+      "우리는 2인 팀이지만 AI 에이전트 덕분에 10인 팀처럼 일한다. 사람은 전략과 판단만 하고,
+      반복 실행은 모두 AI가 담당한다. 이 운영 방식 자체가 우리 제품의 프로토타입이다."
+      <br><br>— 유승범, 킷에이아이 대표
+    </div>
+  </div>
+</div>
+
+<!-- SLIDE 10: 투자 요청 -->
+<div class="slide s10">
+  <div class="slide-header">
+    <div class="logo" style="color:rgba(255,255,255,0.7);">kitt AI</div>
+    <div class="slide-number" style="color:rgba(255,255,255,0.4);">10 / 10</div>
+  </div>
+  <div class="content">
+    <h2>THE ASK</h2>
+    <h3>SparkClaw와 함께 중소기업 AX 시장을 선점한다</h3>
+    <div class="ask-grid">
+      <div class="ask-box">
+        <h4>FUNDING REQUEST</h4>
+        <div class="amount">5,000만원</div>
+        <div class="amount-label">~ 2억원 투자 유치 목표</div>
+        <div class="use-item"><span class="name">AI 인재 인건비 (2명 · 7개월)</span><span class="val">6,000만원</span></div>
+        <div class="use-item"><span class="name">에이전트 고도화 · 외주</span><span class="val">3,500만원</span></div>
+        <div class="use-item"><span class="name">클라우드 · LLM API</span><span class="val">2,500만원</span></div>
+        <div class="use-item"><span class="name">지재권 · 마케팅</span><span class="val">2,000만원</span></div>
+      </div>
+      <div class="ask-box">
+        <h4>12개월 목표 KPI</h4>
+        <div class="kpi-grid">
+          <div class="kpi-item">
+            <div class="kpi-val">20개사</div>
+            <div class="kpi-label">SaaS 구독 고객</div>
+          </div>
+          <div class="kpi-item">
+            <div class="kpi-val">MRR 2,000만</div>
+            <div class="kpi-label">월 반복 매출</div>
+          </div>
+          <div class="kpi-item">
+            <div class="kpi-val">2종</div>
+            <div class="kpi-label">업종별 에이전트</div>
+          </div>
+          <div class="kpi-item">
+            <div class="kpi-val">AI바우처</div>
+            <div class="kpi-label">NIPA 공급기업 등록</div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="contact">
+      <strong>유승범</strong> · 주식회사 킷에이아이 · kitt.ai.ceo@gmail.com
+    </div>
+  </div>
+</div>
+
+</body>
+</html>
