@@ -1,0 +1,875 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>슬리밍고 AI 챗봇 시스템 개발 제안서</title>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;700;900&display=swap" rel="stylesheet">
+<style>
+  /* ===== Reset & Base ===== */
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  html { font-size: 16px; scroll-behavior: smooth; }
+  body {
+    font-family: 'Noto Sans KR', 'Apple SD Gothic Neo', 'Malgun Gothic', sans-serif;
+    color: #222;
+    background: #f4f6f8;
+    line-height: 1.8;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  /* ===== Print (A4) ===== */
+  @media print {
+    @page { size: A4; margin: 18mm 15mm 20mm 15mm; }
+    body { background: #fff; font-size: 10.5pt; }
+    .page-wrapper { max-width: 100%; padding: 0; box-shadow: none; }
+    .toc a { color: #222 !important; text-decoration: none !important; }
+    header, footer.site-footer { break-inside: avoid; }
+    h1, h2, h3 { break-after: avoid; }
+    table { break-inside: avoid; }
+    .no-print { display: none !important; }
+  }
+
+  /* ===== Layout ===== */
+  .page-wrapper {
+    max-width: 960px;
+    margin: 0 auto;
+    background: #fff;
+    box-shadow: 0 0 40px rgba(0,0,0,.08);
+  }
+
+  /* ===== Header ===== */
+  header.site-header {
+    background: linear-gradient(135deg, #2d6a4f 0%, #1b4332 100%);
+    color: #fff;
+    padding: 48px 48px 40px;
+  }
+  header.site-header h1 {
+    font-size: 2rem;
+    font-weight: 900;
+    letter-spacing: -0.5px;
+    margin-bottom: 16px;
+  }
+  header .meta-info {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px 24px;
+    font-size: 0.95rem;
+    opacity: 0.92;
+  }
+  header .meta-info span { white-space: nowrap; }
+  header .meta-info strong { font-weight: 700; margin-right: 4px; }
+
+  /* ===== Content area ===== */
+  .content {
+    padding: 40px 48px 56px;
+  }
+
+  /* ===== TOC ===== */
+  .toc {
+    background: #f0faf4;
+    border-left: 4px solid #2d6a4f;
+    border-radius: 0 8px 8px 0;
+    padding: 24px 32px;
+    margin-bottom: 40px;
+  }
+  .toc h2 {
+    font-size: 1.15rem;
+    color: #2d6a4f;
+    margin-bottom: 12px;
+    border: none;
+    padding: 0;
+  }
+  .toc ol {
+    list-style: decimal;
+    padding-left: 20px;
+  }
+  .toc li {
+    margin-bottom: 6px;
+  }
+  .toc a {
+    color: #2d6a4f;
+    text-decoration: none;
+    font-weight: 500;
+    transition: color .2s;
+  }
+  .toc a:hover { color: #40916c; text-decoration: underline; }
+
+  /* ===== Headings ===== */
+  h1.section-title {
+    font-size: 1.6rem;
+    font-weight: 900;
+    color: #fff;
+    background: linear-gradient(135deg, #2d6a4f, #40916c);
+    padding: 16px 24px;
+    border-radius: 8px;
+    margin: 48px 0 24px;
+  }
+  h2 {
+    font-size: 1.25rem;
+    font-weight: 700;
+    color: #2d6a4f;
+    border-bottom: 2px solid #b7e4c7;
+    padding-bottom: 8px;
+    margin: 36px 0 16px;
+  }
+  h3 {
+    font-size: 1.08rem;
+    font-weight: 700;
+    color: #333;
+    margin: 24px 0 12px;
+    padding-left: 12px;
+    border-left: 3px solid #2d6a4f;
+  }
+  h4 {
+    font-size: 1rem;
+    font-weight: 700;
+    color: #444;
+    margin: 18px 0 10px;
+  }
+
+  /* ===== Paragraphs & Lists ===== */
+  p { margin-bottom: 14px; }
+  ul, ol { margin: 0 0 16px 20px; }
+  li { margin-bottom: 4px; }
+
+  /* ===== Blockquote ===== */
+  blockquote {
+    background: #f0faf4;
+    border-left: 4px solid #2d6a4f;
+    padding: 16px 20px;
+    margin: 16px 0 20px;
+    border-radius: 0 6px 6px 0;
+    color: #1b4332;
+    font-weight: 500;
+  }
+  blockquote strong { color: #2d6a4f; }
+
+  /* ===== Tables ===== */
+  .table-wrap {
+    overflow-x: auto;
+    margin: 0 0 24px;
+    -webkit-overflow-scrolling: touch;
+  }
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.92rem;
+    line-height: 1.65;
+  }
+  thead th {
+    background: #2d6a4f;
+    color: #fff;
+    font-weight: 700;
+    padding: 10px 14px;
+    text-align: left;
+    white-space: nowrap;
+    border: 1px solid #1b4332;
+  }
+  tbody td {
+    padding: 10px 14px;
+    border: 1px solid #d8e8df;
+    vertical-align: top;
+  }
+  tbody tr:nth-child(even) { background: #f7fbf9; }
+  tbody tr:hover { background: #e8f5ee; }
+
+  /* ===== Highlight Box ===== */
+  .highlight-box {
+    background: linear-gradient(135deg, #f0faf4 0%, #e8f5ee 100%);
+    border: 1px solid #b7e4c7;
+    border-radius: 8px;
+    padding: 20px 24px;
+    margin: 20px 0;
+    font-size: 1.05rem;
+  }
+  .highlight-box strong { color: #2d6a4f; }
+
+  /* ===== Divider ===== */
+  hr {
+    border: none;
+    height: 1px;
+    background: #d8e8df;
+    margin: 32px 0;
+  }
+
+  /* ===== Footer ===== */
+  footer.site-footer {
+    background: #1b4332;
+    color: rgba(255,255,255,.85);
+    text-align: center;
+    padding: 24px 48px;
+    font-size: 0.85rem;
+    line-height: 1.7;
+  }
+  footer.site-footer strong { color: #fff; }
+
+  /* ===== Responsive ===== */
+  @media (max-width: 768px) {
+    header.site-header { padding: 32px 24px 28px; }
+    header.site-header h1 { font-size: 1.5rem; }
+    .content { padding: 28px 20px 40px; }
+    h1.section-title { font-size: 1.3rem; padding: 14px 18px; }
+    h2 { font-size: 1.1rem; }
+    table { font-size: 0.82rem; }
+    thead th, tbody td { padding: 8px 10px; }
+    footer.site-footer { padding: 20px 20px; }
+  }
+  @media (max-width: 480px) {
+    header.site-header h1 { font-size: 1.25rem; }
+    .content { padding: 20px 14px 32px; }
+    h1.section-title { font-size: 1.15rem; }
+    .toc { padding: 16px 18px; }
+  }
+</style>
+</head>
+<body>
+
+<div class="page-wrapper">
+
+<!-- ==================== HEADER ==================== -->
+<header class="site-header">
+  <h1>슬리밍고 AI 챗봇 시스템 개발 제안서</h1>
+  <div class="meta-info">
+    <span><strong>프로젝트명:</strong> 슬리밍고(Slimming Go) AI 챗봇 시스템</span>
+    <span><strong>제안일:</strong> 2026년 3월 23일</span>
+    <span><strong>제안사:</strong> (주)kitt</span>
+    <span><strong>버전:</strong> v1.0 (최종)</span>
+  </div>
+</header>
+
+<!-- ==================== CONTENT ==================== -->
+<div class="content">
+
+<!-- ===== 목차 ===== -->
+<nav class="toc">
+  <h2>목차</h2>
+  <ol>
+    <li><a href="#sec1">제안 개요</a></li>
+    <li><a href="#sec2">현황 분석 및 요구사항</a></li>
+    <li><a href="#sec3">제안 솔루션</a></li>
+    <li><a href="#sec4">UI/UX 설계 방향</a></li>
+    <li><a href="#sec5">예산</a></li>
+    <li><a href="#sec6">유지보수 및 운영</a></li>
+    <li><a href="#sec7">기대 효과</a></li>
+  </ol>
+</nav>
+
+<!-- ============================================================ -->
+<!--  1. 제안 개요                                                 -->
+<!-- ============================================================ -->
+<h1 class="section-title" id="sec1">1. 제안 개요</h1>
+
+<h2>1.1 슬리밍고가 마주한 비즈니스 과제</h2>
+
+<p>슬리밍고는 15년 연구, 12만명 자세측정 데이터, 전국 11개 지점이라는 업계 최고 수준의 자산을 보유한 자세/체형 관리 전문 브랜드입니다. 그러나 이 강력한 전문성이 고객에게 온전히 전달되지 못하는 구조적 문제가 존재합니다.</p>
+
+<h3>고객 접점의 한계</h3>
+<div class="table-wrap">
+<table>
+  <thead>
+    <tr><th>과제</th><th>현재 상황</th><th>놓치고 있는 것</th></tr>
+  </thead>
+  <tbody>
+    <tr><td><strong>영업시간 외 문의 사각지대</strong></td><td>퇴근 후/주말에 카카오톡/전화 문의가 집중되나 응대 인력이 없음</td><td>관심이 가장 높을 때 고객을 놓치고 있음</td></tr>
+    <tr><td><strong>반복 문의에 묶인 직원 시간</strong></td><td>"가격이 얼마인가요?", "가까운 매장이 어디인가요?" 동일 질문이 하루 수십 건</td><td>직원 1인당 하루 1~2시간을 단순 반복 답변에 소비</td></tr>
+    <tr><td><strong>채널마다 다른 답변</strong></td><td>직원에 따라 프로그램 설명, 가격 안내가 제각각</td><td>브랜드 전문성에 대한 신뢰 하락</td></tr>
+    <tr><td><strong>전화 한 통에 한 명만</strong></td><td>동시 통화가 불가능, 통화 중 다른 고객은 대기</td><td>전화 연결 실패로 고객 불만</td></tr>
+    <tr><td><strong>프로그램 참여 후 불안감</strong></td><td>"이런 변화가 정상인가요?" 등 즉시 답변이 어려움</td><td>고객 불안감 증가, 중도 포기율 상승</td></tr>
+  </tbody>
+</table>
+</div>
+
+<h3>내부 운영의 비효율</h3>
+<div class="table-wrap">
+<table>
+  <thead>
+    <tr><th>과제</th><th>현재 상황</th><th>놓치고 있는 것</th></tr>
+  </thead>
+  <tbody>
+    <tr><td><strong>매뉴얼 검색에 걸리는 시간</strong></td><td>신규 직원이 절차, 사용법을 찾으려면 문서를 일일이 뒤져야 함</td><td>온보딩에 2~4주 소요</td></tr>
+    <tr><td><strong>선배 직원에게 반복 문의</strong></td><td>"이 케이스에 어떤 프로그램을 추천하나요?" 등 매번 물어봐야 하는 구조</td><td>선배 직원의 본업 방해</td></tr>
+    <tr><td><strong>지점 간 정보 격차</strong></td><td>본사 공지가 일부 지점에 전달되지 않는 경우 발생</td><td>11개 지점 서비스 품질 불균형</td></tr>
+  </tbody>
+</table>
+</div>
+
+<h2>1.2 AI 챗봇으로 해결합니다</h2>
+
+<p>본 제안의 핵심은 <strong>"슬리밍고의 15년 전문 지식을 24시간 일하는 AI 직원으로 만드는 것"</strong>입니다.</p>
+
+<div class="table-wrap">
+<table>
+  <thead>
+    <tr><th>과제</th><th>AI 챗봇 해결 방안</th><th>기대 효과</th></tr>
+  </thead>
+  <tbody>
+    <tr><td>영업시간 외 사각지대</td><td>카카오톡, 홈페이지, 전화 모든 채널에서 24시간 즉시 응답</td><td>영업시간 외 문의 응답률 0% → <strong>90% 이상</strong></td></tr>
+    <tr><td>반복 문의 부담</td><td>AI가 단순 반복 질문을 자동 처리</td><td>반복 문의의 <strong>70% 이상</strong> 자동 처리</td></tr>
+    <tr><td>답변 불일관</td><td>공식 자료를 학습한 AI가 동일 품질의 답변 제공</td><td>한결같은 <strong>브랜드 경험</strong></td></tr>
+    <tr><td>전화 연결 한계</td><td>AI 음성 응대로 동시 여러 통화 처리</td><td>전화 포기율 <strong>50% 이상 감소</strong></td></tr>
+    <tr><td>관리 후 불안감</td><td>학습된 지식 기반으로 즉시 답변</td><td>중도 포기율 <strong>15% 이상 감소</strong></td></tr>
+    <tr><td>신규 직원 적응</td><td>업무 매뉴얼 챗봇으로 즉시 답변</td><td>온보딩 기간 2~4주 → <strong>1주 이내</strong></td></tr>
+    <tr><td>지점 간 격차</td><td>모든 지점이 동일한 AI 지식 기반 활용</td><td>11개 지점 <strong>서비스 품질 평준화</strong></td></tr>
+  </tbody>
+</table>
+</div>
+
+<h2>1.3 제안의 목표</h2>
+
+<blockquote><strong>"슬리밍고의 전문 지식이 잠들지 않는 AI 컨설턴트로 고객 곁에 24시간 함께합니다."</strong></blockquote>
+
+<h3>정량 목표</h3>
+<div class="table-wrap">
+<table>
+  <thead>
+    <tr><th>지표</th><th>현재</th><th>목표</th><th>비고</th></tr>
+  </thead>
+  <tbody>
+    <tr><td>영업시간 외 문의 응답률</td><td>0%</td><td>90% 이상</td><td>AI 24시간 자동 응대</td></tr>
+    <tr><td>단순 반복 문의 자동 처리율</td><td>0%</td><td>70% 이상</td><td>가격, 위치, 프로그램 안내 등</td></tr>
+    <tr><td>첫 방문 전환율</td><td>현재 수준</td><td>20% 이상 향상</td><td>즉시 응대 → 관심 유지 → 방문</td></tr>
+    <tr><td>직원 단순 업무 시간</td><td>1.5시간/일/인</td><td>0.5시간 이내</td><td>연간 약 2,750시간 절감 (11개 지점, 1시간 절감 x 250영업일)</td></tr>
+    <tr><td>신규 직원 온보딩 기간</td><td>2~4주</td><td>1주 이내</td><td>매뉴얼 챗봇 활용</td></tr>
+    <tr><td>고객 문의 만족도</td><td>측정 미비</td><td>4.0/5.0 이상</td><td>대화 종료 후 만족도 수집</td></tr>
+  </tbody>
+</table>
+</div>
+
+<!-- ============================================================ -->
+<!--  2. 현황 분석 및 요구사항                                      -->
+<!-- ============================================================ -->
+<h1 class="section-title" id="sec2">2. 현황 분석 및 요구사항</h1>
+
+<h2>2.1 AI 챗봇 시장 트렌드</h2>
+<div class="table-wrap">
+<table>
+  <thead>
+    <tr><th>트렌드</th><th>설명</th><th>슬리밍고 적용 방향</th></tr>
+  </thead>
+  <tbody>
+    <tr><td><strong>생성형 AI 챗봇 대중화</strong></td><td>"고객 질문을 이해하고 자연스럽게 대화하는 챗봇"으로 빠르게 전환 중</td><td>최신 AI 기술 기반으로 다양한 질문에 유연하게 응답</td></tr>
+    <tr><td><strong>자사 자료 기반 정확한 답변</strong></td><td>회사 보유 자료에서 관련 내용을 먼저 찾아본 뒤 답변을 생성하여 "AI가 지어낸 답변" 방지</td><td>슬리밍고 홈페이지, 블로그, 프로그램 정보를 자동 학습하여 정확한 답변 생성</td></tr>
+    <tr><td><strong>음성 AI 전화 응대</strong></td><td>AI가 전화를 직접 받아 자연스러운 목소리로 응대하는 서비스가 빠르게 확산</td><td>최신 음성 AI 기술로 전화 문의 자동 응대</td></tr>
+    <tr><td><strong>멀티채널 통합</strong></td><td>여러 채널의 문의를 하나의 AI가 통합 처리하는 방식이 표준화</td><td>카카오톡 + 홈페이지 위젯 + 전화 음성 AI 통합 운영</td></tr>
+    <tr><td><strong>개인정보 보호 강화</strong></td><td>AI가 고객 대화를 처리할 때 개인정보 보호 규정 준수 필수</td><td>개인정보 보호 및 보안 강화 적용</td></tr>
+  </tbody>
+</table>
+</div>
+
+<h2>2.2 유사 서비스/솔루션 비교</h2>
+<div class="table-wrap">
+<table>
+  <thead>
+    <tr><th>비교 항목</th><th>채널톡</th><th>카카오 챗봇 (오픈빌더)</th><th>네이버 클로바 챗봇</th></tr>
+  </thead>
+  <tbody>
+    <tr><td><strong>주요 기능</strong></td><td>실시간 채팅 상담, AI 자동 응답</td><td>카카오톡 채널 연동, 시나리오 기반 응답</td><td>자연어 이해, 시나리오 기반 대화</td></tr>
+    <tr><td><strong>음성 AI 지원</strong></td><td>미지원</td><td>미지원</td><td>제한적</td></tr>
+    <tr><td><strong>자사 자료 기반 답변</strong></td><td>제한적 (FAQ 기반)</td><td>미지원</td><td>미지원</td></tr>
+    <tr><td><strong>멀티채널</strong></td><td>웹 + 카카오톡</td><td>카카오톡만</td><td>네이버톡톡 중심</td></tr>
+    <tr><td><strong>월 비용 (예상)</strong></td><td>50~150만원</td><td>무료~30만원</td><td>30~100만원</td></tr>
+  </tbody>
+</table>
+</div>
+
+<blockquote><strong>분석 결론</strong>: 기존 솔루션들은 텍스트 기반 채팅 응대에는 적합하나, 슬리밍고가 필요로 하는 <strong>"자사 자료 기반 정확한 답변 + 음성 AI 전화 응대 + 멀티채널 통합 + 내부 업무 매뉴얼 챗봇"</strong>을 하나의 솔루션으로 제공하기 어렵습니다.</blockquote>
+
+<h2>2.3 기능 요구사항 개요</h2>
+<p>총 <strong>38개 핵심 기능</strong>을 고객용, 내부용, 관리자용, 음성 AI, 공통 영역으로 나누어 구현합니다. 1차 오픈 시 37개 기능을 구현하며, 다국어 응대(1개)는 향후 확장 단계에서 검토합니다.</p>
+
+<h2>2.4 비기능 요구사항</h2>
+<div class="table-wrap">
+<table>
+  <thead>
+    <tr><th>구분</th><th>핵심 요구사항</th></tr>
+  </thead>
+  <tbody>
+    <tr><td><strong>성능</strong></td><td>텍스트 챗봇 3초 이내 응답, 음성 AI 2초 이내 첫 응답, 50건 이상 동시 대화 처리</td></tr>
+    <tr><td><strong>보안</strong></td><td>개인정보 보호 및 보안 강화 (암호화 전송/저장, 개인정보 자동 마스킹, 대화 데이터 보관 정책, 고객 데이터 외부 학습 차단)</td></tr>
+    <tr><td><strong>가용성</strong></td><td>월 99.5% 이상 서비스 가용률, 매일 자동 백업, 장애 시 2시간 이내 복구</td></tr>
+  </tbody>
+</table>
+</div>
+
+<!-- ============================================================ -->
+<!--  3. 제안 솔루션                                               -->
+<!-- ============================================================ -->
+<h1 class="section-title" id="sec3">3. 제안 솔루션</h1>
+
+<h2>3.1 제안 범위</h2>
+
+<h3>포함 범위</h3>
+
+<h4>고객용 AI 챗봇 (3개 채널)</h4>
+<div class="table-wrap">
+<table>
+  <thead>
+    <tr><th>채널</th><th>구현 방식</th><th>주요 기능</th></tr>
+  </thead>
+  <tbody>
+    <tr><td><strong>카카오톡</strong></td><td>카카오톡 안에서 바로 AI와 대화 가능</td><td>프로그램/제품 문의, 가격, 매장 위치, 예약 연결, 사용 후 궁금증</td></tr>
+    <tr><td><strong>홈페이지 위젯</strong></td><td>하단 팝업 채팅 (텍스트 기본 + 마이크 버튼으로 음성 모드 전환)</td><td>텍스트 대화, 음성 질문/답변, 상담원 연결</td></tr>
+    <tr><td><strong>전화 음성 AI</strong></td><td>AI가 전화를 직접 받아 자연스러운 음성으로 응대</td><td>음성 문의 자동 응답, 상담원 전화 연결, 통화 내용 자동 기록</td></tr>
+  </tbody>
+</table>
+</div>
+
+<h4>내부용 AI 챗봇</h4>
+<div class="table-wrap">
+<table>
+  <thead>
+    <tr><th>대상</th><th>주요 기능</th></tr>
+  </thead>
+  <tbody>
+    <tr><td>전 직원</td><td>업무 매뉴얼 검색, 업무 절차 안내, 고객 응대 가이드, 제품 정보 조회</td></tr>
+    <tr><td>신규 직원</td><td>온보딩 가이드 (단계별 업무 안내, 필수 학습 항목)</td></tr>
+  </tbody>
+</table>
+</div>
+
+<h4>AI 지식 관리 시스템</h4>
+<div class="table-wrap">
+<table>
+  <thead>
+    <tr><th>기능</th><th>설명</th></tr>
+  </thead>
+  <tbody>
+    <tr><td><strong>파일 업로드 → AI 자동 분석/정리</strong></td><td>관리자가 자료(PDF, 워드, 엑셀 등)를 업로드하면 AI가 자동으로 내용을 분석/정리하여 챗봇 지식으로 등록</td></tr>
+    <tr><td><strong>자동 지식 등록</strong></td><td>정리된 정보가 챗봇 지식 기반에 자동 반영, 별도 코딩 없이 챗봇이 즉시 활용</td></tr>
+    <tr><td><strong>홈페이지/블로그 자동 수집</strong></td><td>슬리밍고 홈페이지, 블로그 내용을 정기적으로 자동 수집/학습</td></tr>
+  </tbody>
+</table>
+</div>
+
+<h4>관리자 시스템</h4>
+<div class="table-wrap">
+<table>
+  <thead>
+    <tr><th>화면</th><th>설명</th></tr>
+  </thead>
+  <tbody>
+    <tr><td>대시보드</td><td>일별/주별/월별 대화 건수, 채널별 비율, 자주 묻는 질문 TOP 10, 응답 정확도</td></tr>
+    <tr><td>FAQ 관리</td><td>자주 묻는 질문과 답변 등록/수정/삭제</td></tr>
+    <tr><td>답변 품질 모니터링</td><td>AI 답변 정확도 추이, 부정확 답변 자동 표시</td></tr>
+    <tr><td>대화 로그 조회</td><td>고객/직원 대화 내역 전체 조회, 필터링</td></tr>
+    <tr><td>학습 데이터 관리</td><td>업로드 문서, 크롤링 데이터 조회/수정/삭제</td></tr>
+    <tr><td>크롤링 관리</td><td>자동 수집 스케줄 설정, 수동 실행</td></tr>
+    <tr><td>채널 설정</td><td>채널별 인사말, 운영시간, 챗봇 성격 설정</td></tr>
+    <tr><td>사용자/권한 관리</td><td>관리자 계정 및 접근 권한 관리</td></tr>
+  </tbody>
+</table>
+</div>
+
+<h4>공통 기능</h4>
+<ul>
+  <li>자사 자료 기반 지식 검색 (AI가 슬리밍고 자료를 바탕으로 정확한 답변 생성)</li>
+  <li>대화 맥락 유지 (이전 대화를 기억하여 자연스러운 이어 대화)</li>
+  <li>개인정보 자동 마스킹 (전화번호, 주민번호 등 자동 감지/보호)</li>
+  <li>답변 출처 표시 ("이 답변은 OO 자료를 참고했습니다")</li>
+  <li>대화 만족도 수집 (대화 종료 시 간단 평가)</li>
+</ul>
+
+<h2>3.2 핵심 차별점 3가지</h2>
+
+<h3>차별점 1: "파일만 올리면 AI가 알아서" &mdash; 제로 코딩 지식 관리</h3>
+
+<p>기존 챗봇 솔루션은 질문과 답변을 하나하나 직접 입력해야 합니다. 새 프로그램이 추가되면 수십 개의 시나리오를 다시 설계해야 합니다.</p>
+
+<p><strong>슬리밍고 AI 챗봇은 다릅니다.</strong></p>
+
+<ul>
+  <li>새 프로그램 안내 자료(PDF)를 올리면, 챗봇이 다음 날부터 해당 프로그램에 대해 답변합니다.</li>
+  <li>가격표(엑셀)를 올리면, 모든 채널의 가격 안내가 자동 업데이트됩니다.</li>
+  <li>기술 지식이 전혀 없는 직원도 자료를 "드래그 앤 드롭"하는 것만으로 챗봇을 최신 상태로 유지할 수 있습니다.</li>
+</ul>
+
+<blockquote><strong>비즈니스 가치</strong>: IT팀 없이도 슬리밍고 본사에서 직접 챗봇 지식을 관리할 수 있습니다.</blockquote>
+
+<h3>차별점 2: "텍스트도, 음성도, 전화도" &mdash; 완전한 멀티채널 통합</h3>
+
+<div class="table-wrap">
+<table>
+  <thead>
+    <tr><th>채널</th><th>특징</th></tr>
+  </thead>
+  <tbody>
+    <tr><td>카카오톡</td><td>카카오톡 안에서 바로 AI 대화</td></tr>
+    <tr><td>홈페이지 위젯</td><td>텍스트 + 음성 모드 전환, 마이크 버튼으로 음성 대화</td></tr>
+    <tr><td>전화 음성 AI</td><td>자연스러운 한국어 음성 응대, 동시 여러 통화 처리</td></tr>
+  </tbody>
+</table>
+</div>
+
+<p>세 채널 모두 <strong>동일한 지식 기반, 동일한 품질의 답변</strong>을 제공합니다.</p>
+
+<blockquote><strong>비즈니스 가치</strong>: 특히 음성 AI는 기존 챗봇 솔루션(채널톡, 카카오 챗봇, 네이버 클로바)에서는 제공하지 않는 기능입니다.</blockquote>
+
+<h3>차별점 3: "외부도, 내부도" &mdash; 고객 챗봇 + 직원 업무 도우미 통합</h3>
+
+<div class="table-wrap">
+<table>
+  <thead>
+    <tr><th>구분</th><th>고객용 챗봇</th><th>직원용 챗봇</th></tr>
+  </thead>
+  <tbody>
+    <tr><td>대상</td><td>슬리밍고 고객</td><td>슬리밍고 전 직원</td></tr>
+    <tr><td>질문 예시</td><td>"쓰리데이 프로그램이 뭔가요?"</td><td>"쓰리데이 시술 절차가 어떻게 되나요?"</td></tr>
+    <tr><td>답변 수준</td><td>고객 눈높이 (쉽고 친근하게)</td><td>직원 눈높이 (전문 용어, 상세 절차)</td></tr>
+  </tbody>
+</table>
+</div>
+
+<blockquote><strong>비즈니스 가치</strong>: 챗봇 1개 예산으로 2개의 가치를 얻습니다. 고객 경험 향상과 직원 업무 효율화를 동시에 달성합니다.</blockquote>
+
+<!-- ============================================================ -->
+<!--  4. UI/UX 설계 방향                                           -->
+<!-- ============================================================ -->
+<h1 class="section-title" id="sec4">4. UI/UX 설계 방향</h1>
+
+<h2>4.1 UX 설계 원칙</h2>
+
+<p>슬리밍고 AI 챗봇의 UX는 <strong>"IT 전문가가 아닌 일반 고객과 현장 직원이 처음 만나는 순간부터 편안하게 사용할 수 있어야 한다"</strong>는 철학을 기반으로 합니다.</p>
+
+<h3>원칙 1: 3초 안에 이해할 수 있는 화면</h3>
+<ul>
+  <li>화면마다 <strong>하나의 주요 행동</strong>에 집중합니다</li>
+  <li>전문 용어 대신 <strong>일상 언어</strong>를 사용합니다. (예: "학습 데이터 새로고침")</li>
+  <li>처음 사용하는 관리자도 별도 교육 없이 핵심 기능을 사용할 수 있도록 설계합니다</li>
+</ul>
+
+<h3>원칙 2: 대화하듯 자연스러운 흐름</h3>
+<ul>
+  <li>AI 답변은 <strong>슬리밍고 브랜드 톤</strong>(친근하면서도 전문적인)으로 통일합니다</li>
+  <li>고객이 질문할 때 <strong>버튼 선택과 자유 입력을 모두 제공</strong>합니다</li>
+  <li>답변 하단에 <strong>"이런 것도 궁금하신가요?"</strong> 형태의 관련 질문 추천</li>
+</ul>
+
+<h3>원칙 3: 모드 전환은 한 번의 탭으로</h3>
+<ul>
+  <li>홈페이지 위젯에서 <strong>마이크 버튼 한 번</strong>으로 텍스트 ↔ 음성 모드 전환</li>
+  <li>음성 모드에서 <strong>"듣고 있어요..."</strong> 상태 표시로 안도감 제공</li>
+  <li>챗봇이 해결하기 어려운 질문에는 <strong>"상담원 연결"</strong> 버튼 자동 표시</li>
+</ul>
+
+<h3>원칙 4: 관리자가 "전문가"가 될 필요 없는 관리 화면</h3>
+<ul>
+  <li>파일 업로드는 <strong>드래그 앤 드롭</strong> 한 번으로 완료</li>
+  <li>모든 관리 작업에 <strong>단계별 안내 문구</strong> 표시</li>
+  <li>위험한 작업(삭제 등)에는 <strong>확인 단계</strong> 필수</li>
+</ul>
+
+<h3>원칙 5: 신뢰를 주는 투명한 AI</h3>
+<ul>
+  <li>모든 AI 답변에 <strong>출처 표시</strong></li>
+  <li>확신할 수 없는 질문에는 <strong>솔직하게 안내</strong> ("상담원 연결을 도와드릴까요?")</li>
+  <li>건강/체형 관련 민감한 질문에는 <strong>안전 답변 원칙</strong> 적용</li>
+</ul>
+
+<h2>4.2 핵심 사용자 시나리오</h2>
+
+<h3>시나리오 1: 카카오톡에서 바로 AI 챗봇으로 프로그램 문의</h3>
+
+<blockquote><strong>페르소나</strong>: 김민지(32세, 직장인) &mdash; 퇴근 후 카카오톡에서 슬리밍고 채널을 발견. 전화하기엔 늦은 시간.</blockquote>
+
+<h4>이 시나리오의 핵심 UX 포인트</h4>
+<ul>
+  <li><strong>카카오톡 안에서 바로 AI와 대화</strong> &mdash; 별도 웹페이지 이동 없이 카카오톡에서 즉시 응답</li>
+  <li>카카오톡 규격에 맞는 <strong>카드형/버튼형 응답</strong>으로 시각적이고 직관적인 대화</li>
+  <li>버튼 선택과 자유 입력을 <strong>병행</strong> 제공</li>
+  <li>답변마다 <strong>출처를 표시</strong>하여 신뢰감 확보</li>
+  <li>밤 10시여도 <strong>동일한 품질의 응대</strong> 제공</li>
+</ul>
+
+<h3>시나리오 2: 홈페이지 위젯에서 텍스트 → 음성 모드 전환</h3>
+
+<blockquote><strong>페르소나</strong>: 박영희(55세, 주부) &mdash; 홈페이지에서 프로그램을 살펴보다가 궁금한 점이 생김.</blockquote>
+
+<h3>시나리오 3: 관리자 파일 업로드 → AI 자동 분석 → 지식 등록</h3>
+
+<blockquote><strong>페르소나</strong>: 이수진(슬리밍고 본사 운영팀장) &mdash; 새 프로그램이 출시됨. IT 지식은 없음.</blockquote>
+
+<h2>4.3 UI 디자인 방향</h2>
+
+<h3>브랜드 컬러 시스템</h3>
+<div class="table-wrap">
+<table>
+  <thead>
+    <tr><th>역할</th><th>컬러</th><th>용도</th></tr>
+  </thead>
+  <tbody>
+    <tr><td>주 색상</td><td>민트 그린 (#2EC4B6)</td><td>버튼, 링크, 강조 요소</td></tr>
+    <tr><td>보조 색상</td><td>코랄 (#FF6B6B)</td><td>알림, 배지, 액션 유도</td></tr>
+    <tr><td>배경</td><td>연한 화이트 (#F8F9FA)</td><td>전체 배경</td></tr>
+    <tr><td>텍스트</td><td>다크 그레이 (#2D3436)</td><td>본문 텍스트</td></tr>
+    <tr><td>AI 메시지 배경</td><td>연한 민트 (#E8F8F5)</td><td>챗봇 답변 영역</td></tr>
+  </tbody>
+</table>
+</div>
+
+<h3>톤앤매너</h3>
+<p><strong>고객용 챗봇</strong>: 친근한 존댓말, "~해요" 체. 전문 용어는 쉬운 말로 풀어서 설명.</p>
+<p><strong>관리자 화면</strong>: 간결한 안내체, "~합니다" 체. IT 전문 용어는 쉬운 말 병기.</p>
+
+<h2>4.4 초보자 친화적 UX</h2>
+
+<h3>고객 챗봇 &mdash; 누구나 바로 사용</h3>
+<div class="table-wrap">
+<table>
+  <thead>
+    <tr><th>요소</th><th>설계 방향</th></tr>
+  </thead>
+  <tbody>
+    <tr><td><strong>첫 진입 시 추천 버튼</strong></td><td>[프로그램 안내] [가격 문의] [매장 찾기] 등 추천 버튼 먼저 표시</td></tr>
+    <tr><td><strong>음성 모드 안내 툴팁</strong></td><td>마이크 버튼 옆에 "음성으로도 대화할 수 있어요!" 안내 자동 표시</td></tr>
+    <tr><td><strong>답변 후 다음 행동 추천</strong></td><td>"이것도 궁금하실 수 있어요" 관련 질문 버튼 표시</td></tr>
+    <tr><td><strong>글자 크기 조절</strong></td><td>작게/보통/크게 선택 가능 (시니어 고객 배려)</td></tr>
+  </tbody>
+</table>
+</div>
+
+<h3>관리자 화면 &mdash; 교육 없이 시작</h3>
+<div class="table-wrap">
+<table>
+  <thead>
+    <tr><th>요소</th><th>설계 방향</th></tr>
+  </thead>
+  <tbody>
+    <tr><td><strong>첫 로그인 가이드 투어</strong></td><td>주요 메뉴를 하나씩 안내하는 화면 투어 자동 시작</td></tr>
+    <tr><td><strong>빈 상태 안내</strong></td><td>"아직 등록된 FAQ가 없습니다. [+ 첫 번째 FAQ 등록하기]"</td></tr>
+    <tr><td><strong>단계별 진행 표시</strong></td><td>STEP 1/2/3으로 명확하게 표시</td></tr>
+    <tr><td><strong>도움말 아이콘</strong></td><td>모든 메뉴 제목 옆에 (?) → 1~2줄 설명</td></tr>
+    <tr><td><strong>전문 용어 쉬운 말 병기</strong></td><td>어려운 기술 용어는 쉬운 말로 풀어서 설명</td></tr>
+  </tbody>
+</table>
+</div>
+
+<h3>접근성 기본 준수</h3>
+<div class="table-wrap">
+<table>
+  <thead>
+    <tr><th>항목</th><th>적용 내용</th></tr>
+  </thead>
+  <tbody>
+    <tr><td>색상 대비</td><td>WCAG 2.1 AA 기준 충족</td></tr>
+    <tr><td>키보드 네비게이션</td><td>Tab/Enter 키로 모든 기능 사용 가능</td></tr>
+    <tr><td>화면 확대</td><td>200% 확대 시 레이아웃 정상 유지</td></tr>
+    <tr><td>반응형</td><td>모바일, 태블릿, 데스크톱 최적화</td></tr>
+  </tbody>
+</table>
+</div>
+
+<!-- ============================================================ -->
+<!--  5. 예산                                                      -->
+<!-- ============================================================ -->
+<h1 class="section-title" id="sec5">5. 예산</h1>
+
+<h2>5.1 프로젝트 일정 (3개월)</h2>
+
+<div class="table-wrap">
+<table>
+  <thead>
+    <tr><th>단계</th><th>기간</th><th>주요 내용</th></tr>
+  </thead>
+  <tbody>
+    <tr><td><strong>1단계: 기반 구축</strong></td><td>1개월차 (4주)</td><td>시스템 아키텍처 설계, AI 챗봇 엔진 개발, RAG 기반 지식 검색 구축, 지식 관리 시스템 개발</td></tr>
+    <tr><td><strong>2단계: 채널 통합</strong></td><td>2개월차 (4주)</td><td>카카오톡 연동, 홈페이지 위젯(텍스트+음성), 전화 음성 AI, 관리자 시스템 개발</td></tr>
+    <tr><td><strong>3단계: 통합 · 오픈</strong></td><td>3개월차 (4주)</td><td>내부용 직원 챗봇, 통합 테스트, 안정화, 운영 교육, 정식 오픈</td></tr>
+  </tbody>
+</table>
+</div>
+
+<h2>5.2 개발 비용 상세</h2>
+
+<div class="table-wrap">
+<table>
+  <thead>
+    <tr><th>항목</th><th>비용 (만원)</th></tr>
+  </thead>
+  <tbody>
+    <tr><td>AI 챗봇 코어 엔진 (RAG 기반 지식 검색)</td><td style="text-align:right">2,800</td></tr>
+    <tr><td>AI 지식 관리 시스템 (파일 업로드, 자동 학습, 크롤링)</td><td style="text-align:right">1,200</td></tr>
+    <tr><td>내부용 직원 챗봇</td><td style="text-align:right">900</td></tr>
+    <tr><td>카카오톡 채널 연동</td><td style="text-align:right">900</td></tr>
+    <tr><td>홈페이지 위젯 (텍스트 + 음성 모드)</td><td style="text-align:right">1,300</td></tr>
+    <tr><td>전화 음성 AI 시스템</td><td style="text-align:right">1,800</td></tr>
+    <tr><td>관리자 시스템 (대시보드, FAQ, 로그, 설정)</td><td style="text-align:right">1,600</td></tr>
+    <tr><td>인프라 구축 및 배포</td><td style="text-align:right">500</td></tr>
+    <tr><td>QA / 통합 테스트 / 안정화</td><td style="text-align:right">500</td></tr>
+    <tr><td>PM / 기획 / 설계 / 교육</td><td style="text-align:right">500</td></tr>
+    <tr style="background:#f0faf4"><td><strong>합계</strong></td><td style="text-align:right"><strong>12,000</strong></td></tr>
+  </tbody>
+</table>
+</div>
+
+<h2>5.3 총 견적</h2>
+
+<div class="highlight-box">
+  <strong>총 개발 금액: 12,000만원 (VAT 별도) / 13,200만원 (VAT 포함, 약 1억 3,200만원)</strong>
+</div>
+
+<h2>5.4 유지보수 비용 (월정액)</h2>
+
+<div class="table-wrap">
+<table>
+  <thead>
+    <tr><th>항목</th><th>월 비용 (만원)</th><th>비고</th></tr>
+  </thead>
+  <tbody>
+    <tr><td>클라우드 인프라 운영</td><td style="text-align:right">50</td><td>서버, DB, 스토리지</td></tr>
+    <tr><td>AI API 사용료 (LLM + 음성)</td><td style="text-align:right">50</td><td>사용량에 따라 변동 가능</td></tr>
+    <tr><td>기술 지원 / 장애 대응</td><td style="text-align:right">50</td><td>2시간 이내 1차 대응</td></tr>
+    <tr><td>답변 품질 관리 / 모니터링</td><td style="text-align:right">30</td><td>월 1회 분석/보고</td></tr>
+    <tr><td>경미한 기능 개선</td><td style="text-align:right">20</td><td>월 2건 이내</td></tr>
+    <tr style="background:#f0faf4"><td><strong>합계</strong></td><td style="text-align:right"><strong>200</strong></td><td><strong>연 2,400만원</strong></td></tr>
+  </tbody>
+</table>
+</div>
+
+<blockquote><strong>참고</strong>: AI API 사용료는 실제 사용량에 따라 변동될 수 있으며, 트래픽 증가 시 별도 협의합니다. 오픈 후 2개월간은 하자 보수 기간으로 무상 지원됩니다.</blockquote>
+
+<!-- ============================================================ -->
+<!--  6. 유지보수 및 운영                                           -->
+<!-- ============================================================ -->
+<h1 class="section-title" id="sec6">6. 유지보수 및 운영</h1>
+
+<h2>6.1 유지보수</h2>
+
+<p><strong>월 유지보수 비용: 200만원</strong> (1년 계약 기준, VAT 별도)</p>
+
+<h3>유지보수 범위</h3>
+<div class="table-wrap">
+<table>
+  <thead>
+    <tr><th>항목</th><th>내용</th></tr>
+  </thead>
+  <tbody>
+    <tr><td>장애 대응</td><td>2시간 이내 1차 대응, 4시간 이내 복구</td></tr>
+    <tr><td>오류 수정</td><td>심각도에 따라 즉시~5영업일 이내 수정</td></tr>
+    <tr><td>답변 품질 관리</td><td>월 1회 분석/보고</td></tr>
+    <tr><td>AI 모델 업데이트</td><td>신규 버전 호환성 검증/적용</td></tr>
+    <tr><td>경미한 기능 개선</td><td>월 2건 이내</td></tr>
+    <tr><td>모니터링</td><td>24시간 시스템 모니터링</td></tr>
+    <tr><td>보안 패치</td><td>보안 취약점 발견 시 긴급 적용</td></tr>
+  </tbody>
+</table>
+</div>
+
+<h2>6.2 운영 이관 및 교육 계획</h2>
+
+<h3>교육 계획</h3>
+<div class="table-wrap">
+<table>
+  <thead>
+    <tr><th>교육 대상</th><th>교육 내용</th><th>방식</th><th>시간</th></tr>
+  </thead>
+  <tbody>
+    <tr><td><strong>관리자 (운영팀장)</strong></td><td>전체 시스템 운영법: 대시보드, FAQ 관리, 학습 데이터, 답변 품질 모니터링</td><td>현장 교육 + 실습</td><td>4시간</td></tr>
+    <tr><td><strong>일반 관리자</strong></td><td>일상 운영법: FAQ 등록/수정, 대화 로그 확인, 파일 업로드</td><td>현장 교육 + 실습</td><td>2시간</td></tr>
+    <tr><td><strong>지점 담당자</strong></td><td>챗봇 기본 안내: 고객 안내법, 카카오톡 채널, 내부용 챗봇 사용법</td><td>온라인 교육 (영상)</td><td>1시간</td></tr>
+  </tbody>
+</table>
+</div>
+
+<blockquote>관리자 운영 매뉴얼(PDF + 웹 문서)을 제공합니다.</blockquote>
+
+<!-- ============================================================ -->
+<!--  7. 기대 효과                                                 -->
+<!-- ============================================================ -->
+<h1 class="section-title" id="sec7">7. 기대 효과</h1>
+
+<h2>7.1 정량적 기대 효과</h2>
+<div class="table-wrap">
+<table>
+  <thead>
+    <tr><th>기대 효과</th><th>측정 지표</th><th>현재</th><th>목표</th><th>산출 근거</th></tr>
+  </thead>
+  <tbody>
+    <tr><td><strong>직원 시간 절감</strong></td><td>단순 반복 문의 처리 시간</td><td>1.5시간/일/인</td><td>0.5시간 이내</td><td>11개 지점 x 1시간 절감 x 250영업일 = 연간 약 <strong>2,750시간 절감</strong></td></tr>
+    <tr><td><strong>24시간 고객 응대</strong></td><td>영업시간 외 문의 응답률</td><td>0%</td><td>90% 이상</td><td>야간/주말 문의 즉시 자동 응대</td></tr>
+    <tr><td><strong>첫 방문 전환율 향상</strong></td><td>문의 → 방문 전환율</td><td>현재 수준</td><td>20% 이상 향상</td><td>즉시 응대 → 관심 유지 → 방문 촉진</td></tr>
+    <tr><td><strong>신규 고객 추가 유입</strong></td><td>월간 추가 방문 건수</td><td>-</td><td>월 10~20건</td><td>영업시간 외 문의 응대로 추가 전환</td></tr>
+    <tr><td><strong>고객 유지율 개선</strong></td><td>프로그램 중도 포기율</td><td>현재 수준</td><td>15% 이상 감소</td><td>관리 후 궁금증 즉시 해소</td></tr>
+    <tr><td><strong>전화 응대 효율</strong></td><td>전화 포기율</td><td>높음 (추정)</td><td>50% 이상 감소</td><td>AI 동시 다회선 응대</td></tr>
+    <tr><td><strong>신규 직원 적응</strong></td><td>온보딩 소요 기간</td><td>2~4주</td><td>1주 이내</td><td>매뉴얼 챗봇으로 즉시 업무 지식 접근</td></tr>
+    <tr><td><strong>고객 만족도</strong></td><td>문의 만족도 (5점 척도)</td><td>측정 미비</td><td>4.0점 이상</td><td>일관되고 정확한 답변 + 만족도 수집</td></tr>
+  </tbody>
+</table>
+</div>
+
+<h3>연간 투자 대비 효과 (ROI) 요약</h3>
+<div class="table-wrap">
+<table>
+  <thead>
+    <tr><th>항목</th><th>산출 근거</th><th>연간 효과</th></tr>
+  </thead>
+  <tbody>
+    <tr><td>직원 업무 시간 절감</td><td>11개 지점 x 1시간/일 절감 x 250영업일</td><td>연간 약 <strong>2,750시간</strong> 절감</td></tr>
+    <tr><td>추가 매출 기회</td><td>월 15건 추가 방문 x 평균 프로그램 단가 x 12개월</td><td>연간 추가 매출 기회 확보</td></tr>
+    <tr><td>고객 이탈 방지</td><td>중도 포기율 15% 감소 x 월 이용 고객 수 x 프로그램 잔여 금액</td><td>이탈 방지에 따른 매출 보전</td></tr>
+  </tbody>
+</table>
+</div>
+
+<h2>7.2 정성적 기대 효과</h2>
+
+<h3>브랜드 가치 측면</h3>
+<div class="table-wrap">
+<table>
+  <thead>
+    <tr><th>기대 효과</th><th>설명</th></tr>
+  </thead>
+  <tbody>
+    <tr><td><strong>"24시간 케어하는 브랜드" 이미지</strong></td><td>밤 10시에 문의해도 전문적인 답변을 받는 경험이 브랜드 신뢰로 이어짐</td></tr>
+    <tr><td><strong>15년 전문성의 디지털화</strong></td><td>12만명의 데이터와 15년 노하우가 AI를 통해 모든 고객에게 동일하게 전달</td></tr>
+    <tr><td><strong>업계 선도적 디지털 전환</strong></td><td>자세/체형 관리 업계에서 AI 챗봇 + 음성 AI 선도 사례</td></tr>
+  </tbody>
+</table>
+</div>
+
+<h3>운영 효율 측면</h3>
+<div class="table-wrap">
+<table>
+  <thead>
+    <tr><th>기대 효과</th><th>설명</th></tr>
+  </thead>
+  <tbody>
+    <tr><td><strong>직원의 본연 업무 집중</strong></td><td>단순 반복을 AI가 처리, 직원은 1:1 전문 상담에 집중</td></tr>
+    <tr><td><strong>11개 지점 서비스 균질화</strong></td><td>모든 지점이 동일한 AI 지식 기반 사용</td></tr>
+    <tr><td><strong>데이터 기반 의사결정</strong></td><td>고객 인사이트가 대시보드로 가시화</td></tr>
+  </tbody>
+</table>
+</div>
+
+<h3>고객 경험 측면</h3>
+<div class="table-wrap">
+<table>
+  <thead>
+    <tr><th>기대 효과</th><th>설명</th></tr>
+  </thead>
+  <tbody>
+    <tr><td><strong>즉시 답변 경험</strong></td><td>기다림 없이 궁금한 점을 해소, 호감과 신뢰로 직결</td></tr>
+    <tr><td><strong>관리 후 지속 케어</strong></td><td>"이런 변화 정상인가요?"에 AI가 즉시 안심 답변 제공</td></tr>
+    <tr><td><strong>채널 선택의 자유</strong></td><td>카카오톡, 홈페이지, 전화 중 가장 편한 방법 선택 가능</td></tr>
+  </tbody>
+</table>
+</div>
+
+<hr>
+
+<div class="highlight-box" style="text-align:center; font-size:1.05rem;">
+  <p><strong>본 제안서는 슬리밍고의 비즈니스 과제를 AI 기술로 해결하기 위한 것입니다.</strong></p>
+  <p style="margin-bottom:0;"><strong>15년 전문성이 24시간 잠들지 않는 AI 파트너로 고객 곁에 함께할 때, 슬리밍고의 다음 15년은 더 강력해질 것입니다.</strong></p>
+</div>
+
+</div><!-- .content -->
+
+<!-- ==================== FOOTER ==================== -->
+<footer class="site-footer">
+  <strong>(주)kitt</strong> &nbsp;|&nbsp; 슬리밍고 AI 챗봇 시스템 개발 제안서 &nbsp;|&nbsp; 2026년 3월 23일 &nbsp;|&nbsp; v1.0 (최종)<br>
+  본 문서는 (주)kitt가 슬리밍고에 제출하는 공식 제안서이며, 무단 복제 및 배포를 금합니다.
+</footer>
+
+</div><!-- .page-wrapper -->
+
+</body>
+</html>
